@@ -1,0 +1,8 @@
+[Mon Aug 25 15:45:43.717782 2025] [authz_core:error] [pid 3154722:tid 3154758] [client 68.183.179.154:0] AH01630: client denied by server configuration: /home/lppm/web/simlitabmas.unjaya.ac.id/public_html/system/vendor
+[Tue Aug 26 02:25:36.520930 2025] [proxy_fcgi:error] [pid 3339933:tid 3339950] [client 64.227.187.73:0] AH01071: Got error 'Primary script unknown'
+[Tue Aug 26 02:25:39.507677 2025] [proxy_fcgi:error] [pid 3339932:tid 3339971] [client 64.227.187.73:0] AH01071: Got error 'Primary script unknown'
+[Wed Aug 27 04:32:26.054897 2025] [proxy_fcgi:error] [pid 3515328:tid 3515356] [client 152.42.219.58:0] AH01071: Got error 'Primary script unknown'
+[Wed Aug 27 04:32:26.066402 2025] [proxy_fcgi:error] [pid 3515328:tid 3515358] [client 152.42.219.58:0] AH01071: Got error 'Primary script unknown'
+[Wed Aug 27 09:42:08.837970 2025] [core:alert] [pid 3515328:tid 3515345] [client 103.247.15.74:0] /home/lppm/web/simlitabmas.unjaya.ac.id/public_html/assets/profilebox/.htaccess: Invalid command 'php_flag', perhaps misspelled or defined by a module not included in the server configuration, referer: https://simlitabmas.unjaya.ac.id/dashboard
+[Wed Aug 27 13:18:05.596299 2025] [core:alert] [pid 3515334:tid 3515388] [client 103.247.15.74:0] /home/lppm/web/simlitabmas.unjaya.ac.id/public_html/assets/profilebox/.htaccess: Invalid command 'php_flag', perhaps misspelled or defined by a module not included in the server configuration, referer: https://simlitabmas.unjaya.ac.id/dashboard
+[Thu Aug 28 07:23:20.933953 2025] [proxy_fcgi:error] [pid 3692232:tid 3692248] [client 104.248.147.84:0] AH01071: Got error 'Primary script unknown'

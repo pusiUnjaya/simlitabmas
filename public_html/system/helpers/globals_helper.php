@@ -1,0 +1,798 @@
+<?php 
+	if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+	
+	//baca kode rtf
+	// Function that checks whether the data are the on-screen text.
+	// It works in the following way:
+	// an array arrfailAt stores the control words for the current state of the stack, which show that
+	// input data are something else than plain text.
+	// For example, there may be a description of font or color palette etc. 
+	function rtf_isPlainText($s) 
+	{
+		$arrfailAt = array("*", "fonttbl", "colortbl", "datastore", "themedata");
+		for ($i = 0; $i < count($arrfailAt); $i++)
+			if (!empty($s[$arrfailAt[$i]])) return false;
+		return true;
+	} 
+	
+	function cekuser($key)
+	{
+		$ci =& get_instance();
+		$ci->db->where('email',$key);
+		$query = $ci->db->get('users');
+		if ($query->num_rows() > 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	function rtf2text($filename) 
+	{
+		// Read the data from the input file.
+		//$text = file_get_contents($filename);
+		$text = $filename;
+		if (!strlen($text))
+			return "";
+
+		// Create empty stack array.
+		$document = "";
+		$stack = array();
+		$j = -1;
+		// Read the data character-by- character…
+		for ($i = 0, $len = strlen($text); $i < $len; $i++) {
+			$c = $text[$i];
+
+			// Depending on current character select the further actions.
+			switch ($c) {
+				// the most important key word backslash
+				case "\\":
+					// read next character
+					$nc = $text[$i + 1];
+
+					// If it is another backslash or nonbreaking space or hyphen,
+					// then the character is plain text and add it to the output stream.
+					if ($nc == '\\' && rtf_isPlainText($stack[$j])) $document .= '\\';
+					elseif ($nc == '~' && rtf_isPlainText($stack[$j])) $document .= ' ';
+					elseif ($nc == '_' && rtf_isPlainText($stack[$j])) $document .= '-';
+					// If it is an asterisk mark, add it to the stack.
+					elseif ($nc == '*') $stack[$j]["*"] = true;
+					// If it is a single quote, read next two characters that are the hexadecimal notation
+					// of a character we should add to the output stream.
+					elseif ($nc == "'") {
+						$hex = substr($text, $i + 2, 2);
+						if (rtf_isPlainText($stack[$j]))
+							$document .= html_entity_decode("&#".hexdec($hex).";");
+						//Shift the pointer.
+						$i += 2;
+					// Since, we’ve found the alphabetic character, the next characters are control word
+					// and, possibly, some digit parameter.
+					} elseif ($nc >= 'a' && $nc <= 'z' || $nc >= 'A' && $nc <= 'Z') {
+						$word = "";
+						$param = null;
+
+						// Start reading characters after the backslash.
+						for ($k = $i + 1, $m = 0; $k < strlen($text); $k++, $m++) {
+							$nc = $text[$k];
+							// If the current character is a letter and there were no digits before it,
+							// then we’re still reading the control word. If there were digits, we should stop
+							// since we reach the end of the control word.
+							if ($nc >= 'a' && $nc <= 'z' || $nc >= 'A' && $nc <= 'Z') {
+								if (empty($param))
+									$word .= $nc;
+								else
+									break;
+							// If it is a digit, store the parameter.
+							} elseif ($nc >= '0' && $nc <= '9')
+								$param .= $nc;
+							// Since minus sign may occur only before a digit parameter, check whether
+							// $param is empty. Otherwise, we reach the end of the control word.
+							elseif ($nc == '-') {
+								if (empty($param))
+									$param .= $nc;
+								else
+									break;
+							} else
+								break;
+						}
+						// Shift the pointer on the number of read characters.
+						$i += $m - 1;
+
+						// Start analyzing what we’ve read. We are interested mostly in control words.
+						$toText = "";
+						switch (strtolower($word)) {
+							// If the control word is "u", then its parameter is the decimal notation of the
+							// Unicode character that should be added to the output stream.
+							// We need to check whether the stack contains \ucN control word. If it does,
+							// we should remove the N characters from the output stream.
+							case "u":
+								$toText .= html_entity_decode("&#x".dechex($param).";");
+								$ucDelta = @$stack[$j]["uc"];
+								if ($ucDelta > 0)
+									$i += $ucDelta;
+							break;
+							// Select line feeds, spaces and tabs.
+							case "par": case "page": case "column": case "line": case "lbr":
+								$toText .= "\n"; 
+							break;
+							case "emspace": case "enspace": case "qmspace":
+								$toText .= " "; 
+							break;
+							case "tab": $toText .= "\t"; break;
+							// Add current date and time instead of corresponding labels.
+							case "chdate": $toText .= date("m.d.Y"); break;
+							case "chdpl": $toText .= date("l, j F Y"); break;
+							case "chdpa": $toText .= date("D, j M Y"); break;
+							case "chtime": $toText .= date("H:i:s"); break;
+							// Replace some reserved characters to their html analogs.
+							case "emdash": $toText .= html_entity_decode("&mdash;"); break;
+							case "endash": $toText .= html_entity_decode("&ndash;"); break;
+							case "bullet": $toText .= html_entity_decode("&#149;"); break;
+							case "lquote": $toText .= html_entity_decode("&lsquo;"); break;
+							case "rquote": $toText .= html_entity_decode("&rsquo;"); break;
+							case "ldblquote": $toText .= html_entity_decode("&laquo;"); break;
+							case "rdblquote": $toText .= html_entity_decode("&raquo;"); break;
+							// Add all other to the control words stack. If a control word
+							// does not include parameters, set &param to true.
+							default:
+								$stack[$j][strtolower($word)] = empty($param) ? true : $param;
+							break;
+						}
+						// Add data to the output stream if required.
+						if (rtf_isPlainText($stack[$j]))
+							$document .= $toText;
+					}
+
+					$i++;
+				break;
+				// If we read the opening brace {, then new subgroup starts and we add
+				// new array stack element and write the data from previous stack element to it.
+				case "{":
+					array_push($stack, $stack[$j++]);
+				break;
+				// If we read the closing brace }, then we reach the end of subgroup and should remove 
+				// the last stack element.
+				case "}":
+					array_pop($stack);
+					$j--;
+				break;
+				// Skip “trash”.
+				case '\0': case '\r': case '\f': case '\n': break;
+				// Add other data to the output stream if required.
+				default:
+					if (rtf_isPlainText($stack[$j]))
+						$document .= $c;
+				break;
+			}
+		}
+		// Return result.
+		return $document;
+	}
+
+
+	//fungsi buat scan folder
+	function myscandir($dir, $exp, $how='name', $desc=0){
+	    $r = array();
+	    $dh = @opendir($dir);
+	    if ($dh) {
+	        while (($fname = readdir($dh)) !== false) {
+	            if (preg_match($exp, $fname)) {
+	                $stat = stat("$dir/$fname");
+	                $r[$fname] = ($how == 'name')? $fname: $stat[$how];
+	            }
+	        }
+	        closedir($dh);
+	        if ($desc) {
+	            arsort($r);
+	        }
+	        else {
+	            asort($r);
+	        }
+	    }
+	    return(array_keys($r));
+	}
+	
+	//format pemisah ribuan
+	function ribuan($uang)
+    {
+       $ribuan="";
+       $panjang = strlen($uang);
+        while($panjang > 3)
+       {
+	     $ribuan = "." . substr($uang,-3) . $ribuan;
+	     $lebar=strlen($uang)-3;
+	     $uang = substr($uang,0,$lebar);
+	     $panjang = strlen($uang);
+       }
+       $ribuan = $uang.$ribuan;
+       return $ribuan;
+    }
+
+    //format pemisah ribuan
+	function ribuankoma($uang)
+    {
+       $ribuan="";
+       $panjang = strlen($uang);
+        while($panjang > 3)
+       {
+	     $ribuan = "," . substr($uang,-3) . $ribuan;
+	     $lebar=strlen($uang)-3;
+	     $uang = substr($uang,0,$lebar);
+	     $panjang = strlen($uang);
+       }
+       $ribuan = $uang.$ribuan;
+       return $ribuan;
+    }
+		
+	// Untuk membuat format rupiah
+	function rupiah($uang)
+    {
+       $rupiah="";
+       $panjang = strlen($uang);
+        while($panjang > 3)
+       {
+	     $rupiah = "." . substr($uang,-3) . $rupiah;
+	     $lebar=strlen($uang)-3;
+	     $uang = substr($uang,0,$lebar);
+	     $panjang = strlen($uang);
+       }
+       $rupiah = "Rp ".$uang.$rupiah.",-";
+       return $rupiah;
+    }
+
+     // Untuk membuat terbilang -> dari angka kehuruf   
+    function terbilang($bilangan)
+    {
+    if($bilangan=='' || $bilangan==0)
+        return "nol";
+    $angka = array('0','0','0','0','0','0','0','0','0','0',
+                 '0','0','0','0','0','0');
+    $kata = array('','satu','dua','tiga','empat','lima',
+                'enam','tujuh','delapan','sembilan');
+    $tingkat = array('','ribu','juta','milyar','triliun');
+
+    $panjang_bilangan = strlen($bilangan);
+
+    /* pengujian panjang bilangan */
+    if ($panjang_bilangan > 15) {
+    $kalimat = "Diluar Batas";
+    return $kalimat;
+    }
+
+    /* mengambil angka-angka yang ada dalam bilangan,
+     dimasukkan ke dalam array */
+    for ($i = 1; $i <= $panjang_bilangan; $i++) {
+    $angka[$i] = substr($bilangan,-($i),1);
+    }
+
+    $i = 1;
+    $j = 0;
+    $kalimat = "";
+
+
+    /* mulai proses iterasi terhadap array angka */
+    while ($i <= $panjang_bilangan) {
+
+    $subkalimat = "";
+    $kata1 = "";
+    $kata2 = "";
+    $kata3 = "";
+
+    /* untuk ratusan */
+    if ($angka[$i+2] != "0") {
+      if ($angka[$i+2] == "1") {
+        $kata1 = "seratus";
+      } else {
+        $kata1 = $kata[$angka[$i+2]] . " ratus";
+      }
+    }
+
+    /* untuk puluhan atau belasan */
+    if ($angka[$i+1] != "0") {
+      if ($angka[$i+1] == "1") {
+        if ($angka[$i] == "0") {
+          $kata2 = "sepuluh";
+        } elseif ($angka[$i] == "1") {
+          $kata2 = "sebelas";
+        } else {
+          $kata2 = $kata[$angka[$i]] . " belas";
+        }
+      } else {
+        $kata2 = $kata[$angka[$i+1]] . " puluh";
+      }
+    }
+
+    /* untuk satuan */
+    if ($angka[$i] != "0") {
+      if ($angka[$i+1] != "1") {
+        $kata3 = $kata[$angka[$i]];
+      }
+    }
+
+    /* pengujian angka apakah tidak nol semua,
+       lalu ditambahkan tingkat */
+    if (($angka[$i] != "0") OR ($angka[$i+1] != "0") OR
+        ($angka[$i+2] != "0")) {
+      $subkalimat = "$kata1 $kata2 $kata3 " . $tingkat[$j] . " ";
+    }
+
+    /* gabungkan variabe sub kalimat (untuk satu blok 3 angka)
+       ke variabel kalimat */
+    $kalimat = $subkalimat . $kalimat;
+    $i = $i + 3;
+    $j = $j + 1;
+
+    }
+
+    /* mengganti satu ribu jadi seribu jika diperlukan */
+    if (($angka[5] == "0") AND ($angka[6] == "0")) {
+    $kalimat = str_replace("satu ribu","seribu",$kalimat);
+    }
+    $kalimat = trim($kalimat);
+    $kalimat = "$kalimat rupiah";
+    return $kalimat;
+
+    }
+	
+	// Untuk membuat bilangaja -> dari angka kehuruf   
+        function bilangaja($bilangan)
+        {
+        if($bilangan=='' || $bilangan==0)
+            return "nol";
+        $angka = array('0','0','0','0','0','0','0','0','0','0',
+                     '0','0','0','0','0','0');
+        $kata = array('','satu','dua','tiga','empat','lima',
+                    'enam','tujuh','delapan','sembilan');
+        $tingkat = array('','ribu','juta','milyar','triliun');
+    
+        $panjang_bilangan = strlen($bilangan);
+    
+        /* pengujian panjang bilangan */
+        if ($panjang_bilangan > 15) {
+        $kalimat = "Diluar Batas";
+        return $kalimat;
+        }
+    
+        /* mengambil angka-angka yang ada dalam bilangan,
+         dimasukkan ke dalam array */
+        for ($i = 1; $i <= $panjang_bilangan; $i++) {
+        $angka[$i] = substr($bilangan,-($i),1);
+        }
+    
+        $i = 1;
+        $j = 0;
+        $kalimat = "";
+    
+    
+        /* mulai proses iterasi terhadap array angka */
+        while ($i <= $panjang_bilangan) {
+    
+        $subkalimat = "";
+        $kata1 = "";
+        $kata2 = "";
+        $kata3 = "";
+    
+        /* untuk ratusan */
+        if ($angka[$i+2] != "0") {
+          if ($angka[$i+2] == "1") {
+            $kata1 = "seratus";
+          } else {
+            $kata1 = $kata[$angka[$i+2]] . " ratus";
+          }
+        }
+    
+        /* untuk puluhan atau belasan */
+        if ($angka[$i+1] != "0") {
+          if ($angka[$i+1] == "1") {
+            if ($angka[$i] == "0") {
+              $kata2 = "sepuluh";
+            } elseif ($angka[$i] == "1") {
+              $kata2 = "sebelas";
+            } else {
+              $kata2 = $kata[$angka[$i]] . " belas";
+            }
+          } else {
+            $kata2 = $kata[$angka[$i+1]] . " puluh";
+          }
+        }
+    
+        /* untuk satuan */
+        if ($angka[$i] != "0") {
+          if ($angka[$i+1] != "1") {
+            $kata3 = $kata[$angka[$i]];
+          }
+        }
+    
+        /* pengujian angka apakah tidak nol semua,
+           lalu ditambahkan tingkat */
+        if (($angka[$i] != "0") OR ($angka[$i+1] != "0") OR
+            ($angka[$i+2] != "0")) {
+          $subkalimat = "$kata1 $kata2 $kata3 " . $tingkat[$j] . " ";
+        }
+    
+        /* gabungkan variabe sub kalimat (untuk satu blok 3 angka)
+           ke variabel kalimat */
+        $kalimat = $subkalimat . $kalimat;
+        $i = $i + 3;
+        $j = $j + 1;
+    
+        }
+    
+        /* mengganti satu ribu jadi seribu jika diperlukan */
+        if (($angka[5] == "0") AND ($angka[6] == "0")) {
+        $kalimat = str_replace("satu ribu","seribu",$kalimat);
+        }
+        $kalimat = trim($kalimat);
+        $kalimat = "$kalimat ";
+        return $kalimat;
+
+        }
+	
+	function tgl_ingg($tgl_awal){
+		$tahun	= substr($tgl_awal,6,4);
+		$bulan 	= substr($tgl_awal,3,2);
+		$hari	= substr($tgl_awal,0,2);
+		$tgl = $tahun."-".$bulan."-".$hari;
+		return $tgl;
+	}
+
+	function tgl_indo($tgl_awal,$text=0){
+		$tahun	= substr($tgl_awal,0,4);
+        if($text){
+            $bln 	= substr($tgl_awal,5,2);
+            switch($bln){
+                case "01" :
+                    $bulan = "Januari";
+                    break;
+                case "02" :
+                    $bulan = "Febuari";
+                    break;
+                case "03" :
+                    $bulan = "Maret";
+                    break;
+                case "04" :
+                    $bulan = "April";
+                    break;
+                case "05" :
+                    $bulan = "Mei";
+                    break;
+                case "06" :
+                    $bulan = "Juni";
+                    break;
+                case "07" :
+                    $bulan = "Juli";
+                    break;
+                case "08" :
+                    $bulan = "Agustus";
+                    break;
+                case "09" :
+                    $bulan = "September";
+                    break;
+                case "10" :
+                    $bulan = "Oktober";
+                    break;
+                case "11" :
+                    $bulan = "November";
+                    break;
+                default :
+					$bulan = "Desember";
+            }
+            $hari	= substr($tgl_awal,8,2);
+			$jam	= substr($tgl_awal,11,8);
+			if($jam<>'')
+				$tgl    = $hari." ".$bulan." ".$tahun.", ".$jam;
+			else
+				$tgl    = $hari." ".$bulan." ".$tahun;
+            return $tgl;
+        }else{
+    		$bulan 	= substr($tgl_awal,5,2);
+            $hari	= substr($tgl_awal,8,2);
+			$jam	= substr($tgl_awal,11,8);
+			if($jam<>'')
+				$tgl = $hari."-".$bulan."-".$tahun.", ".$jam;
+			else
+				$tgl = $hari."-".$bulan."-".$tahun;
+            return $tgl;
+        }
+	}
+
+	function berbilang($angka) {
+	  // Validasi input
+	  if (!is_numeric($angka)) {
+	    return "Masukan harus berupa angka!";
+	  }
+	  if ($angka < 0 || $angka > 999999999999999) {
+	    return "Angka harus di antara 0 dan 999.999.999.999.999!";
+	  }
+
+	  // Sanitasi input
+	  $angka = abs($angka); //mengubah angka agar menjadi bernilai positif
+	  $angka = floor($angka); //mengubah angka agar menjadi bilangan bulat
+
+	  $angka_huruf = [
+	    "", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"
+	  ];
+
+	  if ($angka < 12) {
+	    return $angka_huruf[$angka];
+	  } elseif ($angka < 20) {
+	    return berbilang($angka - 10) . " belas";
+	  } elseif ($angka < 100) {
+	    return berbilang($angka / 10) . " puluh " . berbilang($angka % 10);
+	  } elseif ($angka < 200) {
+	    return "seratus " . berbilang($angka - 100);
+	  } elseif ($angka < 1000) {
+	    return berbilang($angka / 100) . " ratus " . berbilang($angka % 100);
+	  } elseif ($angka < 2000) {
+	    return "seribu " . berbilang($angka - 1000);
+	  } elseif ($angka < 1000000) {
+	    return berbilang($angka / 1000) . " ribu " . berbilang($angka % 1000);
+	  } elseif ($angka < 1000000000) {
+	    return berbilang($angka / 1000000) . " juta " . berbilang($angka % 1000000);
+	  } elseif ($angka < 1000000000000) {
+	    return berbilang($angka / 1000000000) . " miliar " . berbilang($angka % 1000000000);
+	  } else {
+	    return berbilang($angka / 1000000000000) . " triliun " . berbilang($angka % 1000000000000);
+	  }
+	}
+
+	function tanggal_ke_kalimat($tanggal) {
+	  // Validasi input
+	  if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $tanggal)) {
+	    return "Format tanggal tidak valid!";
+	  }
+
+	  // Pecah tanggal menjadi bagian tahun, bulan, dan hari
+	  list($tahun, $bulan, $hari) = explode('-', $tanggal);
+
+	  // Konversi bulan ke dalam format teks
+	  switch ($bulan) {
+	    case '01':
+	      $bulan_kalimat = 'Januari';
+	      break;
+	    case '02':
+	      $bulan_kalimat = 'Februari';
+	      break;
+	    case '03':
+	      $bulan_kalimat = 'Maret';
+	      break;
+	    case '04':
+	      $bulan_kalimat = 'April';
+	      break;
+	    case '05':
+	      $bulan_kalimat = 'Mei';
+	      break;
+	    case '06':
+	      $bulan_kalimat = 'Juni';
+	      break;
+	    case '07':
+	      $bulan_kalimat = 'Juli';
+	      break;
+	    case '08':
+	      $bulan_kalimat = 'Agustus';
+	      break;
+	    case '09':
+	      $bulan_kalimat = 'September';
+	      break;
+	    case '10':
+	      $bulan_kalimat = 'Oktober';
+	      break;
+	    case '11':
+	      $bulan_kalimat = 'November';
+	      break;
+	    case '12':
+	      $bulan_kalimat = 'Desember';
+	      break;
+	    default:
+	      $bulan_kalimat = '';
+	      break;
+	  }
+
+	  $daftar_hari = array(
+		 'Sunday' => 'Minggu',
+		 'Monday' => 'Senin',
+		 'Tuesday' => 'Selasa',
+		 'Wednesday' => 'Rabu',
+		 'Thursday' => 'Kamis',
+		 'Friday' => 'Jumat',
+		 'Saturday' => 'Sabtu'
+		);
+	  
+	  $namahari = date('l', strtotime($tanggal));
+
+	  // Konversi hari ke dalam format teks
+	  $hari_kalimat = berbilang($hari);
+
+	  // Konversi tahun ke dalam format teks
+	  $tahun_kalimat = berbilang($tahun);
+
+	  // Gabungkan bagian-bagian tanggal menjadi kalimat
+	  $kalimat = $daftar_hari[$namahari].' tanggal '.$hari_kalimat . ' ' . $bulan_kalimat . ' tahun ' . $tahun_kalimat;
+
+	  return $kalimat;
+	}
+	
+	function getRomawi($bln){
+                switch ($bln){
+                    case 1: 
+                        return "I";
+                        break;
+                    case 2:
+                        return "II";
+                        break;
+                    case 3:
+                        return "III";
+                        break;
+                    case 4:
+                        return "IV";
+                        break;
+                    case 5:
+                        return "V";
+                        break;
+                    case 6:
+                        return "VI";
+                        break;
+                    case 7:
+                        return "VII";
+                        break;
+                    case 8:
+                        return "VIII";
+                        break;
+                    case 9:
+                        return "IX";
+                        break;
+                    case 10:
+                        return "X";
+                        break;
+                    case 11:
+                        return "XI";
+                        break;
+                    case 12:
+                        return "XII";
+                        break;
+                }
+	}
+	
+	function inisial($kalimat){
+		$inis[0] = '';
+		$inis[1] = '';
+		$inis[2] = '';
+		$inis[3] = '';
+		$inis[4] = '';
+		$kal  = explode(" ",$kalimat);
+		$n = count($kal);
+		if($n > 4) $n = 4;
+		for($i=0; $i<$n; $i++){
+			$inis[$i] = substr($kal[$i],0,1);
+		}
+		return $inis[0].$inis[1].$inis[2].$inis[3].$inis[4];
+	}
+	
+	function menuju($tujuan,$lama=0){
+		echo "<meta http-equiv='refresh' content ='$lama; url=$tujuan'>";
+	}
+	function img_hapus($hapus=''){
+        $gb = "<img id='link' src='".base_url()."images/hapus.gif' title='Hapus Data Terpilih' onClick = 'return tanya()'>$hapus";
+		return $gb;
+	}
+	function img_detail($detail=''){
+		$gb = "<img id='link' src='".base_url()."images/detail.gif' title='Tampilkan Data Detail'>$detail";
+		return $gb;
+	}
+	function img_edit($edit=''){
+		$gb = "<img id='link' src='".base_url()."images/edit.gif' title='Ubah Data Terpilih'>$edit";
+		return $gb;
+	}
+	function img_tambah($tambah=''){
+		$gb = "<img id='link' src='".base_url()."images/tambah.gif' title='Tambah Data' valign=middle>$tambah";
+		return $gb;
+	}
+	function img_tampil($tampil=''){
+		$gb = "<img id='link' src='".base_url()."images/xtampil.gif' title='Tampilkan Data' valign=middle>$tampil";
+		return $gb;
+	}
+	function img_sembunyi($sembunyi=''){
+		$gb = "<img id='link' src='".base_url()."images/empty.gif' title='Sembunyikan Data' valign=middle>$sembunyi";
+		return $gb;
+	}
+	function img_simpan($simpan=''){
+		$gb = "<img id='link' src='".base_url()."images/save.gif' title='Simpan Data' valign=middle>$simpan";
+		return $gb;
+	}
+	function img_batal($batal=''){
+		$gb = "<img id='link' src='".base_url()."images/cancel.gif' title='Batalkan Input Data' valign=middle>$batal";
+		return $gb;
+	}
+	function img_refresh($refresh=''){
+		$gb = "<img id='link' src='".base_url()."images/refresh.gif' title='Refresh Halaman' valign=middle>$refresh";
+		return $gb;
+	}
+	function img_preview($preview=''){
+		$gb = "<img id='link' src='".base_url()."images/preview.gif' title='Preview Halaman' valign=middle>$preview";
+		return $gb;
+	}
+	function img_addBook($addBook=''){
+		$gb = "<img id='link' src='".base_url()."images/addBook.gif' title='Tambahkan ke Daftar Buku' valign=middle>$addBook";
+		return $gb;
+	}
+	function img_remBook($remBook=''){
+		$gb = "<img id='link' src='".base_url()."images/remBook.gif' title='Hapus dari Daftar Buku' valign=middle>$remBook";
+		return $gb;
+	}
+	function img_print($print=''){
+		$gb = "<img id='link' src='".base_url()."images/print.gif' title='Cetak Halaman' valign=middle>$print";
+		return $gb;
+	}
+	function img_search($search=''){
+		$gb = "<img id='link' src='".base_url()."images/search.gif' title='Pencarian Data' valign=middle>$search";
+		return $gb;
+	}
+	function img_check($check=''){
+		$gb = "<img id='link' src='".base_url()."images/check.gif' title='Pilih Data' align='center' valign=middle>$check";
+		return $gb;
+	}
+	function img_return($return=''){
+		$gb = "<img id='link' src='".base_url()."images/return.gif' title='Kembalikan Buku' align='center' valign=middle>$return";
+		return $gb;
+	}
+	function img_empty($empty=''){
+		$gb = "<img id='link' src='".base_url()."images/empty.gif' title='Aksi Tidak diperbolehkan' align='center' valign=middle>$empty";
+		return $gb;
+	}
+	function img_info($info=''){
+		$gb = "<img id='link' src='".base_url()."images/info.gif' title='Anda terkena denda,\nkarena terlambat mengembalikan buku.' align='center' valign=middle>$info";
+		return $gb;
+	}
+	function img_denda($denda=''){
+		$gb = "<img id='link' src='".base_url()."images/denda.gif' title='Input Denda' align='center' valign=middle>$denda";
+		return $gb;
+	}
+	function open_img($path,$name_gb,$id_css,$align='left'){
+		$gb = "<img id='$id_css' src='".base_url()."images/".$path."/".$name_gb."' align='$align'>";
+		return $gb;
+	}
+	
+	function hari_esok($hr,$tanggal){
+		$sekarang	= strtotime($tanggal);
+		$nanti		= $sekarang + (24*$hr) * 60 * 60;
+		$besok		= date("Y-m-d", $nanti);
+		return $besok;
+	}
+	
+	function selisih_hari(){
+		
+		return $hasil;
+	}
+	
+	// UNTUK MENU UTAMA
+	function img_buku($buku=''){
+		$gb = "<img id='link' src='".base_url()."images/buku.gif' title='Data Buku' align='left' valign=middle>$buku";
+		return $gb;
+	}
+	function img_keluar($keluar=''){
+		$gb = "<img id='link' src='".base_url()."images/keluar.gif' title='Logout' align='left' valign=middle>$keluar";
+		return $gb;
+	}
+	function img_log($log=''){
+		$gb = "<img id='link' src='".base_url()."images/log.gif' title='Log' align='left' valign=middle>$log";
+		return $gb;
+	}
+	function img_dendo($denda=''){
+		$gb = "<img id='link' src='".base_url()."images/dendo.gif' title='Denda' align='left' valign=middle>$dendo";
+		return $gb;
+	}
+	function img_backup($backup=''){
+		$gb = "<img id='link' src='".base_url()."images/backup.gif' title='Backup Data' align='left' valign=middle>$backup";
+		return $gb;
+	}
+	function img_help($help=''){
+		$gb = "<img id='link' src='".base_url()."images/help.gif' title='Bantuan' align='left' valign=middle>$help";
+		return $gb;
+	}
+	function img_anggota($anggota=''){
+		$gb = "<img id='link' src='".base_url()."images/anggota.gif' title='Daftar Anggota' align='left' valign='top'>$anggota";
+		return $gb;
+	}
+	// SELESAI MENU UTAMA
+?>
