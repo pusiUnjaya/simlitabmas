@@ -12,48 +12,73 @@
       <?php
       	//cek skema
       	$skema = array();
-      	if(($this->session->userdata('sesi_jafung')=='Tenaga Pengajar' || $this->session->userdata('sesi_jafung')=='Asisten Ahli') && $this->session->userdata('sesi_sinta')>=0 && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+		//echo 'sesi_jafung: '.$this->session->userdata('sesi_jafung').' sesi_sinta: '.$this->session->userdata('sesi_sinta').
+		//'sesi_jenjang: '.$this->session->userdata('sesi_jenjang').' sesi_fakultas:'.$this->session->userdata('sesi_fakultas');
+
+		$angka_skor_sinta = (int) str_replace('.', '', $this->session->userdata('sesi_sinta'));
+
+      	if(($this->session->userdata('sesi_jafung')=='Tenaga Pengajar' || $this->session->userdata('sesi_jafung')=='Asisten Ahli') 
+			&& $this->session->userdata('sesi_sinta')>=0 && ($this->session->userdata('sesi_jenjang')=='S2' 
+		    || $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Pemula (RisLa)</li>';
 					array_push($skema,'Riset Pemula (RisLa)');
 				}
-				if(($this->session->userdata('sesi_jafung')=='Asisten Ahli' || $this->session->userdata('sesi_jafung')=='Lektor') && ($this->session->userdata('sesi_sinta')>=25) && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Asisten Ahli' || $this->session->userdata('sesi_jafung')=='Lektor') 
+					&& ($angka_skor_sinta>=25) && ($this->session->userdata('sesi_jenjang')=='S2' 
+				|| $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Fundamental (RisFun)</li>';
 					array_push($skema,'Riset Fundamental (RisFun)');
 				}
-				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' 
+				|| $this->session->userdata('sesi_jafung')=='Profesor') && ($this->session->userdata('sesi_jenjang')=='S2' 
+				|| $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					//echo '<li>Riset Kejuangan (RisJuang)</li>';
 					array_push($skema,'Riset Kejuangan (RisJuang)');
 				}
-				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') && ($this->session->userdata('sesi_sinta')>=50) && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' 
+				|| $this->session->userdata('sesi_jafung')=='Profesor') && ($angka_skor_sinta>=50) 
+				&& ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Kerjasama (RisKer)</li>';
 					array_push($skema,'Riset Kerjasama (RisKer)');
 				}
 				//skema terapan
-				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 && $this->session->userdata('sesi_sinta')>=150) || ($this->session->userdata('sesi_fakultas')==3 && $this->session->userdata('sesi_sinta')>=50)) && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' 
+				|| $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 
+				&& $angka_skor_sinta>=150) || ($this->session->userdata('sesi_fakultas')==3 
+				&& $angka_skor_sinta>=50)) && ($this->session->userdata('sesi_jenjang')=='S2' 
+				|| $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Terapan Hilirisasi (Risterasi)</li>';
 					array_push($skema,'Riset Terapan Hilirisasi (Risterasi)');
 				}
-				if(($this->session->userdata('sesi_jafung')=='Asisten Ahli' || $this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 && $this->session->userdata('sesi_sinta')>=100) || ($this->session->userdata('sesi_fakultas')==3 && $this->session->userdata('sesi_sinta')>=50)) && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Asisten Ahli' || $this->session->userdata('sesi_jafung')=='Lektor' 
+				|| $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') 
+				&& (($this->session->userdata('sesi_fakultas')<>3 && $angka_skor_sinta>=100) 
+				|| ($this->session->userdata('sesi_fakultas')==3 && $angka_skor_sinta>=50)) 
+				&& ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Mandatory (RisMa)</li>';
 					array_push($skema,'Riset Mandatory (RisMa)');
 				}
 				//skema pengembangan
-				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 && $this->session->userdata('sesi_sinta')>=150) || ($this->session->userdata('sesi_fakultas')==3 && $this->session->userdata('sesi_sinta')>=50)) && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' 
+				|| $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 
+				&& $angka_skor_sinta>=150) || ($this->session->userdata('sesi_fakultas')==3 
+				&& $angka_skor_sinta>=50)) && ($this->session->userdata('sesi_jenjang')=='S2' 
+				|| $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Pengembangan (Risbang)</li>';
 					array_push($skema,'Riset Pengembangan (Risbang)');
 				}
-				$hitskema = count($skema);
-				$this->session->set_userdata('sesi_skema', $skema);
+		$hitskema = count($skema);
+		$this->session->set_userdata('sesi_skema', $skema);
 
-				$cek = $this->msubmit->cekbuka($this->session->userdata('sesi_id'));
-				if(!$cek && $this->session->userdata('sesi_status')<>3)
+		$cek = $this->msubmit->cekbuka($this->session->userdata('sesi_id'));
+		if(!$cek && $this->session->userdata('sesi_status')<>3)
 					$cek['status'] = 0;
 				// if($cek['status']==1) {
 			?>
