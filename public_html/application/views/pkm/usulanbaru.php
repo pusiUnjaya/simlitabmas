@@ -12,39 +12,65 @@
       <?php
       	//cek skema
       	$skemapkm = array();
-      	if(($this->session->userdata('sesi_jafung')=='Tenaga Pengajar' || $this->session->userdata('sesi_jafung')=='Asisten Ahli') && $this->session->userdata('sesi_sinta')>=0 && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+		$angka_skor_sinta = (int) str_replace('.', '', $this->session->userdata('sesi_sinta'));
+
+      	if(($this->session->userdata('sesi_jafung')=='Tenaga Pengajar' || $this->session->userdata('sesi_jafung')=='Asisten Ahli') 
+			&& $this->session->userdata('sesi_sinta')>=0 && ($this->session->userdata('sesi_jenjang')=='S2' 
+		    || $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Pemula (RisLa)</li>';
 					array_push($skemapkm,'Pemberdayaan Masyarakat Pemula (PMP)');
 				}
-				if(($this->session->userdata('sesi_jafung')=='Asisten Ahli' || $this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') && ($this->session->userdata('sesi_sinta')>=25) && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Asisten Ahli' || $this->session->userdata('sesi_jafung')=='Lektor' 
+				|| $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') 
+				&& ($angka_skor_sinta>=25) && ($this->session->userdata('sesi_jenjang')=='S2' 
+				|| $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Fundamental (RisFun)</li>';
 					array_push($skemapkm,'Pemberdayaan Kemitraan Masyarakat (PKM)');
 				}
-				if(($this->session->userdata('sesi_jafung')=='Asisten Ahli' || $this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') && ($this->session->userdata('sesi_sinta')>=25) && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Asisten Ahli' || $this->session->userdata('sesi_jafung')=='Lektor' 
+				|| $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') 
+				&& ($angka_skor_sinta>=25) && ($this->session->userdata('sesi_jenjang')=='S2' 
+				|| $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					//echo '<li>Riset Kejuangan (RisJuang)</li>';
 					array_push($skemapkm,'Pemberdayaan Masyarakat oleh Mahasiswa (PMM)');
 				}
-				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 && $this->session->userdata('sesi_sinta')>=50) || ($this->session->userdata('sesi_fakultas')==3 && $this->session->userdata('sesi_sinta')>=25)) && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' 
+				|| $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 
+				&& $angka_skor_sinta>=50) || ($this->session->userdata('sesi_fakultas')==3 
+				&& $angka_skor_sinta>=25)) && ($this->session->userdata('sesi_jenjang')=='S2' 
+				|| $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Kerjasama (RisKer)</li>';
 					array_push($skemapkm,'Kewirausahaan berbasis Mahasiswa (KBM)');
 				}
 				
-				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 && $this->session->userdata('sesi_sinta')>=50) || ($this->session->userdata('sesi_fakultas')==3 && $this->session->userdata('sesi_sinta')>=25)) && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' 
+				|| $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 
+				&& $angka_skor_sinta>=50) || ($this->session->userdata('sesi_fakultas')==3 
+				&& $angka_skor_sinta>=25)) && ($this->session->userdata('sesi_jenjang')=='S2' 
+				|| $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Terapan Hilirisasi (Risterasi)</li>';
 					array_push($skemapkm,'Pemberdayaan Mitra Usaha Produk Unggulan Daerah (PM-UPUD)');
 				}
-				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 && $this->session->userdata('sesi_sinta')>=50) || ($this->session->userdata('sesi_fakultas')==3 && $this->session->userdata('sesi_sinta')>=25)) && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' 
+				|| $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 
+				&& $angka_skor_sinta>=50) || ($this->session->userdata('sesi_fakultas')==3 
+				&& $angka_skor_sinta>=25)) && ($this->session->userdata('sesi_jenjang')=='S2' 
+				|| $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Mandatory (RisMa)</li>';
 					array_push($skemapkm,'Pemberdayaan Berbasis Desa Binaan (PDB)');
 				}
 			
-				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' || $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 && $this->session->userdata('sesi_sinta')>=50) || ($this->session->userdata('sesi_fakultas')==3 && $this->session->userdata('sesi_sinta')>=25)) && ($this->session->userdata('sesi_jenjang')=='S2' || $this->session->userdata('sesi_jenjang')=='S3'))
+				if(($this->session->userdata('sesi_jafung')=='Lektor' || $this->session->userdata('sesi_jafung')=='Lektor Kepala' 
+				|| $this->session->userdata('sesi_jafung')=='Profesor') && (($this->session->userdata('sesi_fakultas')<>3 
+				&& $angka_skor_sinta>=50) || ($this->session->userdata('sesi_fakultas')==3 
+				&& $angka_skor_sinta>=25)) && ($this->session->userdata('sesi_jenjang')=='S2' 
+				|| $this->session->userdata('sesi_jenjang')=='S3'))
 				{
 					// echo '<li>Riset Pengembangan (Risbang)</li>';
 					array_push($skemapkm,'Pemberdayaan Berbasis Lembaga');
