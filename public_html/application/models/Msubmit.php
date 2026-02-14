@@ -1844,7 +1844,10 @@ Class MSubmit extends CI_Model
 	function mahasiswa()
 	{
 		$data = array();
-		$hasil = $this->db->query("SELECT mahasiswa.*, fakultas.fakultas namafak, prodi.prodi namaprodi FROM mahasiswa JOIN fakultas on fakultas.id_fak=mahasiswa.fakultas JOIN prodi on prodi.id_prodi=mahasiswa.prodi where concat('',mahasiswa.namamhs * 1) <> mahasiswa.namamhs GROUP BY mahasiswa.namamhs,mahasiswa.npm ORDER by fakultas.fakultas,prodi.prodi,mahasiswa.namamhs asc; ");
+		//$hasil = $this->db->query("SELECT mahasiswa.*, fakultas.fakultas namafak, prodi.prodi namaprodi FROM mahasiswa JOIN fakultas on fakultas.id_fak=mahasiswa.fakultas JOIN prodi on prodi.id_prodi=mahasiswa.prodi where concat('',mahasiswa.namamhs * 1) <> mahasiswa.namamhs GROUP BY mahasiswa.namamhs,mahasiswa.npm ORDER by fakultas.fakultas,prodi.prodi,mahasiswa.namamhs asc; ");
+		$hasil = $this->db->query("SELECT mahasiswa.*, fakultas.fakultas namafak, prodi.prodi namaprodi FROM mahasiswa 
+			JOIN fakultas on fakultas.id_fak=mahasiswa.fakultas JOIN prodi on prodi.id_prodi=mahasiswa.prodi 
+			GROUP BY mahasiswa.namamhs,mahasiswa.npm ORDER by fakultas.fakultas,prodi.prodi,mahasiswa.namamhs asc; ");
 		
 		if($hasil->num_rows() > 0)
 		{
