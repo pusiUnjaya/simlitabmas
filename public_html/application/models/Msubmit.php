@@ -767,8 +767,8 @@ Class MSubmit extends CI_Model
 		$data = array(
 				"namamhs"	=> $this->input->post("namamhs",true),
 				"npm"		=> $this->input->post("npm",true),
-				"hp"		=> $this->input->post("nomorhp",true),
-				"email"		=> $this->input->post("emailmhs",true),
+			//	"hp"		=> $this->input->post("nomorhp",true),
+			//	"email"		=> $this->input->post("emailmhs",true),
 				"fakultas"	=> $this->input->post("fakultas",true),
 				"prodi"		=> $this->input->post("prodi",true),
 				"modified"	=> $waktu
