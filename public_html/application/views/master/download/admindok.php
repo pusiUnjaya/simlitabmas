@@ -502,28 +502,6 @@
 </script>
 
 <script>
-	$(".hapus").click(function(){
-		var id = $(this).data('id');
-		bootbox.confirm({
-			title: "Hapus Data?",
-			message: "Anda Yakin Ingin Menghapus Data Sekarang? Setelah Hapus, Data Tidak Dapat Diperbaiki.",
-			closeButton: false,
-			buttons: {
-				cancel: {
-					label: '<i class="fa fa-times"></i> Batal'
-				},
-				confirm: {
-					label: '<i class="fa fa-check"></i> Hapus'
-				}
-			},
-			callback: function (result)
-			{
-				if(result)
-				window.location = "<?php echo base_url();?>dokumen/hapus/" + id ;
-			}
-		})
-	});
-
 	$(document).ready(function () {
 		$('.dataTable').DataTable({
 			"ordering": false // false to disable sorting (or any other option)
@@ -532,8 +510,26 @@
 
 
 		$(document).on('click','.hapus',function(){
-			alert('tes hapus');
-		});
+			var id = $(this).data('id');
+			bootbox.confirm({
+				title: "Hapus Data?",
+				message: "Anda Yakin Ingin Menghapus Data Sekarang? Setelah Hapus, Data Tidak Dapat Diperbaiki.",
+				closeButton: false,
+				buttons: {
+					cancel: {
+						label: '<i class="fa fa-times"></i> Batal'
+					},
+					confirm: {
+						label: '<i class="fa fa-check"></i> Hapus'
+					}
+				},
+				callback: function (result)
+				{
+					if(result)
+					window.location = "<?php echo base_url();?>dokumen/hapus/" + id ;
+				}
+			})
+			});
 	});
 
 	$(document).ready(function(){
