@@ -511,14 +511,24 @@
 								echo "<br><b>Status : ".$set."</b>
 										  <br>Ketua : ".$ketua['namalengkap']." | Prodi : ".$prodi['prodi']." | Skema : ".$p->skema."
 										  <br>Anggota : ";
-								$pisah = explode(',',$p->anggotadosen);
-								if($p->anggotadosen<>'')
+										  
+								//echo trim($p->anggotadosen);
+								if($p->anggotadosen<>''){
+									$posisi = strpos($p->anggotadosen, ',');
+									if ($posisi !== false) {
+										$pisah = explode(',',$p->anggotadosen);
+										
+									} else {
+										$pisah[0] = $p->anggotadosen;
+										
+									}									
 									$hitpisah = count($pisah);
-								else
+								}else 
 									$hitpisah = $this->msubmit->hitanggotabaru($p->id_usulan,'Penelitian');
 
 								$jmlanggota = $hitpisah;
 								$hitangg = $this->msubmit->hitanggotabaru($p->id_usulan,'Penelitian');
+								
 								if($p->anggotadosen<>'' && $hitangg==0)
 								{
 									echo '<ol>';
@@ -536,6 +546,32 @@
 											$setok = 'Belum Setuju';
 										$revnya = $this->mdosen->namadosen($pisah[$i]);
 										echo '<li>'.$revnya['namalengkap'].' ('.$setok.')</li>';
+									}
+									echo '</ol>';
+								}
+								elseif($p->anggotadosen<>'' && $hitangg>0)
+								{
+									$angg = $this->msubmit->perananggota($p->id_usulan,'Penelitian');
+									$hits = count($angg);
+									echo '<ol>';
+									foreach($angg as $a)
+									{
+										$okdeal = $this->msubmit->cekanggotasetuju($a->id_dosen,$p->id_usulan);
+										
+										if($okdeal>0)
+										{
+											$setok = 'Setuju';
+											$jmldeal++;
+										}
+										else
+											$setok = 'Belum Setuju';
+
+										if($hits==1)
+											echo $a->namalengkap.' ('.$setok.')';
+										else
+										{
+											echo '<li>'.$a->namalengkap.' ('.$setok.')</li>';
+										}
 									}
 									echo '</ol>';
 								}
