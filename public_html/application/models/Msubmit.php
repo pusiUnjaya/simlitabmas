@@ -574,6 +574,25 @@ Class MSubmit extends CI_Model
 		$this->db->join("allmhs","allmhs.npm=peran.anggota");
 		$this->db->where("peran.id_usulan",$id);
 		$this->db->where("peran.skema",$skema);
+
+		$hasil = $this->db->get();
+		
+		if($hasil->num_rows() > 0)
+		{
+			$data = $hasil->result();
+		}
+		return $data;
+	}
+
+	function peranmhsid($id,$skema)
+	{
+		$data = array();
+		$this->db->select("mahasiswa.npm, mahasiswa.namamhs,peran.tugas, peran.jenis_anggota");
+		$this->db->from("peran");
+		$this->db->join("mahasiswa","CAST(mahasiswa.idmhs AS CHAR)=peran.anggota");
+		$this->db->where("peran.id_usulan",$id);
+		$this->db->where("peran.skema",$skema);
+		
 		$hasil = $this->db->get();
 		
 		if($hasil->num_rows() > 0)

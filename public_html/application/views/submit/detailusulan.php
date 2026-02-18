@@ -431,8 +431,20 @@ pre { font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Robo
 						<div class="col-md-8">
 							<span>
 							<?php 
-								$ambil = explode(',',$usulan['anggotadosen']);
-								$hit = count($ambil);
+								$hit = 0;
+								if ($usulan['anggotadosen']<>''){
+									$posisi = strpos($usulan['anggotadosen'], ',');
+									if ($posisi !== false) {
+										$ambil = explode(',',$usulan['anggotadosen']);
+										
+									} else {
+										$ambil[0] = $usulan['anggotadosen'];
+										
+									}									
+									$hit = count($ambil);
+								}
+								//$ambil = explode(',',$usulan['anggotadosen']);
+								//$hit = count($ambil);
 								$hitangg = $this->msubmit->hitangg($usulan['id_usulan']);
 								
 								if($usulan['anggotadosen']<>'' && $hitangg==0) 
@@ -449,6 +461,25 @@ pre { font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Robo
 									}
 									if($hit>1)
 										echo '</ol>';
+								}
+								elseif($usulan['anggotadosen']<>'' && $hitangg>0)
+								{
+									$angg = $this->msubmit->perananggota($usulan['id_usulan'],'Penelitian');
+									$hits = count($angg);
+									echo '<ol>';
+									foreach($angg as $a)
+									{
+										if($hits==1)
+										{
+											echo $a->namalengkap.'<br>';
+											echo 'Peran : '.$a->tugas;
+										}
+										else
+										{
+											echo '<li>'.$a->namalengkap.'<br>Peran : '.$a->tugas.'</li>';
+										}
+									}
+									echo '</ol>';
 								}
 								elseif($usulan['anggotadosen']=='' && $hitangg>0)
 								{
@@ -483,36 +514,53 @@ pre { font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Robo
 						<div class="col-md-8">
 									<span>
 										<?php 
-											$ambil = explode(',',$usulan['anggotamhs']);
-											$hit = count($ambil);
+											$hit = 0;
+											if ($usulan['anggotamhs']<>''){
+												$posisi = strpos($usulan['anggotamhs'], ',');
+												if ($posisi !== false) {
+													$ambil = explode(',',$usulan['anggotamhs']);
+													
+												} else {
+													$ambil[0] = $usulan['anggotamhs'];
+													
+												}									
+												$hit = count($ambil);
+											}
+											
+											//$ambil = explode(',',$usulan['anggotamhs']);
+											//$hit = count($ambil);
 											$hitangg = $this->msubmit->hitangg($usulan['id_usulan']);
 											
-											if($usulan['anggotamhs']<>'' && $hitangg==0 && $hit==1) 
+											if($usulan['anggotamhs']<>'' && $hitangg==0 && $hit>0) 
 											{
 												echo '<pre>'.$usulan['anggotamhs'].'</pre>';
 											}
-											elseif($usulan['anggotamhs']<>'' && $hitangg==0 && $hit>1) 
+											elseif($usulan['anggotamhs']<>'' && $hitangg==0 && $hit>0) 
 											{
-												$split = explode(',',$usulan['anggotamhs']);
-												$jumsplit = count($split);
-												if($jumsplit>1)
+												//$split = explode(',',$usulan['anggotamhs']);
+												//$jumsplit = count($split);
+												if($hit>0)
 													echo '<ol style="margin-left:-23px">';
-												for($i=0;$i<$jumsplit;$i++)
+												for($i=0;$i<$hit;$i++)
 												{
-														$namamhs = $this->msubmit->namamhs($split[$i]);
+														$namamhs = $this->msubmit->namamhs($ambil[$i]);
 														$prodi = $this->mdosen->namaprodi($namamhs['prodi']);
-														if($jumsplit>1)
+														if($hit>0)
 															echo '<li>'.$namamhs['namamhs'].' ( '.$prodi['prodi'].' )</li>';
 														else
 															echo $namamhs['namamhs'].' ( '.$prodi['prodi'].' )';
 												}
-												if($jumsplit>1)
+												if($hit>0)
 													echo '</ol>';
 											}
-											elseif($usulan['anggotamhs']=='' && $hitangg>0)
+											elseif($usulan['anggotamhs']<>'' && $hitangg>0 && $hit>0)
 											{
 												$angg = $this->msubmit->peranmhs($usulan['id_usulan'],'Penelitian');
 												$hits = count($angg);
+												if ($hits==0){
+													$angg = $this->msubmit->peranmhsid($usulan['id_usulan'],'Penelitian');
+													$hits = count($angg);
+												}
 												echo '<ol>';
 												foreach($angg as $a)
 												{
