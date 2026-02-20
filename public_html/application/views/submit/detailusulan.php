@@ -529,7 +529,7 @@ pre { font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Robo
 											
 											//$ambil = explode(',',$usulan['anggotamhs']);
 											//$hit = count($ambil);
-											$hitangg = $this->msubmit->hitangg($usulan['id_usulan']);
+											$hitangg = $this->msubmit->hitangg($usulan['id_usulan'],"mhs");
 											
 											if($usulan['anggotamhs']<>'' && $hitangg==0 && $hit>0) 
 											{

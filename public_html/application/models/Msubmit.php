@@ -535,13 +535,19 @@ Class MSubmit extends CI_Model
 		return $data;
 	}
 
-	function hitangg($id)
+	function hitangg($id,$jenis="Dosen")
 	{
+		$jns = "Dosen";
+		if($jenis == "mhs"){
+		  $jns = "Mahasiswa";
+		}
+		
 		$data = array();
 		$this->db->select("*");
 		$this->db->from("peran");
 		$this->db->where("id_usulan",$id);
 		$this->db->where("skema","Penelitian");
+		$this->db->where("jenis_anggota",$jns);
 		$hasil = $this->db->get();
 		
 		$data = $hasil->num_rows();
@@ -557,6 +563,7 @@ Class MSubmit extends CI_Model
 		$this->db->join("dosen","dosen.id_dosen=peran.anggota");
 		$this->db->where("peran.id_usulan",$id);
 		$this->db->where("peran.skema",$skema);
+		$this->db->where("peran.jenis_anggota","Dosen");
 		$hasil = $this->db->get();
 		
 		if($hasil->num_rows() > 0)
@@ -574,6 +581,7 @@ Class MSubmit extends CI_Model
 		$this->db->join("allmhs","allmhs.npm=peran.anggota");
 		$this->db->where("peran.id_usulan",$id);
 		$this->db->where("peran.skema",$skema);
+		$this->db->where("peran.jenis_anggota","Mahasiswa");
 
 		$hasil = $this->db->get();
 		
@@ -592,6 +600,7 @@ Class MSubmit extends CI_Model
 		$this->db->join("mahasiswa","CAST(mahasiswa.idmhs AS CHAR)=peran.anggota");
 		$this->db->where("peran.id_usulan",$id);
 		$this->db->where("peran.skema",$skema);
+		$this->db->where("peran.jenis_anggota","Mahasiswa");
 		
 		$hasil = $this->db->get();
 		
