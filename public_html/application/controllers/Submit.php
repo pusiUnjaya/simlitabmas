@@ -1211,6 +1211,9 @@ class Submit extends CI_Controller
 		header('Content-Type: application/json');
 
 		// Cek login, jika tidak login langsung return JSON error dan exit
+
+
+
 		if (empty($this->session->userdata('sesi_user'))) {
 			echo json_encode([
 				'status' => false,
@@ -1243,5 +1246,30 @@ class Submit extends CI_Controller
 				'message' => $e->getMessage()
 			]);
 		}
+	}
+
+	function search_mahasiswa()
+	{
+		header('Content-Type: application/json');
+		$all_sessiondata = $this->session->all_userdata();
+		// Cek login, jika tidak login langsung return JSON error dan exit
+		if (empty($this->session->userdata('sesi_user'))) {
+			echo json_encode([
+				'status' => false,
+				'data' => $all_sessiondata,
+				'message' => 'Sesi habis. Silahkan login terlebih dahulu!'
+			]);
+			return;
+		}
+
+		$q = $this->input->post('q', true);
+		$page = $this->input->post('page', true) ?: 1;
+		$selected = $this->input->post('selected', true);
+		$mahasiswa = $this->msubmit->search_mahasiswa($q, $page, $selected);
+		echo json_encode([
+			'status' => true,
+			'data' => $mahasiswa,
+			'message' => $q
+		]);
 	}
 }

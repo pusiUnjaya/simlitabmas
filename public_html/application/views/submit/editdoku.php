@@ -409,16 +409,7 @@
 			<div class="modal-body">
 				<div class="form-group row-fluid">
 					<label for="p-id" class="form-label">Nama Mahasiswa</label>
-					<select id="p-id" class="form-control" style="width: 100%;">
-						<option value="">-- Pilih salah satu --</option>
-						<?php foreach ($mahasiswa as $p): ?>
-							<?php if ($p->status == 'Aktif'): ?>
-								<option value="<?php echo $p->npm ?>">
-									<?php echo $p->namamhs ?> (<?php echo $p->namafak . '/' . $p->namaprodi ?>)
-								</option>
-							<?php endif ?>
-						<?php endforeach ?>
-					</select>
+					<select id="p-id" class="form-control" style="width: 100%;"></select>
 				</div>
 				<label for="recipient-name" class="col-form-label">Tugas Dalam Penelitian * :</label>
 				<textarea id="p-tugas" name="tugas" class="form-control" required></textarea>
@@ -467,11 +458,7 @@ $anggotamhs = json_encode($datamhs);
 		});
 	});
 
-	$(document).ready(function() {
-		$('#p-id').select2({
-			dropdownParent: $("#p-modal")
-		});
-	});
+
 	$('.unggah').bind('change', function() {
 		var ukuran = this.files[0].size / 1024 / 1024;
 		fileName = this.files[0].name;
@@ -886,6 +873,69 @@ $anggotamhs = json_encode($datamhs);
 			}
 		});
 
+
+		var currSelectedAnggotaMhs = '';
+		formatSelectedMhs('');
+
+		function formatSelectedMhs(selected = '', selectedText = '') {
+			// Destroy previous select2 instance if exists
+			if ($('#p-id').data('select2')) {
+				$('#p-id').select2('destroy');
+			}
+			$('#p-id').empty();
+			if (selected && selectedText) {
+				// Tambahkan option terpilih secara manual agar langsung muncul
+				var option = new Option(selectedText, selected, true, true);
+				console.log(option);
+				$('#p-id').append(option).trigger('change');
+			}
+			$('#p-id').select2({
+				dropdownParent: $("#p-modal"),
+				ajax: {
+					url: '<?php echo site_url('submit/search_mahasiswa'); ?>',
+					dataType: 'json',
+					type: 'POST',
+					delay: 250,
+					data: function(params) {
+						return {
+							q: params.term,
+							page: params.page || 1
+						};
+					},
+					processResults: function(data, params) {
+						params.page = params.page || 1;
+						if (data.status) {
+							return {
+								results: data.data,
+								pagination: {
+									more: (params.page * 20) < data.total_count
+								}
+							};
+						} else {
+							alert(data.message);
+						}
+					},
+					cache: true
+				},
+				minimumInputLength: 2,
+				templateResult: function(item) {
+					if (item.loading) return item.namamhs;
+					return item.namamhs || 'Tidak ditemukan';
+				},
+				templateSelection: function(item) {
+					if (selected && selectedText && item.status == undefined) {
+						currSelectedAnggotaMhs = selected;
+						return selectedText;
+					} else {
+						currSelectedAnggotaMhs = item.npm;
+						return item.namamhs || 'Tidak ditemukan';
+					}
+
+				}
+			});
+		}
+
+
 		$(document).on('click', '.editAnggota', function() {
 			var jenis = $(this).data('jenis');
 			var id = $(this).data('id');
@@ -900,9 +950,9 @@ $anggotamhs = json_encode($datamhs);
 				$('#m-modal-title').text('Edit');
 				$('#m-modal').modal('show');
 			} else {
-				console.log(currAnggotaMhs);
 				var anggota = currAnggotaMhs.find(x => x.id == id);
-				$('#p-id').val(anggota.npm).trigger('change');
+				// Pastikan value dan text terisi agar select2 langsung tampil
+				formatSelectedMhs(anggota.npm, anggota.namamhs);
 				$('#p-tugas').val(anggota.tugas);
 				$('#p-simpan').data('edit', id);
 				$('#p-simpan').data('jenis', jenis);

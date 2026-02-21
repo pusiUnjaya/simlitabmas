@@ -1829,7 +1829,7 @@ class MSubmit extends CI_Model
 	function allmhs()
 	{
 		$data = array();
-		$hasil = $this->db->query("SELECT allmhs.*, fakultas.fakultas namafak, prodi.prodi namaprodi FROM allmhs JOIN fakultas on fakultas.id_fak=allmhs.fakultas JOIN prodi on prodi.id_prodi=allmhs.prodi where concat('',allmhs.namamhs * 1) <> allmhs.namamhs GROUP BY allmhs.namamhs,allmhs.npm ORDER by fakultas.fakultas,prodi.prodi,allmhs.namamhs asc; ");
+		$hasil = $this->db->query("SELECT `idmhs`,`npm`,`namamhs`,`fakultas`,`prodi`,`status`,`thmasuk`,`hp`,`email`,`modified`,`namafak`,`namaprodi` FROM `v_allmhs`");
 
 		if ($hasil->num_rows() > 0) {
 			$data = $hasil->result();
@@ -3037,5 +3037,23 @@ class MSubmit extends CI_Model
 	{
 		$this->db->where("idperan", $id);
 		return $this->db->delete("peran");
+	}
+
+	function search_mahasiswa($q, $page, $npm_selected = '')
+	{
+		$this->db->select("npm as id, namamhs as text, `idmhs`,`npm`,`namamhs`,`fakultas`,`prodi`,`status`,`thmasuk`,`hp`,`email`,`modified`,`namafak`,`namaprodi`");
+		$this->db->from("v_allmhs");
+
+		if ($npm_selected != '') {
+			$this->db->where("npm", $npm_selected);
+		} else {
+			$this->db->like("LOWER(namamhs)", strtolower($q));
+			$this->db->or_like("LOWER(npm)", strtolower($q));
+			$this->db->where("status", "Aktif");
+		}
+
+
+		$this->db->limit(10, ($page - 1) * 10);
+		return $this->db->get()->result();
 	}
 }
