@@ -107,13 +107,24 @@
 							<div class="col-md-12">
 								<label>Reviewer</label>
 								<?php
+								$is_dashboardpengusul = false;
+								if ($this->session->userdata('sesi_id') == $usulan['pengusul']) {
+									$is_dashboardpengusul = true;
+								}
+
 								if ($usulan['reviewer'] <> '') {
 									$pisah = explode(',', $usulan['reviewer']);
 									$hitpisah = count($pisah);
 									echo '<ol>';
+									$nrev = 1;
 									for ($i = 0; $i < $hitpisah; $i++) {
 										$revnya = $this->mdosen->namadosen($pisah[$i]);
-										echo '<li>' . $revnya['namalengkap'] . '</li>';
+										if ($is_dashboardpengusul) {
+											echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+											$nrev++;
+										} else {
+											echo '<li>' . $revnya['namalengkap'] . '</li>';
+										}
 									}
 									echo '</ol>';
 								} else
@@ -265,8 +276,15 @@
 							$hasilreview = $this->msubmit->lihathasilreview($usulan['id_usulan']);
 							$nomor = 1;
 							echo '<div class="row" style="margin-top:40px">';
+							$nrev = 1;
+							$namarev = [];
 							foreach ($hasilreview as $h) {
-								$namarev = $this->mdosen->dosennya($h->reviewer);
+								if ($is_dashboardpengusul) {
+									$namarev['namalengkap'] = 'Reviewer Anonim ' . $nrev;
+									$nrev++;
+								} else {
+									$namarev['namalengkap'] = $this->mdosen->dosennya($h->reviewer);
+								}
 							?>
 
 								<div class="col-md-6">
