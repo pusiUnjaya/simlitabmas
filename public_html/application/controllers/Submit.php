@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit ('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Submit extends CI_Controller
 {
@@ -23,7 +23,7 @@ class Submit extends CI_Controller
 
 	private function check_login()
 	{
-		empty ($this->session->userdata('sesi_user')) and redirect('login');
+		empty($this->session->userdata('sesi_user')) and redirect('login');
 	}
 
 	public function index()
@@ -34,7 +34,7 @@ class Submit extends CI_Controller
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
 
-		$pilih = empty ($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
+		$pilih = empty($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
 		if ($this->sesi_status <> 1 && $this->sesi_status <> 4) {
 			$dosen = $this->mdosen->ambildosen($this->sesi_id);
 			$data['iddosen'] = $dosen['id_dosen'];
@@ -64,7 +64,7 @@ class Submit extends CI_Controller
 	{
 		$this->check_login();
 
-		empty ($id_usulan) and redirect('submit/tkt/new');
+		empty($id_usulan) and redirect('submit/tkt/new');
 		($id_usulan == 'new') and $id_usulan = null;
 
 		$this->load->model('mtkt', '', true);
@@ -77,11 +77,11 @@ class Submit extends CI_Controller
 		$data['capaian'] = $this->mtkt->capaian($id_usulan);
 		// die('<pre>'.print_r($data['capaian'], true));
 		$data['jenis'] = $jenis_tkt ?: (
-			empty ($data['capaian']) ? 1 : (
+			empty($data['capaian']) ? 1 : (
 				array_reverse(array_keys($data['capaian']))[0]
 			)
 		);
-		$data['tingkat'] = empty ($data['capaian'][$data['jenis']]) ? 1 : (
+		$data['tingkat'] = empty($data['capaian'][$data['jenis']]) ? 1 : (
 			array_reverse(array_keys($data['capaian'][$data['jenis']]))[0]
 		);
 
@@ -103,7 +103,7 @@ class Submit extends CI_Controller
 			'capaian' => $this->input->post('capaian')[$jenis],
 		];
 		// die('<pre>'.print_r($data, true));
-		if (!empty ($id)) {
+		if (!empty($id)) {
 			$this->mtkt->simpan($id, $data);
 			// echo $this->db->last_query();exit;
 
@@ -123,7 +123,7 @@ class Submit extends CI_Controller
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
 
-		$pilih = empty ($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
+		$pilih = empty($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
 		$data['usulan'] = $this->msubmit->progressusulan($pilih);
 		// echo $this->db->last_query();exit;	
 
@@ -320,6 +320,8 @@ class Submit extends CI_Controller
 		$data['show'] = 'show ';
 
 		$data['fakultas'] = $this->mdosen->fakultas();
+		$data['dosen'] = $this->mdosen->select();
+		$data['mahasiswa'] = $this->msubmit->allmhs();
 		$data['usulan'] = $this->msubmit->detailusulan($id);
 
 		$data['page'] = 'submit/editdoku';
@@ -335,7 +337,7 @@ class Submit extends CI_Controller
 
 		$data = "<option value=''>-- Pilih salah satu --</option>";
 		foreach ($mhs as $value) {
-			$data .= "<option value='" . $value->npm . "'>" . $value->namamhs . "(".$value->namafak."/".$value->namaprodi.")</option>";
+			$data .= "<option value='" . $value->npm . "'>" . $value->namamhs . "(" . $value->namafak . "/" . $value->namaprodi . ")</option>";
 		}
 		echo $data;
 	}
@@ -449,7 +451,7 @@ class Submit extends CI_Controller
 		$this->check_login();
 
 		// Set Deadline Unggah Usulan
-		$bukaan= $this->msubmitpribadi->bukaan();
+		$bukaan = $this->msubmitpribadi->bukaan();
 		$now = date('Y-m-d H:i:s');
 		// $begin = new DateTime(date('Y-m-d H:i:s'));
 		// $end = new DateTime('2024-05-19 23:59:59');
@@ -481,7 +483,7 @@ class Submit extends CI_Controller
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
 
-		$pilih = empty ($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
+		$pilih = empty($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
 		$data['dosen'] = $this->msubmit->histori($pilih);
 
 		$data['page'] = 'submit/histori';
@@ -496,7 +498,7 @@ class Submit extends CI_Controller
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
 
-		$pilih = empty ($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
+		$pilih = empty($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
 		$data['revkemajuan'] = $this->msubmit->revkemajuan($pilih);
 		$data['hitrevkemajuan'] = $this->msubmit->hitrevkemajuan($pilih);
 		$data['kemajuan'] = $this->msubmit->kemajuan($pilih);
@@ -514,7 +516,7 @@ class Submit extends CI_Controller
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
 
-		$pilih = empty ($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
+		$pilih = empty($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
 		$data['kaprodi'] = $this->msubmit->kaprodisetuju($pilih);
 		// echo $this->db->last_query();exit;
 		$data['hit'] = $this->msubmit->hitkaprodisetuju($pilih);
@@ -532,7 +534,7 @@ class Submit extends CI_Controller
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
 
-		$pilih = empty ($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
+		$pilih = empty($this->input->post('periode')) ? date('Y') : $this->input->post('periode');
 		$data['usulan'] = $this->msubmit->laporan($pilih);
 		// $data['direview'] = $this->msubmit->direview($pilih);
 		// echo $this->db->last_query();exit;
@@ -768,7 +770,7 @@ class Submit extends CI_Controller
 			$nidn = $this->input->post('m_id');
 			$tugas = $this->input->post('m_tugas');
 			$data = array_map(
-				function($x) {
+				function ($x) {
 					return array_combine(['id_usulan', 'anggota', 'tugas', 'jenis_anggota', 'skema'], $x);
 				},
 				array_map(
@@ -785,7 +787,7 @@ class Submit extends CI_Controller
 			$npm = $this->input->post('p_id');
 			$mtugas = $this->input->post('p_tugas');
 			$data = array_map(
-				function($x) {
+				function ($x) {
 					return array_combine(['id_usulan', 'anggota', 'tugas', 'jenis_anggota', 'skema'], $x);
 				},
 				array_map(
@@ -836,7 +838,7 @@ class Submit extends CI_Controller
 	{
 		$this->check_login();
 
-		empty ($id) and $id = $this->input->post("idusul", true);
+		empty($id) and $id = $this->input->post("idusul", true);
 		$this->msubmit->kirim($id);
 		// echo $this->db->last_query();exit;	
 
@@ -1020,7 +1022,7 @@ class Submit extends CI_Controller
 		// echo $this->db->last_query();exit;	
 
 		$this->session->set_flashdata('result', 'Realisasi Dana Telah Sukses Disimpan!');
-		redirect("submit/detaillaporan/".$this->input->post('idus'));
+		redirect("submit/detaillaporan/" . $this->input->post('idus'));
 	}
 
 	function simpansetujulaporan($id)
@@ -1068,15 +1070,178 @@ class Submit extends CI_Controller
 	function anggotadosen($id)
 	{
 		header('Content-Type: application/json');
-		echo json_encode(array_map(function($x) {
+		echo json_encode(array_map(function ($x) {
 			$y = $this->mdosen->namadosen($x);
 			$y['id'] = $x;
 			return $y;
-		}, explode(',', $this->db
-			->select('anggotadosen')
-			->get_where('usulan', ['id_usulan' => $id])
-			->row()
-			->anggotadosen
+		}, explode(
+			',',
+			$this->db
+				->select('anggotadosen')
+				->get_where('usulan', ['id_usulan' => $id])
+				->row()
+				->anggotadosen
 		)));
+	}
+
+	function load_anggota_dosen($id)
+	{
+		header('Content-Type: application/json');
+
+		// Cek login, jika tidak login langsung return JSON error dan exit
+		if (empty($this->session->userdata('sesi_user'))) {
+			echo json_encode([
+				'status' => false,
+				'data' => [],
+				'message' => 'Sesi habis. Silahkan login terlebih dahulu!'
+			]);
+			return;
+		}
+
+		// Jika login, lanjutkan ambil data
+		$resdata = $this->msubmit->perananggota($id, 'Penelitian');
+		echo json_encode([
+			'status' => true,
+			'data' => $resdata,
+			'message' => ''
+		]);
+	}
+
+	function load_anggota_mhs($id)
+	{
+		header('Content-Type: application/json');
+
+		// Cek login, jika tidak login langsung return JSON error dan exit
+		if (empty($this->session->userdata('sesi_user'))) {
+			echo json_encode([
+				'status' => false,
+				'data' => [],
+				'message' => 'Sesi habis. Silahkan login terlebih dahulu!'
+			]);
+			return;
+		}
+
+		// Jika login, lanjutkan ambil data
+		$resdata = $this->msubmit->peranmhs($id, 'Penelitian');
+		echo json_encode([
+			'status' => true,
+			'data' => $resdata,
+			'message' => ''
+		]);
+	}
+
+
+
+	private function aksiAnggota($aksi, $jenis)
+	{
+		$jenis = $jenis == 'dosen' ? 'Dosen' : 'Mahasiswa';
+		if ($aksi == 'add') {
+
+
+			$sv = $this->msubmit->addanggota([
+				'id_usulan' => $this->input->post('id_usulan', true),
+				'anggota' => $this->input->post('anggota', true),
+				'tugas' => $this->input->post('tugas', true),
+				'jenis_anggota' => $jenis,
+				'skema' => 'Penelitian'
+			]);
+			if (!$sv) {
+				echo json_encode([
+					'status' => false,
+					'message' => 'Gagal menambahkan anggota ' . $jenis . '!'
+				]);
+				return;
+			}
+
+			echo json_encode([
+				'status' => true,
+				'message' => 'Anggota ' . $jenis . ' berhasil ditambahkan!'
+			]);
+			return;
+		} else if ($aksi == 'edit') {
+			$dt = [
+				'tugas' => $this->input->post('tugas', true),
+				'anggota' => $this->input->post('anggota', true),
+			];
+
+			$id = $this->input->post('id', true);
+
+			$sv = $this->msubmit->updateanggota($id, $dt);
+			if (!$sv) {
+				echo json_encode([
+					'status' => false,
+					'message' => 'Gagal memperbarui anggota ' . $jenis . '!'
+				]);
+				return;
+			}
+
+			echo json_encode([
+				'status' => true,
+				'message' => 'Anggota ' . $jenis . ' berhasil diperbarui!'
+			]);
+			return;
+		} else if ($aksi == 'delete') {
+			$sv = $this->msubmit->deleteanggota([
+				'id' => $this->input->post('id', true),
+			]);
+			if (!$sv) {
+				echo json_encode([
+					'status' => false,
+					'message' => 'Gagal menghapus anggota ' . $jenis . '!'
+				]);
+				return;
+			}
+
+			echo json_encode([
+				'status' => true,
+				'message' => 'Anggota ' . $jenis . ' berhasil dihapus!'
+			]);
+			return;
+		} else {
+			echo json_encode([
+				'status' => false,
+				'message' => 'Aksi tidak dikenali!'
+			]);
+			return;
+		}
+	}
+
+	function simpan_anggota()
+	{
+		header('Content-Type: application/json');
+
+		// Cek login, jika tidak login langsung return JSON error dan exit
+		if (empty($this->session->userdata('sesi_user'))) {
+			echo json_encode([
+				'status' => false,
+				'message' => 'Sesi habis. Silahkan login terlebih dahulu!'
+			]);
+			return;
+		}
+
+		try {
+			$aksi = $this->input->post('aksi', true);
+			$jenis = $this->input->post('jenis', true);
+
+
+			//cek apakah usulan usulan belum dikirim, jika sudah dikirim maka tidak bisa tambah anggota
+			$id_usulan = $this->input->post('id_usulan', true);
+			$usulan = $this->db->get_where('usulan', ['id_usulan' => $id_usulan])->row();
+			if ($usulan->status == 'Usulan Baru') {
+				$this->aksiAnggota($aksi, $jenis);
+				return;
+			} else {
+				echo json_encode([
+					'status' => false,
+					'message' => 'Usulan sudah dikirim, tidak bisa menambah anggota!'
+				]);
+				return;
+			}
+		} catch (Exception $e) {
+			echo json_encode([
+				'status' => false,
+				'message' => $e->getMessage()
+			]);
+		}
 	}
 }
