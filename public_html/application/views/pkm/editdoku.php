@@ -952,6 +952,36 @@ $anggotamhs = json_encode($datamhs);
 			}
 		});
 
+		$(document).on('click', '.hapusAnggota', function() {
+			var jenis = $(this).data('jenis');
+			var id = $(this).data('id');
+			if (confirm("Apakah Anda yakin ingin menghapus anggota ini?")) {
+				$.ajax({
+					url: "<?php echo site_url('pengabdian/simpan_anggota'); ?>",
+					method: "POST",
+					data: {
+						id: id,
+						aksi: 'delete',
+						jenis: jenis,
+						id_usulan: "<?php echo $this->uri->segment(3); ?>"
+					},
+					success: function(data) {
+						hsl = data;
+					},
+					complete: function() {
+						if (hsl.status) {
+							if (jenis == 'dosen') {
+								load_anggota_dosen();
+							} else {
+								load_anggota_mhs();
+							}
+						}
+						alert(hsl.message);
+					}
+				});
+			}
+		});
+
 
 		$(document).on('click', '.btSimpanAnggota', function() {
 			if (confirm("Apakah Anda yakin ingin menyimpan data anggota ini?")) {

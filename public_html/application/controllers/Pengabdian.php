@@ -1022,9 +1022,7 @@ class Pengabdian extends CI_Controller
 			]);
 			return;
 		} else if ($aksi == 'delete') {
-			$sv = $this->msubmit->deleteanggota([
-				'id' => $this->input->post('id', true),
-			]);
+			$sv = $this->msubmit->deleteanggota($this->input->post('id', true));
 			if (!$sv) {
 				echo json_encode([
 					'status' => false,
