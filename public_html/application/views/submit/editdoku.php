@@ -13,19 +13,40 @@
 		color: #0d1c48 !important;
 	}
 
-	.select2-container--default .select2-selection--single {
-		height: 38px;
-		padding: 6px 12px;
-		border: 1px solid #d1d3e2;
-		border-radius: 4px;
-	}
-
 	.form-check-inline {
 		padding: 5px;
 		border: 1px solid #c6c6c6;
 		border-radius: 8px;
 		margin-bottom: 4px;
 		cursor: pointer;
+	}
+</style>
+
+<style>
+	.select2-container--default .select2-selection--single {
+		height: 38px;
+		padding: 6px 12px;
+	}
+
+	.select2-container--default .select2-selection--single .select2-selection__rendered {
+		line-height: 24px;
+	}
+
+	.select2-container--default .select2-selection--single .select2-selection__arrow {
+		height: 36px;
+		right: 10px;
+	}
+
+	.select2-container--default .select2-selection--single .select2-selection__arrow b {
+		border-color: #888 transparent transparent transparent;
+		border-style: solid;
+		border-width: 5px 4px 0 4px;
+		height: 0;
+		left: 50%;
+		margin-left: -4px;
+		margin-top: -2px;
+		position: absolute;
+		top: 50%;
 	}
 </style>
 <div class="container-fluid">

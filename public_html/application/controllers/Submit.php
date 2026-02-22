@@ -321,7 +321,7 @@ class Submit extends CI_Controller
 
 		$data['fakultas'] = $this->mdosen->fakultas();
 		$data['dosen'] = $this->mdosen->select();
-		$data['mahasiswa'] = $this->msubmit->allmhs();
+		$data['mahasiswa'] = [];
 		$data['usulan'] = $this->msubmit->detailusulan($id);
 
 		$data['page'] = 'submit/editdoku';
@@ -469,7 +469,7 @@ class Submit extends CI_Controller
 
 		$data['fakultas'] = $this->mdosen->fakultas();
 		$data['dosen'] = $this->mdosen->select();
-		$data['mahasiswa'] = $this->msubmit->allmhs();
+		$data['mahasiswa'] = [];
 
 		$data['page'] = 'submit/doku';
 		$this->load->view('dashboard/dashboard', $data);

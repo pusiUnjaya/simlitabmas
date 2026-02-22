@@ -4,7 +4,33 @@
 <script src="<?php echo base_url(); ?>assets/js/bootstrap-select.min.js"></script>
 <link href="<?php echo base_url(); ?>assets/vendor/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo base_url(); ?>assets/vendor/select2/dist/js/select2.min.js"></script>
+<style>
+	.select2-container--default .select2-selection--single {
+		height: 38px;
+		padding: 6px 12px;
+	}
 
+	.select2-container--default .select2-selection--single .select2-selection__rendered {
+		line-height: 24px;
+	}
+
+	.select2-container--default .select2-selection--single .select2-selection__arrow {
+		height: 36px;
+		right: 10px;
+	}
+
+	.select2-container--default .select2-selection--single .select2-selection__arrow b {
+		border-color: #888 transparent transparent transparent;
+		border-style: solid;
+		border-width: 5px 4px 0 4px;
+		height: 0;
+		left: 50%;
+		margin-left: -4px;
+		margin-top: -2px;
+		position: absolute;
+		top: 50%;
+	}
+</style>
 <div class="container-fluid">
 
 	<!-- Page Heading -->
@@ -424,7 +450,7 @@ $anggotamhs = json_encode($datamhs);
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="m-id" class="form-label">Nama Dosen</label>
-					<select id="m-id" class="form-control" style="width: 700px;">
+					<select id="m-id" class="form-control" style="width: 100%;">
 						<option value="">-- Pilih salah satu --</option>
 						<?php foreach ($dosen as $d): ?>
 							<option value="<?php echo $d->id_dosen ?>">
@@ -456,16 +482,7 @@ $anggotamhs = json_encode($datamhs);
 			<div class="modal-body">
 				<div class="form-group row-fluid">
 					<label for="p-id" class="form-label">Nama Mahasiswa</label>
-					<select id="p-id" class="form-control" style="width: 700px;">
-						<option value="">-- Pilih salah satu --</option>
-						<?php foreach ($mahasiswa as $p): ?>
-							<?php if ($p->status == 'Aktif'): ?>
-								<option value="<?php echo $p->npm ?>">
-									<?php echo $p->namamhs ?> (<?php echo $p->namafak . '/' . $p->namaprodi ?>)
-								</option>
-							<?php endif ?>
-						<?php endforeach ?>
-					</select>
+					<select id="p-id" class="form-control" style="width: 100%;"></select>
 				</div>
 				<label for="recipient-name" class="col-form-label">Tugas Dalam Penelitian * :</label>
 				<textarea id="p-tugas" name="tugas" class="form-control" required></textarea>
@@ -489,6 +506,118 @@ $anggotamhs = json_encode($datamhs);
 		$('#p-id').select2({
 			dropdownParent: $("#p-modal")
 		});
+
+		var currSelectedAnggotaMhs = '';
+		var objCurrSelectedAnggotaMhs = {};
+		formatSelectedMhs('');
+
+		function formatSelectedMhs(selected = '', selectedText = '') {
+			// Destroy previous select2 instance if exists
+			if ($('#p-id').data('select2')) {
+				$('#p-id').select2('destroy');
+			}
+			$('#p-id').empty();
+			if (selected && selectedText) {
+				// Tambahkan option terpilih secara manual agar langsung muncul
+				var option = new Option(selectedText, selected, true, true);
+				console.log(option);
+				$('#p-id').append(option).trigger('change');
+			}
+			$('#p-id').select2({
+				dropdownParent: $("#p-modal"),
+				ajax: {
+					url: '<?php echo site_url('submit/search_mahasiswa'); ?>',
+					dataType: 'json',
+					type: 'POST',
+					delay: 250,
+					data: function(params) {
+						return {
+							q: params.term,
+							page: params.page || 1
+						};
+					},
+					processResults: function(data, params) {
+						params.page = params.page || 1;
+						if (data.status) {
+							return {
+								results: data.data,
+								pagination: {
+									more: (params.page * 20) < data.total_count
+								}
+							};
+						} else {
+							alert(data.message);
+						}
+					},
+					cache: true
+				},
+				minimumInputLength: 2,
+				templateResult: function(item) {
+					if (item.loading) return item.namamhs;
+					return item.namamhs || 'Tidak ditemukan';
+				},
+				templateSelection: function(item) {
+					objCurrSelectedAnggotaMhs = item;
+					if (selected && selectedText && item.status == undefined) {
+						currSelectedAnggotaMhs = selected;
+						return selectedText;
+					} else {
+						currSelectedAnggotaMhs = item.npm;
+						return item.namamhs || 'Tidak ditemukan';
+					}
+
+				}
+			});
+		}
+
+		$('#p-simpan').on('click', ev => {
+			let id = $('#p-id').val();
+			if (id == '' || !objCurrSelectedAnggotaMhs.id) {
+				alert('Mohon dipilih salah satu');
+				return;
+			}
+			let namaID = objCurrSelectedAnggotaMhs.namamhs;
+			let tugas = $('#p-tugas').val();
+			let nama = namaID;
+			let npm = $('#p-id').val();
+			// let npm = namaID.substring(namaID.indexOf(' (') + 2, namaID.length - 1);
+
+			$('#p-modal').modal('hide');
+			tambahAnggotaMhs(id, npm, nama, tugas);
+		});
+
+
+
+		$(document).on('click', '.hapusAnggotaMhs', function() {
+			if (!confirm('Data ini benar-benar akan dihapus?')) return;
+
+			$(this).parent().parent().remove();
+			if ($('#p-data tr').length == 1) {
+				$('.p-no-data').show();
+			} else {
+				$('.p-item td:first-child').each(function(i) {
+					$(this).text(i + 1);
+				});
+			}
+		});
+
+		function tambahAnggotaMhs(id, npm, nama, tugas) {
+			$('.p-no-data').hide();
+
+			let no = $('#p-data tr').length;
+			$('#p-data').append(`<tr class="p-item">
+	        <input type="hidden" name="p_id[]" value="${id}">
+	        <td>${no}</td>
+	        <td>${npm}<input type="hidden" name="p_npm[]" value="${npm}"></td>
+	        <td>${nama}<input type="hidden" name="p_nama[]" value="${nama}"></td>
+	        <td>${tugas}<input type="hidden" name="p_tugas[]" value="${tugas}"></td>
+	        <td class="text-right">
+	            <button type="button" class="btn btn-sm hapusAnggotaMhs">
+	                <i class="fa fa-trash"></i>
+	            </button>
+	        </td>
+	    </tr>`);
+		}
 	});
 
 	$('#u-pilih').on('click', ev => {
@@ -581,53 +710,7 @@ $anggotamhs = json_encode($datamhs);
 		<?php endif ?>
 	});
 
-	//anggota mahasiswa
-	function hapusAnggotaMhs(el) {
-		if (!confirm('Data ini benar-benar akan dihapus?')) return;
 
-		$(el).parent().parent().remove();
-		if ($('#p-data tr').length == 1) {
-			$('.p-no-data').show();
-		} else {
-			$('.p-item td:first-child').each(function(i) {
-				$(this).text(i + 1);
-			});
-		}
-	}
-
-	function tambahAnggotaMhs(id, npm, nama, tugas) {
-		$('.p-no-data').hide();
-
-		let no = $('#p-data tr').length;
-		$('#p-data').append(`<tr class="p-item">
-	        <input type="hidden" name="p_id[]" value="${id}">
-	        <td>${no}</td>
-	        <td>${npm}<input type="hidden" name="p_npm[]" value="${npm}"></td>
-	        <td>${nama}<input type="hidden" name="p_nama[]" value="${nama}"></td>
-	        <td>${tugas}<input type="hidden" name="p_tugas[]" value="${tugas}"></td>
-	        <td class="text-right">
-	            <button type="button" class="btn btn-sm" onclick="hapusAnggotaMhs(this)">
-	                <i class="fa fa-trash"></i>
-	            </button>
-	        </td>
-	    </tr>`);
-	}
-
-	$('#p-simpan').on('click', ev => {
-		let id = $('#p-id').val();
-		if (id == '') {
-			alert('Mohon dipilih salah satu');
-			return;
-		}
-		let namaID = $('#p-id :selected').text().trim();
-		let tugas = $('#p-tugas').val();
-		let nama = namaID.substr(0, namaID.indexOf(' ('));
-		let npm = $('#p-id').val();;
-		// let npm = namaID.substring(namaID.indexOf(' (') + 2, namaID.length - 1);
-
-		$('#p-modal').modal('hide');
-		tambahAnggotaMhs(id, npm, nama, tugas);
-	});
 
 
 	$(document).ready(function() {

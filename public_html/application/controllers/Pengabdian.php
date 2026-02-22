@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit ('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Pengabdian extends CI_Controller
 {
@@ -327,6 +327,7 @@ class Pengabdian extends CI_Controller
 		$data['usulan'] = $this->mpengabdian->detailusulan($this->uri->segment(3));
 		$data['riset'] = $this->mpengabdian->daftariset();
 		$data['fakultas'] = $this->mdosen->fakultas();
+		$data['dosen'] = $this->mdosen->select();
 
 		$data['page'] = 'pkm/editdoku';
 		$this->load->view('dashboard/dashboard', $data);
@@ -386,9 +387,9 @@ class Pengabdian extends CI_Controller
 		$data['riset'] = $this->mpengabdian->daftariset();
 		$data['fakultas'] = $this->mdosen->fakultas();
 		$data['dosen'] = $this->mdosen->select();
-		$data['mahasiswa'] = $this->msubmit->allmhs();
+		$data['mahasiswa'] = [];
 
-		$bukaan= $this->msubmitpribadi->bukaan();
+		$bukaan = $this->msubmitpribadi->bukaan();
 		$now = date('Y-m-d H:i:s');
 		if ($now > $bukaan['tgltutup']) {
 			$this->session->set_flashdata('alert', 'Mohon Maaf Waktu Unggah Proposal Pengabdian Sudah Habis!!!!');
@@ -500,7 +501,7 @@ class Pengabdian extends CI_Controller
 		$data = $this->upload->data();
 
 		$file = $_FILES['fileupload']['size'] && $_FILES['fileupload']['name'] ? $data["file_name"] : '';
-		
+
 		$this->mpengabdian->simpankemajuan($file);
 		// echo $this->db->last_query();exit;	
 
@@ -644,7 +645,7 @@ class Pengabdian extends CI_Controller
 			$nidn = $this->input->post('m_id');
 			$tugas = $this->input->post('m_tugas');
 			$data = array_map(
-				function($x) {
+				function ($x) {
 					return array_combine(['id_usulan', 'anggota', 'tugas', 'jenis_anggota', 'skema'], $x);
 				},
 				array_map(
@@ -661,7 +662,7 @@ class Pengabdian extends CI_Controller
 			$npm = $this->input->post('p_id');
 			$mtugas = $this->input->post('p_tugas');
 			$data = array_map(
-				function($x) {
+				function ($x) {
 					return array_combine(['id_usulan', 'anggota', 'tugas', 'jenis_anggota', 'skema'], $x);
 				},
 				array_map(
@@ -911,15 +912,180 @@ class Pengabdian extends CI_Controller
 	function anggotadosen($id)
 	{
 		header('Content-Type: application/json');
-		echo json_encode(array_map(function($x) {
+		echo json_encode(array_map(function ($x) {
 			$y = $this->mdosen->namadosen($x);
 			$y['id'] = $x;
 			return $y;
-		}, explode(',', $this->db
-			->select('anggotadosen')
-			->get_where('usulan_pkm', ['id_usulan' => $id])
-			->row()
-			->anggotadosen
+		}, explode(
+			',',
+			$this->db
+				->select('anggotadosen')
+				->get_where('usulan_pkm', ['id_usulan' => $id])
+				->row()
+				->anggotadosen
 		)));
+	}
+
+	function load_anggota_dosen($id)
+	{
+		header('Content-Type: application/json');
+
+		// Cek login, jika tidak login langsung return JSON error dan exit
+		if (empty($this->session->userdata('sesi_user'))) {
+			echo json_encode([
+				'status' => false,
+				'data' => [],
+				'message' => 'Sesi habis. Silahkan login terlebih dahulu!'
+			]);
+			return;
+		}
+
+		// Jika login, lanjutkan ambil data
+		$resdata = $this->msubmit->perananggota($id, 'Pengabdian');
+		echo json_encode([
+			'status' => true,
+			'data' => $resdata,
+			'message' => ''
+		]);
+	}
+
+	function load_anggota_mhs($id)
+	{
+		header('Content-Type: application/json');
+
+		// Cek login, jika tidak login langsung return JSON error dan exit
+		if (empty($this->session->userdata('sesi_user'))) {
+			echo json_encode([
+				'status' => false,
+				'data' => [],
+				'message' => 'Sesi habis. Silahkan login terlebih dahulu!'
+			]);
+			return;
+		}
+
+		// Jika login, lanjutkan ambil data
+		$resdata = $this->msubmit->peranmhs($id, 'Pengabdian');
+		echo json_encode([
+			'status' => true,
+			'data' => $resdata,
+			'message' => ''
+		]);
+	}
+
+
+	private function aksiAnggota($aksi, $jenis)
+	{
+		$jenis = $jenis == 'dosen' ? 'Dosen' : 'Mahasiswa';
+		if ($aksi == 'add') {
+
+
+			$sv = $this->msubmit->addanggota([
+				'id_usulan' => $this->input->post('id_usulan', true),
+				'anggota' => $this->input->post('anggota', true),
+				'tugas' => $this->input->post('tugas', true),
+				'jenis_anggota' => $jenis,
+				'skema' => 'Pengabdian'
+			]);
+			if (!$sv) {
+				echo json_encode([
+					'status' => false,
+					'message' => 'Gagal menambahkan anggota ' . $jenis . '!'
+				]);
+				return;
+			}
+
+			echo json_encode([
+				'status' => true,
+				'message' => 'Anggota ' . $jenis . ' berhasil ditambahkan!'
+			]);
+			return;
+		} else if ($aksi == 'edit') {
+			$dt = [
+				'tugas' => $this->input->post('tugas', true),
+				'anggota' => $this->input->post('anggota', true),
+			];
+
+			$id = $this->input->post('id', true);
+
+			$sv = $this->msubmit->updateanggota($id, $dt);
+			if (!$sv) {
+				echo json_encode([
+					'status' => false,
+					'message' => 'Gagal memperbarui anggota ' . $jenis . '!'
+				]);
+				return;
+			}
+
+			echo json_encode([
+				'status' => true,
+				'message' => 'Anggota ' . $jenis . ' berhasil diperbarui!'
+			]);
+			return;
+		} else if ($aksi == 'delete') {
+			$sv = $this->msubmit->deleteanggota([
+				'id' => $this->input->post('id', true),
+			]);
+			if (!$sv) {
+				echo json_encode([
+					'status' => false,
+					'message' => 'Gagal menghapus anggota ' . $jenis . '!'
+				]);
+				return;
+			}
+
+			echo json_encode([
+				'status' => true,
+				'message' => 'Anggota ' . $jenis . ' berhasil dihapus!'
+			]);
+			return;
+		} else {
+			echo json_encode([
+				'status' => false,
+				'message' => 'Aksi tidak dikenali!'
+			]);
+			return;
+		}
+	}
+
+	function simpan_anggota()
+	{
+		header('Content-Type: application/json');
+
+		// Cek login, jika tidak login langsung return JSON error dan exit
+
+
+
+		if (empty($this->session->userdata('sesi_user'))) {
+			echo json_encode([
+				'status' => false,
+				'message' => 'Sesi habis. Silahkan login terlebih dahulu!'
+			]);
+			return;
+		}
+
+		try {
+			$aksi = $this->input->post('aksi', true);
+			$jenis = $this->input->post('jenis', true);
+
+
+			//cek apakah usulan usulan belum dikirim, jika sudah dikirim maka tidak bisa tambah anggota
+			$id_usulan = $this->input->post('id_usulan', true);
+			$usulan = $this->db->get_where('usulan_pkm', ['id_usulan' => $id_usulan])->row();
+			if ($usulan->status == 'Usulan Baru') {
+				$this->aksiAnggota($aksi, $jenis);
+				return;
+			} else {
+				echo json_encode([
+					'status' => false,
+					'message' => 'Usulan sudah dikirim, tidak bisa menambah anggota!'
+				]);
+				return;
+			}
+		} catch (Exception $e) {
+			echo json_encode([
+				'status' => false,
+				'message' => $e->getMessage()
+			]);
+		}
 	}
 }

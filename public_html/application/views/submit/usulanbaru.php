@@ -235,20 +235,10 @@ if ($this->session->userdata('sesi_user') == '') {
 									echo "<br><b>Status : " . $set . "</b>
 										  <br>Ketua : " . $ketua['namalengkap'] . " | Prodi : " . $prodi['prodi'] . " | Skema : " . $p->skema . "
 										  <br>Anggota : ";
-									$pisah = explode(',', $p->anggotadosen);
-									$hitpisah = count($pisah);
-									$hitangg = $this->msubmit->hitangg($p->id_usulan);
 
-									if ($p->anggotadosen <> '' && $hitangg == 0) {
-										echo '<ol>';
-										for ($i = 0; $i < $hitpisah; $i++) {
-											$revnya = $this->mdosen->namadosen($pisah[$i]);
-											echo '<li>' . $revnya['namalengkap'] . '</li>';
-										}
-										echo '</ol>';
-									} elseif ($p->anggotadosen == '' && $hitangg > 0) {
-										$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
-										$hits = count($angg);
+									$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
+									$hits = count($angg);
+									if ($hits > 0) {
 										$num = 1;
 										echo '<ol>';
 										foreach ($angg as $a) {
@@ -260,9 +250,35 @@ if ($this->session->userdata('sesi_user') == '') {
 										}
 										echo '</ol>';
 									} else {
-										echo 'Tidak Ada<br>';
-									}
 
+										$pisah = explode(',', $p->anggotadosen);
+										$hitpisah = count($pisah);
+										$hitangg = $this->msubmit->hitangg($p->id_usulan);
+
+										if ($p->anggotadosen <> '' && $hitangg == 0) {
+											echo '<ol>';
+											for ($i = 0; $i < $hitpisah; $i++) {
+												$revnya = $this->mdosen->namadosen($pisah[$i]);
+												echo '<li>' . $revnya['namalengkap'] . '</li>';
+											}
+											echo '</ol>';
+										} elseif ($p->anggotadosen == '' && $hitangg > 0) {
+											$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
+											$hits = count($angg);
+											$num = 1;
+											echo '<ol>';
+											foreach ($angg as $a) {
+												if ($hits == 1)
+													echo $a->namalengkap;
+												else {
+													echo '<li>' . $a->namalengkap . '</li>';
+												}
+											}
+											echo '</ol>';
+										} else {
+											echo 'Tidak Ada<br>';
+										}
+									}
 									echo "RAB : ";
 									$prodinya = $this->mdosen->dosennya($p->pengusul);
 									if ($p->sumberdana == 'Internal' && $p->totaldana <> 0 && $prodinya['prodi'] == 2) {
@@ -424,70 +440,9 @@ if ($this->session->userdata('sesi_user') == '') {
 										  <br>Ketua : " . $ketua['namalengkap'] . " | Prodi : " . $prodi['prodi'] . " | Skema : " . $p->skema . "
 										  <br>Anggota : ";
 
-							//echo trim($p->anggotadosen);
-							if ($p->anggotadosen <> '') {
-								$posisi = strpos($p->anggotadosen, ',');
-								if ($posisi !== false) {
-									$pisah = explode(',', $p->anggotadosen);
-								} else {
-									$pisah[0] = $p->anggotadosen;
-								}
-								$hitpisah = count($pisah);
-							} else
-								$hitpisah = $this->msubmit->hitanggotabaru($p->id_usulan, 'Penelitian');
-
-							$jmlanggota = $hitpisah;
-							$hitangg = $this->msubmit->hitanggotabaru($p->id_usulan, 'Penelitian');
-
-							if ($p->anggotadosen <> '' && $hitangg == 0) {
-								echo '<ol>';
-								$okedeal = 0;
-								for ($i = 0; $i < $hitpisah; $i++) {
-									$okdeal = $this->msubmit->cekanggotasetuju($pisah[$i], $p->id_usulan);
-
-									if ($okdeal > 0) {
-										$setok = 'Setuju';
-										$jmldeal++;
-									} else {
-										$setok = '<span class="badge badge-warning">Belum Setuju</span>';
-
-										//cek apakah id_dosen samaa dengan sesi_dosen, jika sama maka tampilkan tombol setuju
-										if ($pisah[$i] == $this->session->userdata('sesi_dosen') && $p->status == 'Usulan Baru') {
-											$setok = '<span class="badge badge-warning">Anda Belum Setujui</span>' . " &nbsp;<a href='" . base_url() . "submit/detail/" . $p->id_usulan . "' data-id='" . $p->id_usulan . "' class='btn btn-success btn-sm setuju' title='Setujui Keanggotaan'><i class='fas fa-check fa-sm'></i></a>";
-										}
-									}
-									$revnya = $this->mdosen->namadosen($pisah[$i]);
-									echo '<li>' . $revnya['namalengkap'] . ' (' . $setok . ')</li>';
-								}
-								echo '</ol>';
-							} elseif ($p->anggotadosen <> '' && $hitangg > 0) {
-								$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
-								$hits = count($angg);
-								echo '<ol>';
-								foreach ($angg as $a) {
-									$okdeal = $this->msubmit->cekanggotasetuju($a->id_dosen, $p->id_usulan);
-
-									if ($okdeal > 0) {
-										$setok = 'Setuju';
-										$jmldeal++;
-									} else {
-										$setok = '<span class="badge badge-warning">Belum Setuju</span>';
-
-										//cek apakah id_dosen samaa dengan sesi_dosen, jika sama maka tampilkan tombol setuju
-										if ($a->id_dosen == $this->session->userdata('sesi_dosen') && $p->status == 'Usulan Baru') {
-											$setok = '<span class="badge badge-warning">Anda Belum Setujui</span>' . " &nbsp;<a href='" . base_url() . "submit/detail/" . $p->id_usulan . "' data-id='" . $p->id_usulan . "' class='btn btn-success btn-sm setuju' title='Setujui Keanggotaan'><i class='fas fa-check fa-sm'></i></a>";
-										}
-									}
-									if ($hits == 1)
-										echo $a->namalengkap . ' (' . $setok . ')';
-									else {
-										echo '<li>' . $a->namalengkap . ' (' . $setok . ')</li>';
-									}
-								}
-								echo '</ol>';
-							} elseif ($p->anggotadosen == '' && $hitangg > 0) {
-								$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
-								$hits = count($angg);
+							$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
+							$hits = count($angg);
+							if ($hits > 0) {
 								echo '<ol>';
 								foreach ($angg as $a) {
 									$okdeal = $this->msubmit->cekanggotasetuju($a->id_dosen, $p->id_usulan);
@@ -511,9 +466,97 @@ if ($this->session->userdata('sesi_user') == '') {
 								}
 								echo '</ol>';
 							} else {
-								echo 'Tidak Ada<br>';
-							}
 
+								//echo trim($p->anggotadosen);
+								if ($p->anggotadosen <> '') {
+									$posisi = strpos($p->anggotadosen, ',');
+									if ($posisi !== false) {
+										$pisah = explode(',', $p->anggotadosen);
+									} else {
+										$pisah[0] = $p->anggotadosen;
+									}
+									$hitpisah = count($pisah);
+								} else
+									$hitpisah = $this->msubmit->hitanggotabaru($p->id_usulan, 'Penelitian');
+
+								$jmlanggota = $hitpisah;
+								$hitangg = $this->msubmit->hitanggotabaru($p->id_usulan, 'Penelitian');
+
+								if ($p->anggotadosen <> '' && $hitangg == 0) {
+									echo '<ol>';
+									$okedeal = 0;
+									for ($i = 0; $i < $hitpisah; $i++) {
+										$okdeal = $this->msubmit->cekanggotasetuju($pisah[$i], $p->id_usulan);
+
+										if ($okdeal > 0) {
+											$setok = 'Setuju';
+											$jmldeal++;
+										} else {
+											$setok = '<span class="badge badge-warning">Belum Setuju</span>';
+
+											//cek apakah id_dosen samaa dengan sesi_dosen, jika sama maka tampilkan tombol setuju
+											if ($pisah[$i] == $this->session->userdata('sesi_dosen') && $p->status == 'Usulan Baru') {
+												$setok = '<span class="badge badge-warning">Anda Belum Setujui</span>' . " &nbsp;<a href='" . base_url() . "submit/detail/" . $p->id_usulan . "' data-id='" . $p->id_usulan . "' class='btn btn-success btn-sm setuju' title='Setujui Keanggotaan'><i class='fas fa-check fa-sm'></i></a>";
+											}
+										}
+										$revnya = $this->mdosen->namadosen($pisah[$i]);
+										echo '<li>' . $revnya['namalengkap'] . ' (' . $setok . ')</li>';
+									}
+									echo '</ol>';
+								} elseif ($p->anggotadosen <> '' && $hitangg > 0) {
+									$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
+									$hits = count($angg);
+									echo '<ol>';
+									foreach ($angg as $a) {
+										$okdeal = $this->msubmit->cekanggotasetuju($a->id_dosen, $p->id_usulan);
+
+										if ($okdeal > 0) {
+											$setok = 'Setuju';
+											$jmldeal++;
+										} else {
+											$setok = '<span class="badge badge-warning">Belum Setuju</span>';
+
+											//cek apakah id_dosen samaa dengan sesi_dosen, jika sama maka tampilkan tombol setuju
+											if ($a->id_dosen == $this->session->userdata('sesi_dosen') && $p->status == 'Usulan Baru') {
+												$setok = '<span class="badge badge-warning">Anda Belum Setujui</span>' . " &nbsp;<a href='" . base_url() . "submit/detail/" . $p->id_usulan . "' data-id='" . $p->id_usulan . "' class='btn btn-success btn-sm setuju' title='Setujui Keanggotaan'><i class='fas fa-check fa-sm'></i></a>";
+											}
+										}
+										if ($hits == 1)
+											echo $a->namalengkap . ' (' . $setok . ')';
+										else {
+											echo '<li>' . $a->namalengkap . ' (' . $setok . ')</li>';
+										}
+									}
+									echo '</ol>';
+								} elseif ($p->anggotadosen == '' && $hitangg > 0) {
+									$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
+									$hits = count($angg);
+									echo '<ol>';
+									foreach ($angg as $a) {
+										$okdeal = $this->msubmit->cekanggotasetuju($a->id_dosen, $p->id_usulan);
+
+										if ($okdeal > 0) {
+											$setok = 'Setuju';
+											$jmldeal++;
+										} else {
+											$setok = '<span class="badge badge-warning">Belum Setuju</span>';
+
+											//cek apakah id_dosen samaa dengan sesi_dosen, jika sama maka tampilkan tombol setuju
+											if ($a->id_dosen == $this->session->userdata('sesi_dosen') && $p->status == 'Usulan Baru') {
+												$setok = '<span class="badge badge-warning">Anda Belum Setujui</span>' . " &nbsp;<a href='" . base_url() . "submit/detail/" . $p->id_usulan . "' data-id='" . $p->id_usulan . "' class='btn btn-success btn-sm setuju' title='Setujui Keanggotaan'><i class='fas fa-check fa-sm'></i></a>";
+											}
+										}
+										if ($hits == 1)
+											echo $a->namalengkap . ' (' . $setok . ')';
+										else {
+											echo '<li>' . $a->namalengkap . ' (' . $setok . ')</li>';
+										}
+									}
+									echo '</ol>';
+								} else {
+									echo 'Tidak Ada<br>';
+								}
+							}
 							echo "RAB : ";
 							$prodinya = $this->mdosen->dosennya($p->pengusul);
 							if ($p->sumberdana == 'Internal' && $p->totaldana <> 0 && $prodinya['prodi'] == 2) {
