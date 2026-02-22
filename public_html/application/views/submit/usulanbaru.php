@@ -441,8 +441,8 @@ if ($this->session->userdata('sesi_user') == '') {
 										  <br>Anggota : ";
 
 							$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
-							$hits = count($angg);
-							if ($hits > 0) {
+							$hitpisah = count($angg);
+							if ($hitpisah > 0) {
 								echo '<ol>';
 								foreach ($angg as $a) {
 									$okdeal = $this->msubmit->cekanggotasetuju($a->id_dosen, $p->id_usulan);
