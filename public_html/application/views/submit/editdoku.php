@@ -298,7 +298,7 @@
 											<th>Nama</th>
 											<th>Tugas</th>
 											<th width="5%" class="text-right">
-												<button type="button" class="btn btn-sm btn-outline-success addAnggota" data-jenis="dosen" data-toggle="modal" data-target="#m-modal">
+												<button type="button" class="btn btn-sm btn-outline-success addAnggota" data-jenis="Dosen" data-toggle="modal" data-target="#m-modal">
 													<i class="fas fa-plus fa-sm"></i>
 												</button>
 											</th>
@@ -347,7 +347,7 @@
 											<th>Nama</th>
 											<th>Tugas</th>
 											<th width="5%" class="text-right">
-												<button type="button" class="btn btn-sm btn-outline-success addAnggota" data-jenis="mahasiswa" data-toggle="modal" data-target="#p-modal">
+												<button type="button" class="btn btn-sm btn-outline-success addAnggota" data-jenis="Mahasiswa" data-toggle="modal" data-target="#p-modal">
 													<i class="fas fa-plus fa-sm"></i>
 												</button>
 											</th>
@@ -458,7 +458,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-				<button type="button" class="btn btn-primary btSimpanAnggota" data-jenis="dosen" id="m-simpan">Simpan</button>
+				<button type="button" class="btn btn-primary btSimpanAnggota" data-jenis="Dosen" id="m-simpan">Simpan</button>
 			</div>
 		</div>
 	</div>
@@ -483,7 +483,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-				<button type="button" class="btn btn-primary btSimpanAnggota" data-jenis="mahasiswa" id="p-simpan">Simpan</button>
+				<button type="button" class="btn btn-primary btSimpanAnggota" data-jenis="Mahasiswa" id="p-simpan">Simpan</button>
 			</div>
 		</div>
 	</div>
@@ -966,7 +966,7 @@ $anggotamhs = json_encode($datamhs);
 								htmlbody += '<td>' + v.nidn + '</td>';
 								htmlbody += '<td>' + v.namalengkap + '</td>';
 								htmlbody += '<td>' + v.tugas + '</td>';
-								htmlbody += '<td class="text-right"><button type="button" class="btn btn-sm btn-outline-warning editAnggota" data-jenis="dosen" data-id="' + v.id + '"><i class="fas fa-pencil-alt fa-sm"></i></button><button type="button" class="btn btn-sm btn-outline-danger hapusAnggota" data-jenis="dosen" data-id="' + v.id + '"><i class="fas fa-trash fa-sm"></i></button></td>';
+								htmlbody += '<td class="text-right"><button type="button" class="btn btn-sm btn-outline-warning editAnggota" data-jenis="Dosen" data-id="' + v.id + '"><i class="fas fa-pencil-alt fa-sm"></i></button><button type="button" class="btn btn-sm btn-outline-danger hapusAnggota" data-jenis="Dosen" data-id="' + v.id + '"><i class="fas fa-trash fa-sm"></i></button></td>';
 								htmlbody += '</tr>';
 							});
 							$('#anggotadosenterpilih').html(htmlbody);
@@ -999,7 +999,7 @@ $anggotamhs = json_encode($datamhs);
 								htmlbody += '<td>' + v.npm + '</td>';
 								htmlbody += '<td>' + v.namamhs + '</td>';
 								htmlbody += '<td>' + v.tugas + '</td>';
-								htmlbody += '<td class="text-right"><button type="button" class="btn btn-sm btn-outline-warning editAnggota" data-jenis="mahasiswa" data-id="' + v.id + '"><i class="fas fa-pencil-alt fa-sm"></i></button><button type="button" class="btn btn-sm btn-outline-danger hapusAnggota" data-jenis="mahasiswa" data-id="' + v.id + '"><i class="fas fa-trash fa-sm"></i></button></td>';
+								htmlbody += '<td class="text-right"><button type="button" class="btn btn-sm btn-outline-warning editAnggota" data-jenis="Mahasiswa" data-id="' + v.id + '"><i class="fas fa-pencil-alt fa-sm"></i></button><button type="button" class="btn btn-sm btn-outline-danger hapusAnggota" data-jenis="Mahasiswa" data-id="' + v.id + '"><i class="fas fa-trash fa-sm"></i></button></td>';
 								htmlbody += '</tr>';
 							});
 							$('#anggotamahasiswaperpilih').html(htmlbody);
@@ -1052,7 +1052,7 @@ $anggotamhs = json_encode($datamhs);
 		$(document).on('click', '.addAnggota', function() {
 			var jenis = $(this).data('jenis');
 			currAksiAnggota = 'add';
-			if (jenis == 'dosen') {
+			if (jenis == 'Dosen') {
 				$('#m-id').val('').trigger('change');
 				$('#m-tugas').val('');
 				$('#m-simpan').removeData('edit');
@@ -1139,7 +1139,7 @@ $anggotamhs = json_encode($datamhs);
 			var id = $(this).data('id');
 			currAksiAnggota = 'edit';
 			currIdPeran = id;
-			if (jenis == 'dosen') {
+			if (jenis == 'Dosen') {
 				var anggota = currAnggotaDosen.find(x => x.id == id);
 				$('#m-id').val(anggota.id_dosen).trigger('change');
 				$('#m-tugas').val(anggota.tugas);
@@ -1177,7 +1177,7 @@ $anggotamhs = json_encode($datamhs);
 					},
 					complete: function() {
 						if (hsl.status) {
-							if (jenis == 'dosen') {
+							if (jenis == 'Dosen') {
 								load_anggota_dosen();
 							} else {
 								load_anggota_mhs();
@@ -1195,8 +1195,8 @@ $anggotamhs = json_encode($datamhs);
 				var jenis = $(this).data('jenis');
 				var edit = $(this).data('edit');
 				var id = currIdPeran;
-				var anggota = (jenis == 'dosen') ? $('#m-id').val() : $('#p-id').val();
-				var tugas = (jenis == 'dosen') ? $('#m-tugas').val() : $('#p-tugas').val();
+				var anggota = (jenis == 'Dosen') ? $('#m-id').val() : $('#p-id').val();
+				var tugas = (jenis == 'Dosen') ? $('#m-tugas').val() : $('#p-tugas').val();
 
 				if (currAksiAnggota == 'add') {
 					if (anggota == "" || tugas == "") {
@@ -1225,7 +1225,7 @@ $anggotamhs = json_encode($datamhs);
 					},
 					complete: function() {
 						if (hsl.status) {
-							if (jenis == 'dosen') {
+							if (jenis == 'Dosen') {
 								load_anggota_dosen();
 								$('#m-modal').modal('hide');
 							} else {
