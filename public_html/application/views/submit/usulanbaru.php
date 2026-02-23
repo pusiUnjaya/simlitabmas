@@ -238,14 +238,25 @@ if ($this->session->userdata('sesi_user') == '') {
 
 									$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
 									$hits = count($angg);
-									if ($hits > 0) {
+									$anggdosenluar = $this->msubmit->perananggotadosenluar($p->id_usulan, 'Penelitian');
+									$hitsdosenluar = count($anggdosenluar);
+									if ($hits > 0 || $hitsdosenluar > 0) {
 										$num = 1;
 										echo '<ol>';
 										foreach ($angg as $a) {
-											if ($hits == 1)
+											if (($hits + $hitsdosenluar) == 1)
 												echo $a->namalengkap;
 											else {
 												echo '<li>' . $a->namalengkap . '</li>';
+											}
+										}
+										if ($hitsdosenluar > 0) {
+											foreach ($anggdosenluar as $a) {
+												if (($hits + $hitsdosenluar) == 1)
+													echo $a->namalengkap;
+												else {
+													echo '<li>' . $a->namalengkap . '</li>';
+												}
 											}
 										}
 										echo '</ol>';
@@ -261,6 +272,12 @@ if ($this->session->userdata('sesi_user') == '') {
 												$revnya = $this->mdosen->namadosen($pisah[$i]);
 												echo '<li>' . $revnya['namalengkap'] . '</li>';
 											}
+
+											if ($hitsdosenluar > 0) {
+												foreach ($anggdosenluar as $a) {
+													echo '<li>' . $a->namalengkap . '</li>';
+												}
+											}
 											echo '</ol>';
 										} elseif ($p->anggotadosen == '' && $hitangg > 0) {
 											$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
@@ -268,10 +285,19 @@ if ($this->session->userdata('sesi_user') == '') {
 											$num = 1;
 											echo '<ol>';
 											foreach ($angg as $a) {
-												if ($hits == 1)
+												if (($hits + $hitsdosenluar) == 1)
 													echo $a->namalengkap;
 												else {
 													echo '<li>' . $a->namalengkap . '</li>';
+												}
+											}
+											if ($hitsdosenluar > 0) {
+												foreach ($anggdosenluar as $a) {
+													if (($hits + $hitsdosenluar) == 1)
+														echo $a->namalengkap;
+													else {
+														echo '<li>' . $a->namalengkap . '</li>';
+													}
 												}
 											}
 											echo '</ol>';
@@ -442,7 +468,10 @@ if ($this->session->userdata('sesi_user') == '') {
 
 							$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
 							$hitpisah = count($angg);
-							if ($hitpisah > 0) {
+
+							$anggdosenluar = $this->msubmit->perananggotadosenluar($p->id_usulan, 'Penelitian');
+							$hitsdosenluar = count($anggdosenluar);
+							if ($hitpisah > 0 || $hitsdosenluar > 0) {
 								echo '<ol>';
 								foreach ($angg as $a) {
 									$okdeal = $this->msubmit->cekanggotasetuju($a->id_dosen, $p->id_usulan);
@@ -458,12 +487,23 @@ if ($this->session->userdata('sesi_user') == '') {
 											$setok = '<span class="badge badge-warning">Anda Belum Setujui</span>' . " &nbsp;<a href='" . base_url() . "submit/detail/" . $p->id_usulan . "' data-id='" . $p->id_usulan . "' class='btn btn-success btn-sm setuju' title='Setujui Keanggotaan'><i class='fas fa-check fa-sm'></i></a>";
 										}
 									}
-									if ($hits == 1)
+									if (($hitpisah + $hitsdosenluar) == 1)
 										echo $a->namalengkap . ' (' . $setok . ')';
 									else {
 										echo '<li>' . $a->namalengkap . ' (' . $setok . ')</li>';
 									}
 								}
+								if ($hitsdosenluar > 0) {
+									foreach ($anggdosenluar as $a) {
+										if (($hitpisah + $hitsdosenluar) == 1)
+											echo $a->namalengkap;
+										else {
+											echo '<li>' . $a->namalengkap . '</li>';
+										}
+									}
+								}
+
+
 								echo '</ol>';
 							} else {
 
@@ -502,6 +542,12 @@ if ($this->session->userdata('sesi_user') == '') {
 										$revnya = $this->mdosen->namadosen($pisah[$i]);
 										echo '<li>' . $revnya['namalengkap'] . ' (' . $setok . ')</li>';
 									}
+
+									if ($hitsdosenluar > 0) {
+										foreach ($anggdosenluar as $a) {
+											echo '<li>' . $a->namalengkap . '</li>';
+										}
+									}
 									echo '</ol>';
 								} elseif ($p->anggotadosen <> '' && $hitangg > 0) {
 									$angg = $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
@@ -521,10 +567,20 @@ if ($this->session->userdata('sesi_user') == '') {
 												$setok = '<span class="badge badge-warning">Anda Belum Setujui</span>' . " &nbsp;<a href='" . base_url() . "submit/detail/" . $p->id_usulan . "' data-id='" . $p->id_usulan . "' class='btn btn-success btn-sm setuju' title='Setujui Keanggotaan'><i class='fas fa-check fa-sm'></i></a>";
 											}
 										}
-										if ($hits == 1)
+										if (($hits + $hitsdosenluar) == 1)
 											echo $a->namalengkap . ' (' . $setok . ')';
 										else {
 											echo '<li>' . $a->namalengkap . ' (' . $setok . ')</li>';
+										}
+									}
+
+									if ($hitsdosenluar > 0) {
+										foreach ($anggdosenluar as $a) {
+											if (($hits + $hitsdosenluar) == 1)
+												echo $a->namalengkap;
+											else {
+												echo '<li>' . $a->namalengkap . '</li>';
+											}
 										}
 									}
 									echo '</ol>';
@@ -546,10 +602,21 @@ if ($this->session->userdata('sesi_user') == '') {
 												$setok = '<span class="badge badge-warning">Anda Belum Setujui</span>' . " &nbsp;<a href='" . base_url() . "submit/detail/" . $p->id_usulan . "' data-id='" . $p->id_usulan . "' class='btn btn-success btn-sm setuju' title='Setujui Keanggotaan'><i class='fas fa-check fa-sm'></i></a>";
 											}
 										}
-										if ($hits == 1)
+										if (($hits + $hitsdosenluar) == 1)
 											echo $a->namalengkap . ' (' . $setok . ')';
 										else {
 											echo '<li>' . $a->namalengkap . ' (' . $setok . ')</li>';
+										}
+									}
+
+
+									if ($hitsdosenluar > 0) {
+										foreach ($anggdosenluar as $a) {
+											if (($hits + $hitsdosenluar) == 1)
+												echo $a->namalengkap;
+											else {
+												echo '<li>' . $a->namalengkap . '</li>';
+											}
 										}
 									}
 									echo '</ol>';

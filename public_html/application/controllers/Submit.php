@@ -19,6 +19,7 @@ class Submit extends CI_Controller
 		$this->load->model('mdosen', '', TRUE);
 		$this->load->model('mpengabdian', '', TRUE);
 		$this->load->model('mtkt', '', TRUE);
+		$this->load->model('mdosenluar', '', TRUE);
 	}
 
 	private function check_login()
@@ -322,6 +323,7 @@ class Submit extends CI_Controller
 		$data['fakultas'] = $this->mdosen->fakultas();
 		$data['dosen'] = $this->mdosen->select();
 		$data['mahasiswa'] = [];
+		$data['negara'] = $this->mdosenluar->get_negara();
 		$data['usulan'] = $this->msubmit->detailusulan($id);
 
 		$data['page'] = 'submit/editdoku';
@@ -470,6 +472,7 @@ class Submit extends CI_Controller
 		$data['fakultas'] = $this->mdosen->fakultas();
 		$data['dosen'] = $this->mdosen->select();
 		$data['mahasiswa'] = [];
+		$data['negara'] = $this->mdosenluar->get_negara();
 
 		$data['page'] = 'submit/doku';
 		$this->load->view('dashboard/dashboard', $data);
@@ -752,7 +755,6 @@ class Submit extends CI_Controller
 	function simpan()
 	{
 		$this->check_login();
-
 		$config['file_name'] = 'file_usulan_penelitian_' . $this->sesi_id . '_' . date('his');
 		$config['upload_path'] = './assets/uploadbox/';
 		$config['allowed_types'] = 'pdf';
@@ -779,6 +781,23 @@ class Submit extends CI_Controller
 					array_merge($nidn),
 					array_merge($tugas),
 					array_merge(array_fill(0, count($nidn), 'Dosen')),
+					array_merge(array_fill(0, count($nidn), 'Penelitian'))
+				)
+			);
+			$this->db->insert_batch('peran', $data);
+
+			$nidn = $this->input->post('dosenluar_id');
+			$tugas = $this->input->post('dosenluar_tugas');
+			$data = array_map(
+				function ($x) {
+					return array_combine(['id_usulan', 'anggota', 'tugas', 'jenis_anggota', 'skema'], $x);
+				},
+				array_map(
+					null,
+					array_fill(0, count($nidn), $id),
+					array_merge($nidn),
+					array_merge($tugas),
+					array_merge(array_fill(0, count($nidn), 'Dosen Luar')),
 					array_merge(array_fill(0, count($nidn), 'Penelitian'))
 				)
 			);
@@ -1107,6 +1126,29 @@ class Submit extends CI_Controller
 		]);
 	}
 
+	function load_anggota_dosenluar($id)
+	{
+		header('Content-Type: application/json');
+
+		// Cek login, jika tidak login langsung return JSON error dan exit
+		if (empty($this->session->userdata('sesi_user'))) {
+			echo json_encode([
+				'status' => false,
+				'data' => [],
+				'message' => 'Sesi habis. Silahkan login terlebih dahulu!'
+			]);
+			return;
+		}
+
+		// Jika login, lanjutkan ambil data
+		$resdata = $this->msubmit->perananggotadosenluar($id, 'Penelitian');
+		echo json_encode([
+			'status' => true,
+			'data' => $resdata,
+			'message' => ''
+		]);
+	}
+
 	function load_anggota_mhs($id)
 	{
 		header('Content-Type: application/json');
@@ -1134,10 +1176,16 @@ class Submit extends CI_Controller
 
 	private function aksiAnggota($aksi, $jenis)
 	{
-		$jenis = $jenis == 'dosen' ? 'Dosen' : 'Mahasiswa';
+		$arrjenis = ['Dosen', 'Dosen Luar', 'Mahasiswa'];
+		if (in_array($jenis, $arrjenis) == false) {
+			echo json_encode([
+				'status' => false,
+				'message' => 'Jenis anggota tidak valid!'
+			]);
+			return;
+		}
+
 		if ($aksi == 'add') {
-
-
 			$sv = $this->msubmit->addanggota([
 				'id_usulan' => $this->input->post('id_usulan', true),
 				'anggota' => $this->input->post('anggota', true),
@@ -1249,12 +1297,10 @@ class Submit extends CI_Controller
 	function search_mahasiswa()
 	{
 		header('Content-Type: application/json');
-		$all_sessiondata = $this->session->all_userdata();
 		// Cek login, jika tidak login langsung return JSON error dan exit
 		if (empty($this->session->userdata('sesi_user'))) {
 			echo json_encode([
 				'status' => false,
-				'data' => $all_sessiondata,
 				'message' => 'Sesi habis. Silahkan login terlebih dahulu!'
 			]);
 			return;
@@ -1267,6 +1313,123 @@ class Submit extends CI_Controller
 		echo json_encode([
 			'status' => true,
 			'data' => $mahasiswa,
+			'message' => $q
+		]);
+	}
+
+	function dosenluar_add()
+	{
+		header('Content-Type: application/json');
+		// Cek login, jika tidak login langsung return JSON error dan exit
+		if (empty($this->session->userdata('sesi_user'))) {
+			echo json_encode([
+				'status' => false,
+				'message' => 'Sesi habis. Silahkan login terlebih dahulu!'
+			]);
+			return;
+		}
+
+		$data = [
+			'namalengkap' => $this->input->post('namalengkap', true),
+			'nidn' => $this->input->post('nidn', true),
+			'id_negara' => $this->input->post('id_negara', true),
+			'namadepartmen' => $this->input->post('namadepartmen', true),
+			'namainstitusi' => $this->input->post('namainstitusi', true),
+			'id_negara_institusi' => $this->input->post('id_negara_institusi', true),
+		];
+
+		try {
+
+			$id_usulan = $this->input->post('id_usulan', true);
+			if ($id_usulan <> '') {
+				//cek apakah usulan usulan belum dikirim, jika sudah dikirim maka tidak bisa tambah anggota
+				$usulan = $this->db->get_where('usulan', ['id_usulan' => $id_usulan])->row();
+				if ($usulan->status != 'Usulan Baru') {
+					echo json_encode([
+						'status' => false,
+						'message' => 'Usulan sudah dikirim, tidak bisa menambah anggota!'
+					]);
+					return;
+				}
+			}
+
+			//tambahkan dulu data dosen luar ke master dosen luar, lalu ambil id dosen dan tugaskan untuk dikirim sebagai response
+			$sv_dosenluar = $this->mdosenluar->add($data);
+			if (!$sv_dosenluar) {
+				echo json_encode([
+					'status' => false,
+					'message' => 'Gagal menambahkan dosen luar!'
+				]);
+				return;
+			} else {
+				$id_dosenluar = $this->db->insert_id();
+
+				if ($id_usulan <> '') {
+					$sv = $this->msubmit->addanggota([
+						'id_usulan' => $this->input->post('id_usulan', true),
+						'anggota' => $id_dosenluar,
+						'tugas' => $this->input->post('tugas', true),
+						'jenis_anggota' => 'Dosen Luar',
+						'skema' => 'Penelitian'
+					]);
+					if (!$sv) {
+						echo json_encode([
+							'status' => false,
+							'message' => 'Gagal menambahkan anggota dosen luar!'
+						]);
+						return;
+					}
+
+					echo json_encode([
+						'status' => true,
+						'message' => 'Anggota dosen luar berhasil ditambahkan!'
+					]);
+					return;
+				}
+
+				$negara_dosenluar = $this->db->get_where('m_negara', ['id_negara' => $data['id_negara']])->row()->nama_negara;
+				$negara_institusi = $this->db->get_where('m_negara', ['id_negara' => $data['id_negara_institusi']])->row()->nama_negara;
+				echo json_encode([
+					'status' => true,
+					'data' => [
+						'id_dosenluar' => $id_dosenluar,
+						'namalengkap' => $data['namalengkap'] . '<br/>' . $negara_dosenluar,
+						'nidn' => $data['nidn'],
+						'prodi' => $data['namadepartmen'] . ', ' . $data['namainstitusi'] . '<br/>' . $negara_institusi,
+						'tugas' => $this->input->post('tugas', true)
+					],
+					'message' => 'Dosen luar berhasil ditambahkan!'
+				]);
+				return;
+			}
+		} catch (Exception $e) {
+			echo json_encode([
+				'status' => false,
+				'message' => $e->getMessage()
+			]);
+			return;
+		}
+	}
+
+	function search_dosenluar()
+	{
+		header('Content-Type: application/json');
+		// Cek login, jika tidak login langsung return JSON error dan exit
+		if (empty($this->session->userdata('sesi_user'))) {
+			echo json_encode([
+				'status' => false,
+				'message' => 'Sesi habis. Silahkan login terlebih dahulu!'
+			]);
+			return;
+		}
+
+		$q = $this->input->post('q', true);
+		$page = $this->input->post('page', true) ?: 1;
+		$selected = $this->input->post('selected', true);
+		$dosenluar = $this->mdosenluar->search_dosenluar($q, $page, $selected);
+		echo json_encode([
+			'status' => true,
+			'data' => $dosenluar,
 			'message' => $q
 		]);
 	}

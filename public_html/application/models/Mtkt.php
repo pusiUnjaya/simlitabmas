@@ -1,10 +1,10 @@
 <?php
-Class Mtkt extends CI_Model
+class Mtkt extends CI_Model
 {
-	function __construct()
-	{
-		parent::__construct();
-	}
+    function __construct()
+    {
+        parent::__construct();
+    }
 
     function indikator_lengkap()
     {
@@ -48,8 +48,8 @@ Class Mtkt extends CI_Model
         return $data;
     }
 
-	function capaian($id)
-	{
+    function capaian($id)
+    {
         $data = array();
 
         if (!empty($id)) {
@@ -64,8 +64,8 @@ Class Mtkt extends CI_Model
             }
         }
 
-		return $data;
-	}
+        return $data;
+    }
 
     function jenistkt()
     {
@@ -73,9 +73,8 @@ Class Mtkt extends CI_Model
         $this->db->select("*");
         $this->db->from("jenis_tkt");
         $hasil = $this->db->get();
-        
-        if($hasil->num_rows() > 0)
-        {
+
+        if ($hasil->num_rows() > 0) {
             $data = $hasil->result();
         }
         return $data;
@@ -88,39 +87,44 @@ Class Mtkt extends CI_Model
             ->where('id_usulan', $id)
             ->delete('tkt_usulan');
         $jenis = $data['jenis'];
-        foreach ($data['capaian'] as $tingkat => $indikator) {
-            $total = 0;
-            foreach ($indikator as $no => $capaian) {
-                $capaian = +$capaian;
-                if (!$capaian) continue;
-                $total += $capaian;
-                $this->db
-                    ->insert('tkt_usulan', [
-                        'id_usulan' => $id,
-                        'id_jenis_tkt' => $jenis,
-                        'tingkat' => $tingkat,
-                        'no_indikator' => $no,
-                        'capaian' => $capaian,
-                    ]);
+        $jenistkt = null;
+        $capaiantkt = null;
+        if (isset($data['capaian']) && is_array($data['capaian'])) {
+            foreach ($data['capaian'] as $tingkat => $indikator) {
+                $total = 0;
+                foreach ($indikator as $no => $capaian) {
+                    $capaian = +$capaian;
+                    if (!$capaian) continue;
+                    $total += $capaian;
+                    $this->db
+                        ->insert('tkt_usulan', [
+                            'id_usulan' => $id,
+                            'id_jenis_tkt' => $jenis,
+                            'tingkat' => $tingkat,
+                            'no_indikator' => $no,
+                            'capaian' => $capaian,
+                        ]);
+                }
+
+                $jenistkt = $jenis;
+                $capaiantkt = $tingkat;
+
+                $mean = $total / count($indikator);
+                if ($mean <= 80) break;
             }
-
-            $jenistkt = $jenis;
-            $capaiantkt = $tingkat;
-
-            $mean = $total/count($indikator);
-            if ($mean <= 80) break;
         }
         //update data usulan terkait tkt
         $data = array(
             "kategoritkt" => $jenistkt,
             "capaiantkt"  => $capaiantkt
-            );
-            
-        $this->db->where("id_usulan",$id);
-        $this->db->update("usulan",$data);
+        );
+
+        $this->db->where("id_usulan", $id);
+        $this->db->update("usulan", $data);
     }
 
-    function ukur_tkt($data) {
+    function ukur_tkt($data)
+    {
         $hasil = 1;
         foreach ($data as $tingkat => $indikator) {
             $total = 0;
@@ -129,7 +133,7 @@ Class Mtkt extends CI_Model
                 if (!$capaian) continue;
                 $total += $capaian;
             }
-            $mean = $total/count($indikator);
+            $mean = $total / count($indikator);
             if ($mean > 80) $hasil++;
         }
         return $hasil;

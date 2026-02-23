@@ -556,6 +556,25 @@ class MSubmit extends CI_Model
 		return $data;
 	}
 
+	function perananggotadosenluar($id, $skema)
+	{
+		$data = array();
+		$this->db->select("peran.anggota,peran.tugas, peran.jenis_anggota, peran.idperan as id, dosenluar.namalengkap, dosenluar.nidn, dosenluar.namadepartmen, dosenluar.namainstitusi, m_negara.kode_negara, m_negara.nama_negara as negara, negara_institusi.nama_negara as negara_institusi");
+		$this->db->from("peran");
+		$this->db->join("dosenluar", "dosenluar.id_dosen=peran.anggota");
+		$this->db->join("m_negara", "m_negara.id_negara=dosenluar.id_negara");
+		$this->db->join("m_negara as negara_institusi", "negara_institusi.id_negara=dosenluar.id_negara_institusi");
+		$this->db->where("peran.id_usulan", $id);
+		$this->db->where("peran.skema", $skema);
+		$this->db->where("peran.jenis_anggota", "Dosen Luar");
+		$hasil = $this->db->get();
+
+		if ($hasil->num_rows() > 0) {
+			$data = $hasil->result();
+		}
+		return $data;
+	}
+
 	function peranmhs($id, $skema)
 	{
 		$data = array();

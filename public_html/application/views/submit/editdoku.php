@@ -48,6 +48,28 @@
 		position: absolute;
 		top: 50%;
 	}
+
+	/* Agar modal #tambahDosenLuarModal bisa discroll seluruhnya tanpa max-height */
+	#tambahDosenLuarModal .modal-dialog {
+		display: flex;
+		flex-direction: column;
+		height: 90%;
+	}
+
+	#tambahDosenLuarModal .modal-content {
+		flex: 1 1 auto;
+		overflow-y: auto;
+		height: 100%;
+	}
+
+	#btnChangeModalDosenLuar {
+		padding: 0;
+		font-size: 0.875rem;
+		font-weight: 400;
+		line-height: 1.5;
+		letter-spacing: 0.00938em;
+		text-decoration: underline;
+	}
 </style>
 <div class="container-fluid">
 
@@ -289,6 +311,30 @@
 									</tbody>
 								</table>
 							</div>
+							<div class="col-sm-12">
+								<label>Anggota Dosen Luar</label>
+								<table class="table table-bordered table-hover">
+									<thead>
+										<tr>
+											<th width="5%">No</th>
+											<th width="15%">NIDN/NPP</th>
+											<th>Nama</th>
+											<th>Institusi</th>
+											<th>Tugas</th>
+											<th width="5%" class="text-right">
+												<button type="button" class="btn btn-sm btn-outline-success" id="btnAddDosenLuar" data-toggle="modal" data-target="#dosenluar-modal">
+													<i class="fas fa-plus fa-sm"></i>
+												</button>
+											</th>
+										</tr>
+									</thead>
+									<tbody id="anggotadosenluarperpilih">
+										<tr class="dosenluar-no-data">
+											<td colspan="6" align="center">Belum ada anggota dosen luar yang didata</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 
 
 							<div class="col-sm-12">
@@ -438,6 +484,95 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
 				<button type="button" class="btn btn-primary btSimpanAnggota" data-jenis="mahasiswa" id="p-simpan">Simpan</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="dosenluar-modal" class="modal" tabindex="-1">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title"><span id="dosenluar-modal-title">Tambah</span> Anggota Dosen Luar</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="frmPilihanDosenLuar">
+					<div class="form-group row-fluid">
+						<label for="dosenluar-id" class="form-label">Nama Dosen Luar</label>
+						<select id="dosenluar-id" class="form-control" style="width: 100%;"></select>
+						<!-- Jika dosen belum terdaftar, tawarkan untuk menambahkan terlebih dahulu menggunakan modal, ganti modal ini menjadi modal dosen luar master -->
+						<i class="small" style="color:#b37272">Dosen luar tidak terdafar ? <button type="button" class="btn btn-link" id="btnChangeModalDosenLuar" data-toggle="modal" data-target="#tambahDosenLuarModal">Tambahkan</button></i>
+					</div>
+					<label for="recipient-name" class="col-form-label">Tugas Dalam Penelitian * :</label>
+					<textarea id="dosenluar-tugas" name="tugas" class="form-control" required></textarea>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+				<button type="submit" class="btn btn-primary" id="dosenluar-simpan">Tambahkan</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="tambahDosenLuarModal" class="modal" tabindex="-1">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Tambah Dosen Luar</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="form-tambah-dosenluar">
+					<div class="form-group row-fluid">
+						<label for="dosenluar-nama" class="form-label">Nama Lengkap * </label>
+						<input type="text" id="dosenluar-nama" name="namalengkap" class="form-control" required>
+					</div>
+					<div class="form-group row-fluid">
+						<label for="dosenluar-nidn" class="form-label">NIDN/NPP * </label>
+						<input type="text" id="dosenluar-nidn" name="nidn" class="form-control" required>
+					</div>
+					<div class="form-group row-fluid">
+						<label for="dosenluar-idnegara" class="form-label">Negara Asal * </label>
+						<select id="dosenluar-idnegara" name="id_negara" class="form-control" required>
+							<option value="">-- Pilih Negara --</option>
+							<?php foreach ($negara as $n): ?>
+								<option value="<?php echo $n->id_negara ?>"><?php echo $n->kode_negara . ' - ' . $n->nama_negara ?></option>
+							<?php endforeach ?>
+						</select>
+					</div>
+					<div class="form-group row-fluid">
+						<label for="dosenluar-departmen" class="form-label">Nama Departemen/Prodi * </label>
+						<input type="text" id="dosenluar-departmen" name="namadepartmen" class="form-control" required>
+					</div>
+					<div class="form-group row-fluid">
+						<label for="dosenluar-institusi" class="form-label">Nama Institusi * </label>
+						<input type="text" id="dosenluar-institusi" name="namainstitusi" class="form-control" required>
+					</div>
+					<div class="form-group row-fluid">
+						<label for="dosenluar-idnegara-institusi" class="form-label">Negara Institusi * </label>
+						<select id="dosenluar-idnegara-institusi" name="id_negara_institusi" class="form-control" required>
+							<option value="">-- Pilih Negara --</option>
+							<?php foreach ($negara as $n): ?>
+								<option value="<?php echo $n->id_negara ?>"><?php echo $n->kode_negara . ' - ' . $n->nama_negara ?></option>
+							<?php endforeach ?>
+						</select>
+					</div>
+					<div class="form-group row-fluid">
+						<label for="dosenluar-tugas-master" class="col-form-label">Tugas Dalam Penelitian * :</label>
+						<textarea id="dosenluar-tugas-master" name="tugas" class="form-control" required></textarea>
+					</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+				<button type="submit" class="btn btn-primary" id="dosenluar-simpanmaster">Tambahkan</button>
+
+				</form>
 			</div>
 		</div>
 	</div>
@@ -802,8 +937,12 @@ $anggotamhs = json_encode($datamhs);
 	$(document).ready(function() {
 		var currAnggotaDosen = [];
 		var currAnggotaMhs = [];
+		var currAnggotaDosenLuar = [];
 		var currAksiAnggota = 'add';
 		var currIdPeran = '';
+
+		var currSelectedAnggotaDosenLuar = '';
+		var objCurrSelectedAnggotaDosenLuar = {};
 
 
 		load_anggota_dosen();
@@ -874,6 +1013,42 @@ $anggotamhs = json_encode($datamhs);
 			});
 		}
 
+		load_anggota_dosenluar();
+
+		function load_anggota_dosenluar() {
+			$.ajax({
+				url: "<?php echo site_url('submit/load_anggota_dosenluar/' . $this->uri->segment(3)); ?>",
+				method: "POST",
+				success: function(data) {
+					hsl = data;
+				},
+				complete: function() {
+					htmlbody = '';
+					if (hsl.status) {
+						if (hsl.data.length > 0) {
+							currAnggotaDosenLuar = hsl.data;
+							$.each(hsl.data, function(i, v) {
+								objCurrSelectedAnggotaDosenLuar[v.id] = v;
+								htmlbody += '<tr>';
+								htmlbody += '<td>' + (i + 1) + '</td>';
+								htmlbody += '<td>' + v.nidn + '</td>';
+								htmlbody += '<td>' + v.namalengkap + '<br/>' + v.negara + '</td>';
+								htmlbody += '<td>' + v.namadepartmen + ', ' + v.namainstitusi + '<br/>' + v.negara_institusi + '</td>';
+								htmlbody += '<td>' + v.tugas + '</td>';
+								htmlbody += '<td class="text-right"><button type="button" class="btn btn-sm btn-outline-warning editAnggotaDosenLuar" data-id="' + v.id + '"><i class="fas fa-pencil-alt fa-sm"></i></button><button type="button" class="btn btn-sm btn-outline-danger hapusAnggotaDosenLuar" data-id="' + v.id + '"><i class="fas fa-trash fa-sm"></i></button></td>';
+								htmlbody += '</tr>';
+							});
+							$('#anggotadosenluarperpilih').html(htmlbody);
+						} else {
+							$('#anggotadosenluarperpilih').html('<tr class="l-no-data"><td colspan="6" align="center">Belum ada anggota dosen luar yang didata</td></tr>');
+						}
+					} else {
+						alert(hsl.message);
+					}
+				}
+			});
+		}
+
 		$(document).on('click', '.addAnggota', function() {
 			var jenis = $(this).data('jenis');
 			currAksiAnggota = 'add';
@@ -907,7 +1082,6 @@ $anggotamhs = json_encode($datamhs);
 			if (selected && selectedText) {
 				// Tambahkan option terpilih secara manual agar langsung muncul
 				var option = new Option(selectedText, selected, true, true);
-				console.log(option);
 				$('#p-id').append(option).trigger('change');
 			}
 			$('#p-id').select2({
@@ -955,6 +1129,8 @@ $anggotamhs = json_encode($datamhs);
 				}
 			});
 		}
+
+
 
 
 
@@ -1062,6 +1238,262 @@ $anggotamhs = json_encode($datamhs);
 					}
 				});
 
+			}
+		});
+
+
+
+
+
+
+		function initselect2negara() {
+			$('#dosenluar-idnegara').select2({
+				dropdownParent: $("#tambahDosenLuarModal")
+			});
+			$('#dosenluar-idnegara-institusi').select2({
+				dropdownParent: $("#tambahDosenLuarModal")
+			});
+		}
+		$(document).on('click', '#btnChangeModalDosenLuar', function() {
+			$('#dosenluar-modal').modal('hide');
+			$('#form-tambah-dosenluar')[0].reset();
+			$('#tambahDosenLuarModal').modal('show');
+			initselect2negara();
+			$('#dosenluar-idnegara').val('103').trigger('change');
+			$('#dosenluar-idnegara-institusi').val('103').trigger('change');
+		});
+
+		$(document).on('click', '.hapusAnggotaDosenLuar', function() {
+			if (!confirm('Data ini benar-benar akan dihapus?')) return;
+
+			$(this).parent().parent().remove();
+			if ($('#dosenluar-data tr').length == 1) {
+				$('.dosenluar-no-data').show();
+			} else {
+				$('.dosenluar-item td:first-child').each(function(i) {
+					$(this).text(i + 1);
+				});
+			}
+		});
+
+
+
+
+		$(document).on('submit', '#form-tambah-dosenluar', function(e) {
+			e.preventDefault();
+			if (!confirm('Apakah Anda yakin ingin menambahkan dosen luar ini?')) return;
+
+			var url = "<?php echo site_url('submit/dosenluar_add'); ?>";
+			var namalengkap = $('#dosenluar-nama').val();
+			var nidn = $('#dosenluar-nidn').val();
+			var id_negara = $('#dosenluar-idnegara').val();
+			var namadepartmen = $('#dosenluar-departmen').val();
+			var namainstitusi = $('#dosenluar-institusi').val();
+			var id_negara_institusi = $('#dosenluar-idnegara-institusi').val();
+			var tugas = $('#dosenluar-tugas-master').val();
+			$.ajax({
+				url: url,
+				type: "POST",
+				dataType: "JSON",
+				data: {
+					id_usulan: "<?php echo $this->uri->segment(3); ?>",
+					namalengkap: namalengkap,
+					nidn: nidn,
+					id_negara: id_negara,
+					namadepartmen: namadepartmen,
+					namainstitusi: namainstitusi,
+					id_negara_institusi: id_negara_institusi,
+					tugas: tugas
+				},
+				success: function(response) {
+					// Handle success response
+					hsl = response;
+
+				},
+				complete: function() {
+					if (hsl.status) {
+						load_anggota_dosenluar();
+
+						$('#tambahDosenLuarModal').modal('hide');
+						$('#dosenluar-modal').modal('hide');
+					}
+					alert(hsl.message);
+
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					// Handle error response
+					alert('Error adding dosen luar');
+				}
+			});
+		});
+
+		var currAksiDosenLuar = 'add';
+		var currIdDosenLuar = '';
+
+
+
+		formatSelectedDosenLuar();
+
+		function formatSelectedDosenLuar(selected = '', selectedText = '') {
+			// Destroy previous select2 instance if exists
+			if ($('#dosenluar-id').data('select2')) {
+				$('#dosenluar-id').select2('destroy');
+			}
+			$('#dosenluar-id').empty();
+			if (selected && selectedText) {
+				objCurrSelectedAnggotaDosenLuar[currIdPeran];
+				selectedText = '[' + objCurrSelectedAnggotaDosenLuar[currIdPeran].kode_negara + '] ' + objCurrSelectedAnggotaDosenLuar[currIdPeran].namalengkap + ' - ' + objCurrSelectedAnggotaDosenLuar[currIdPeran].namadepartmen + ', ' + objCurrSelectedAnggotaDosenLuar[currIdPeran].namainstitusi + ' ' + objCurrSelectedAnggotaDosenLuar[currIdPeran].negara_institusi;
+				// Tambahkan option terpilih secara manual agar langsung muncul
+				var option = new Option(selectedText, selected, true, true);
+				$('#dosenluar-id').append(option).trigger('change');
+			}
+			$('#dosenluar-id').select2({
+				dropdownParent: $("#dosenluar-modal"),
+				ajax: {
+					url: '<?php echo site_url('submit/search_dosenluar'); ?>',
+					dataType: 'json',
+					type: 'POST',
+					delay: 250,
+					data: function(params) {
+						return {
+							q: params.term,
+							page: params.page || 1,
+							selected: currSelectedAnggotaDosenLuar
+						};
+					},
+					processResults: function(data, params) {
+						params.page = params.page || 1;
+						if (data.status) {
+							return {
+								results: data.data,
+								pagination: {
+									more: (params.page * 20) < data.total_count
+								}
+							};
+						} else {
+							alert(data.message);
+						}
+					},
+					cache: true
+				},
+				minimumInputLength: 2,
+				templateResult: function(item) {
+					if (item.loading) return item.namalengkap;
+					return '[' + item.kode_negara + '] ' + item.namalengkap + ' - ' + item.namadepartmen + ', ' + item.namainstitusi + ' ' + item.negara_institusi || 'Tidak ditemukan';
+				},
+				templateSelection: function(item) {
+					if (selected && selectedText && item.status == undefined) {
+						currSelectedAnggotaDosenLuar = selected;
+						return selectedText;
+					} else {
+						currSelectedAnggotaDosenLuar = item.id;
+						return '[' + item.kode_negara + '] ' + item.namalengkap + ' - ' + item.namadepartmen + ', ' + item.namainstitusi + ' ' + item.negara_institusi || 'Tidak ditemukan';
+					}
+
+				}
+			});
+		}
+
+		$(document).on('click', '#btnAddDosenLuar', function() {
+			currAksiDosenLuar = 'add';
+			currIdPeran = '';
+			$('#frmPilihanDosenLuar')[0].reset();
+			$('#dosenluar-id').val('').trigger('change');
+			$('#dosenluar-modal-title').text('Tambah');
+		});
+
+
+		$(document).on('submit', '#frmPilihanDosenLuar', function(e) {
+			e.preventDefault();
+			if (confirm("Apakah Anda yakin ingin menyimpan data anggota dosen luar ini?")) {
+				var jenis = 'Dosen Luar';
+				var edit = currAksiDosenLuar;
+				var id = currIdPeran;
+				var anggota = $('#dosenluar-id').val();
+				var tugas = $('#dosenluar-tugas').val();
+
+				if (currAksiDosenLuar == 'add') {
+					if (anggota == "" || tugas == "") {
+						alert("Semua field harus diisi!");
+						return;
+					}
+				} else {
+					if (id == "" || tugas == "" || anggota == "") {
+						alert("Semua field harus diisi!");
+						return;
+					}
+				}
+				$.ajax({
+					url: "<?php echo site_url('submit/simpan_anggota'); ?>",
+					method: "POST",
+					data: {
+						id: id,
+						anggota: anggota,
+						tugas: tugas,
+						jenis: jenis,
+						aksi: currAksiDosenLuar,
+						id_usulan: "<?php echo $this->uri->segment(3); ?>"
+					},
+					success: function(data) {
+						hsl = data;
+					},
+					complete: function() {
+						if (hsl.status) {
+							load_anggota_dosenluar();
+
+							$('#tambahDosenLuarModal').modal('hide');
+							$('#dosenluar-modal').modal('hide');
+						}
+						alert(hsl.message);
+
+					}
+				});
+
+			}
+		});
+
+
+		$(document).on('click', '.editAnggotaDosenLuar', function() {
+
+			var id = $(this).data('id');
+			currAksiDosenLuar = 'edit';
+			currIdPeran = id;
+			var anggota = objCurrSelectedAnggotaDosenLuar[id];
+			if (!anggota) {
+				alert('Data anggota tidak ditemukan!');
+				return;
+			}
+			// Pastikan value dan text terisi agar select2 langsung tampil
+			formatSelectedDosenLuar(anggota.anggota, anggota.namalengkap);
+			$('#dosenluar-tugas').val(anggota.tugas);
+			$('#frmPilihanDosenLuar').data('edit', id);
+			$('#frmPilihanDosenLuar').data('jenis', 'Dosen Luar');
+			$('#dosenluar-modal-title').text('Edit');
+			$('#dosenluar-modal').modal('show');
+		});
+
+		$(document).on('click', '.hapusAnggotaDosenLuar', function() {
+			var id = $(this).data('id');
+			if (confirm("Apakah Anda yakin ingin menghapus anggota dosen luar ini?")) {
+				$.ajax({
+					url: "<?php echo site_url('submit/simpan_anggota'); ?>",
+					method: "POST",
+					data: {
+						id: id,
+						aksi: 'delete',
+						jenis: 'Dosen Luar',
+						id_usulan: "<?php echo $this->uri->segment(3); ?>"
+					},
+					success: function(data) {
+						hsl = data;
+					},
+					complete: function() {
+						if (hsl.status) {
+							load_anggota_dosenluar();
+						}
+						alert(hsl.message);
+					}
+				});
 			}
 		});
 	});

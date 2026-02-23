@@ -17,6 +17,10 @@
 		line-height: 1.5;
 		color: #858796;
 	}
+
+	.text-dosenluar {
+		color: blueviolet;
+	}
 </style>
 <div class="container-fluid">
 
@@ -432,14 +436,24 @@
 								$angg = $this->msubmit->perananggota($usulan['id_usulan'], 'Penelitian');
 								$hits = count($angg);
 
-								if ($hits > 0) {
+								$anggdosenluar = $this->msubmit->perananggotadosenluar($usulan['id_usulan'], 'Penelitian');
+								$hitsdosenluar = count($anggdosenluar);
+								if ($hits > 0 || $hitsdosenluar > 0) {
 									echo '<ol>';
 									foreach ($angg as $a) {
-										if ($hits == 1) {
+										if (($hits + $hitsdosenluar) == 1) {
 											echo $a->namalengkap . '<br>';
 											echo 'Peran : ' . $a->tugas;
 										} else {
 											echo '<li>' . $a->namalengkap . '<br>Peran : ' . $a->tugas . '</li>';
+										}
+									}
+									foreach ($anggdosenluar as $adl) {
+										if (($hits + $hitsdosenluar) == 1) {
+											echo $adl->namalengkap . ' dari ' . $adl->namadepartmen . ', ' . $adl->namainstitusi . ' ' . $adl->negara_institusi . '<br>';
+											echo 'Peran : ' . $adl->tugas;
+										} else {
+											echo '<li class="text-dosenluar">' . $adl->namalengkap . ' dari ' . $adl->namadepartmen . ', ' . $adl->namainstitusi . ' ' . $adl->negara_institusi . '<br>Peran : ' . $adl->tugas . '</li>';
 										}
 									}
 									echo '</ol>';
@@ -461,7 +475,7 @@
 									$hitangg = $this->msubmit->hitangg($usulan['id_usulan']);
 
 									if ($usulan['anggotadosen'] <> '' && $hitangg == 0) {
-										if ($hit > 1)
+										if (($hit + $hitsdosenluar) > 1)
 											echo '<ol style="margin-left:-23px;margin-top:-17px">';
 										for ($i = 0; $i < $hit; $i++) {
 											$dosen = $this->mdosen->namadosen($ambil[$i]);
@@ -470,31 +484,60 @@
 											else
 												echo $dosen['namalengkap'];
 										}
-										if ($hit > 1)
+
+										foreach ($anggdosenluar as $adl) {
+											if (($hit + $hitsdosenluar) == 1) {
+												echo $adl->namalengkap . ' dari ' . $adl->namadepartmen . ', ' . $adl->namainstitusi . ' ' . $adl->negara_institusi . '<br>';
+												echo 'Peran : ' . $adl->tugas;
+											} else {
+												echo '<li class="text-dosenluar">' . $adl->namalengkap . ' dari ' . $adl->namadepartmen . ', ' . $adl->namainstitusi . ' ' . $adl->negara_institusi . '<br>Peran : ' . $adl->tugas . '</li>';
+											}
+										}
+
+
+										if (($hit + $hitsdosenluar) > 1)
 											echo '</ol>';
 									} elseif ($usulan['anggotadosen'] <> '' && $hitangg > 0) {
 										$angg = $this->msubmit->perananggota($usulan['id_usulan'], 'Penelitian');
 										$hits = count($angg);
 										echo '<ol>';
 										foreach ($angg as $a) {
-											if ($hits == 1) {
+											if (($hits + $hitsdosenluar) == 1) {
 												echo $a->namalengkap . '<br>';
 												echo 'Peran : ' . $a->tugas;
 											} else {
 												echo '<li>' . $a->namalengkap . '<br>Peran : ' . $a->tugas . '</li>';
 											}
 										}
+
+										foreach ($anggdosenluar as $adl) {
+											if (($hits + $hitsdosenluar) == 1) {
+												echo $adl->namalengkap . ' dari ' . $adl->namadepartmen . ', ' . $adl->namainstitusi . ' ' . $adl->negara_institusi . '<br>';
+												echo 'Peran : ' . $adl->tugas;
+											} else {
+												echo '<li class="text-dosenluar">' . $adl->namalengkap . ' dari ' . $adl->namadepartmen . ', ' . $adl->namainstitusi . ' ' . $adl->negara_institusi . '<br>Peran : ' . $adl->tugas . '</li>';
+											}
+										}
+
 										echo '</ol>';
 									} elseif ($usulan['anggotadosen'] == '' && $hitangg > 0) {
 										$angg = $this->msubmit->perananggota($usulan['id_usulan'], 'Penelitian');
 										$hits = count($angg);
 										echo '<ol>';
 										foreach ($angg as $a) {
-											if ($hits == 1) {
+											if (($hits + $hitsdosenluar) == 1) {
 												echo $a->namalengkap . '<br>';
 												echo 'Peran : ' . $a->tugas;
 											} else {
 												echo '<li>' . $a->namalengkap . '<br>Peran : ' . $a->tugas . '</li>';
+											}
+										}
+										foreach ($anggdosenluar as $adl) {
+											if (($hits + $hitsdosenluar) == 1) {
+												echo $adl->namalengkap . ' dari ' . $adl->namadepartmen . ', ' . $adl->namainstitusi . ' ' . $adl->negara_institusi . '<br>';
+												echo 'Peran : ' . $adl->tugas;
+											} else {
+												echo '<li class="text-dosenluar">' . $adl->namalengkap . ' dari ' . $adl->namadepartmen . ', ' . $adl->namainstitusi . ' ' . $adl->negara_institusi . '<br>Peran : ' . $adl->tugas . '</li>';
 											}
 										}
 										echo '</ol>';
