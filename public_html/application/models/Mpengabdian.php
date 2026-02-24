@@ -773,6 +773,7 @@ class Mpengabdian extends CI_Model
 		$this->db->select("*,pkm.reviewer cek");
 		$this->db->from("usulan_pkm as pkm");
 		$this->db->join("dosen", "dosen.user=pkm.pengusul");
+		$this->db->join("peran", "peran.id_usulan=pkm.id_usulan AND peran.skema='Pengabdian' AND peran.anggota='" . $this->session->userdata('sesi_dosen') . "'", "left");
 
 		if ($this->session->userdata('sesi_status') <> 1) {
 			$this->db->where("(pkm.pengusul=" . $this->session->userdata('sesi_id') . " OR FIND_IN_SET('" . $this->session->userdata('sesi_dosen') . "',(SELECT anggotadosen from usulan_pkm WHERE id_usulan=pkm.id_usulan)))");
