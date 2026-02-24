@@ -211,6 +211,9 @@
 								$id_usulan = $this->uri->segment(3);
 								$angg = $this->msubmit->perananggota($id_usulan, 'Pengabdian');
 								$hits = count($angg);
+
+								$anggdosenluar = $this->msubmit->perananggotadosenluar($p->id_usulan, 'Pengabdian');
+								$hitsdosenluar = count($anggdosenluar);
 								if ($hits > 0) {
 									echo '<ol>';
 									foreach ($angg as $a) {
@@ -222,11 +225,21 @@
 										else
 											$setuju = '<span class="badge badge-warning">Belum Respon</span>';
 
-										if ($hits == 1) {
+										if (($hits + $hitsdosenluar) == 1) {
 											echo $a->namalengkap . '( <b>' . $setuju . '</b> )<br>';
 											echo 'Peran : ' . $a->tugas;
 										} else {
 											echo '<li>' . $a->namalengkap . ' ( <b>' . $setuju . '</b> )<br>Peran : ' . $a->tugas . '</li>';
+										}
+									}
+									if ($hitsdosenluar > 0) {
+										foreach ($anggdosenluar as $a) {
+											if (($hits + $hitsdosenluar) == 1) {
+												echo $a->namalengkap . ' dari ' . $a->namadepartmen . ', ' . $a->namainstitusi . ' ' . $a->negara_institusi . '<br>';
+												echo 'Peran : ' . $a->tugas;
+											} else {
+												echo '<li class="text-dosenluar">' . $a->namalengkap . ' dari ' . $a->namadepartmen . ', ' . $a->namainstitusi . ' ' . $a->negara_institusi . '<br>Peran : ' . $a->tugas . '</li>';
+											}
 										}
 									}
 									echo '</ol>';
@@ -250,6 +263,11 @@
 
 											$dosen = $this->mdosen->namadosen($ambil[$i]);
 											echo '<li>' . $dosen['namalengkap'] . ' ( <b>' . $setuju . '</b> )</li>';
+										}
+										if ($hitsdosenluar > 0) {
+											foreach ($anggdosenluar as $a) {
+												echo '<li class="text-dosenluar">' . $a->namalengkap . ' dari ' . $a->namadepartmen . ', ' . $a->namainstitusi . ' ' . $a->negara_institusi . '<br>Peran : ' . $a->tugas . '</li>';
+											}
 										}
 										echo '</ol>';
 									} else

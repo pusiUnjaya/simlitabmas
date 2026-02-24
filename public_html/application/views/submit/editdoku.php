@@ -1019,6 +1019,9 @@ $anggotamhs = json_encode($datamhs);
 			$.ajax({
 				url: "<?php echo site_url('submit/load_anggota_dosenluar/' . $this->uri->segment(3)); ?>",
 				method: "POST",
+				data: {
+					skema: 'Pengabdian'
+				},
 				success: function(data) {
 					hsl = data;
 				},
@@ -1170,6 +1173,7 @@ $anggotamhs = json_encode($datamhs);
 						id: id,
 						aksi: 'delete',
 						jenis: jenis,
+						skema: 'Penelitian',
 						id_usulan: "<?php echo $this->uri->segment(3); ?>"
 					},
 					success: function(data) {
@@ -1217,6 +1221,7 @@ $anggotamhs = json_encode($datamhs);
 						anggota: anggota,
 						tugas: tugas,
 						jenis: jenis,
+						skema: 'Penelitian',
 						aksi: currAksiAnggota,
 						id_usulan: "<?php echo $this->uri->segment(3); ?>"
 					},
@@ -1303,7 +1308,8 @@ $anggotamhs = json_encode($datamhs);
 					namadepartmen: namadepartmen,
 					namainstitusi: namainstitusi,
 					id_negara_institusi: id_negara_institusi,
-					tugas: tugas
+					tugas: tugas,
+					skema: 'Penelitian'
 				},
 				success: function(response) {
 					// Handle success response
@@ -1431,6 +1437,7 @@ $anggotamhs = json_encode($datamhs);
 						anggota: anggota,
 						tugas: tugas,
 						jenis: jenis,
+						skema: 'Penelitian',
 						aksi: currAksiDosenLuar,
 						id_usulan: "<?php echo $this->uri->segment(3); ?>"
 					},
@@ -1481,6 +1488,7 @@ $anggotamhs = json_encode($datamhs);
 					data: {
 						id: id,
 						aksi: 'delete',
+						skema: 'Penelitian',
 						jenis: 'Dosen Luar',
 						id_usulan: "<?php echo $this->uri->segment(3); ?>"
 					},

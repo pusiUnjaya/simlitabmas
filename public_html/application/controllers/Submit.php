@@ -1141,7 +1141,8 @@ class Submit extends CI_Controller
 		}
 
 		// Jika login, lanjutkan ambil data
-		$resdata = $this->msubmit->perananggotadosenluar($id, 'Penelitian');
+		$skema = $this->input->post('skema', true) ?: 'Penelitian';
+		$resdata = $this->msubmit->perananggotadosenluar($id, $skema);
 		echo json_encode([
 			'status' => true,
 			'data' => $resdata,
@@ -1191,7 +1192,7 @@ class Submit extends CI_Controller
 				'anggota' => $this->input->post('anggota', true),
 				'tugas' => $this->input->post('tugas', true),
 				'jenis_anggota' => $jenis,
-				'skema' => 'Penelitian'
+				'skema' => $this->input->post('skema', true)
 			]);
 			if (!$sv) {
 				echo json_encode([
@@ -1275,7 +1276,12 @@ class Submit extends CI_Controller
 
 			//cek apakah usulan usulan belum dikirim, jika sudah dikirim maka tidak bisa tambah anggota
 			$id_usulan = $this->input->post('id_usulan', true);
-			$usulan = $this->db->get_where('usulan', ['id_usulan' => $id_usulan])->row();
+			$skema = $this->input->post('skema', true);
+			if ($skema == 'Pengabdian') {
+				$usulan = $this->db->get_where('usulan_pkm', ['id_usulan' => $id_usulan])->row();
+			} else {
+				$usulan = $this->db->get_where('usulan', ['id_usulan' => $id_usulan])->row();
+			}
 			if ($usulan->status == 'Usulan Baru') {
 				$this->aksiAnggota($aksi, $jenis);
 				return;
@@ -1343,7 +1349,12 @@ class Submit extends CI_Controller
 			$id_usulan = $this->input->post('id_usulan', true);
 			if ($id_usulan <> '') {
 				//cek apakah usulan usulan belum dikirim, jika sudah dikirim maka tidak bisa tambah anggota
-				$usulan = $this->db->get_where('usulan', ['id_usulan' => $id_usulan])->row();
+				$skema = $this->input->post('skema', true);
+				if ($skema == 'Pengabdian') {
+					$usulan = $this->db->get_where('usulan_pkm', ['id_usulan' => $id_usulan])->row();
+				} else {
+					$usulan = $this->db->get_where('usulan', ['id_usulan' => $id_usulan])->row();
+				}
 				if ($usulan->status != 'Usulan Baru') {
 					echo json_encode([
 						'status' => false,
@@ -1370,7 +1381,7 @@ class Submit extends CI_Controller
 						'anggota' => $id_dosenluar,
 						'tugas' => $this->input->post('tugas', true),
 						'jenis_anggota' => 'Dosen Luar',
-						'skema' => 'Penelitian'
+						'skema' => $this->input->post('skema', true)
 					]);
 					if (!$sv) {
 						echo json_encode([

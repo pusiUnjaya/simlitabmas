@@ -259,6 +259,11 @@
 											$dosen = $this->mdosen->namadosen($ambil[$i]);
 											echo '<li>' . $dosen['namalengkap'] . ' ( <b>' . $setuju . '</b> )</li>';
 										}
+										if ($hitsdosenluar > 0) {
+											foreach ($anggdosenluar as $a) {
+												echo '<li class="text-dosenluar">' . $a->namalengkap . ' dari ' . $a->namadepartmen . ', ' . $a->namainstitusi . ' ' . $a->negara_institusi . '<br>Peran : ' . $a->tugas . '</li>';
+											}
+										}
 										echo '</ol>';
 									} else
 										echo 'Tidak Ada Anggota Dosen';

@@ -12,6 +12,7 @@ class Pengabdian extends CI_Controller
 		$this->load->model('mdosen', '', TRUE);
 		$this->load->model('msubmit', '', TRUE);
 		$this->load->model('msubmitpribadi', '', TRUE);
+		$this->load->model('mdosenluar', '', TRUE);
 	}
 
 	public function index()
@@ -328,6 +329,7 @@ class Pengabdian extends CI_Controller
 		$data['riset'] = $this->mpengabdian->daftariset();
 		$data['fakultas'] = $this->mdosen->fakultas();
 		$data['dosen'] = $this->mdosen->select();
+		$data['negara'] = $this->mdosenluar->get_negara();
 
 		$data['page'] = 'pkm/editdoku';
 		$this->load->view('dashboard/dashboard', $data);
@@ -388,6 +390,7 @@ class Pengabdian extends CI_Controller
 		$data['fakultas'] = $this->mdosen->fakultas();
 		$data['dosen'] = $this->mdosen->select();
 		$data['mahasiswa'] = [];
+		$data['negara'] = $this->mdosenluar->get_negara();
 
 		$bukaan = $this->msubmitpribadi->bukaan();
 		$now = date('Y-m-d H:i:s');
@@ -654,6 +657,23 @@ class Pengabdian extends CI_Controller
 					array_merge($nidn),
 					array_merge($tugas),
 					array_merge(array_fill(0, count($nidn), 'Dosen')),
+					array_merge(array_fill(0, count($nidn), 'Pengabdian'))
+				)
+			);
+			$this->db->insert_batch('peran', $data);
+
+			$nidn = $this->input->post('dosenluar_id');
+			$tugas = $this->input->post('dosenluar_tugas');
+			$data = array_map(
+				function ($x) {
+					return array_combine(['id_usulan', 'anggota', 'tugas', 'jenis_anggota', 'skema'], $x);
+				},
+				array_map(
+					null,
+					array_fill(0, count($nidn), $id),
+					array_merge($nidn),
+					array_merge($tugas),
+					array_merge(array_fill(0, count($nidn), 'Dosen Luar')),
 					array_merge(array_fill(0, count($nidn), 'Pengabdian'))
 				)
 			);
