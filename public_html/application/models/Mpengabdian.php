@@ -770,13 +770,13 @@ class Mpengabdian extends CI_Model
 	function usulan($pilih)
 	{
 		$data = array();
-		$this->db->select("*,pkm.reviewer cek");
+		$this->db->select("DISTINCT(pkm.id_usulan) as idx, pkm.*, dosen.*, pkm.reviewer cek");
 		$this->db->from("usulan_pkm as pkm");
 		$this->db->join("dosen", "dosen.user=pkm.pengusul");
-		$this->db->join("peran", "peran.id_usulan=pkm.id_usulan AND peran.skema='Pengabdian' AND peran.anggota='" . $this->session->userdata('sesi_dosen') . "'", "left");
+		$this->db->join("peran", "peran.id_usulan=pkm.id_usulan AND peran.skema='Pengabdian'", "left");
 
 		if ($this->session->userdata('sesi_status') <> 1) {
-			$this->db->where("(pkm.pengusul=" . $this->session->userdata('sesi_id') . " OR FIND_IN_SET('" . $this->session->userdata('sesi_dosen') . "',(SELECT anggotadosen from usulan_pkm WHERE id_usulan=pkm.id_usulan)))");
+			$this->db->where("(pkm.pengusul=" . $this->session->userdata('sesi_id') . " OR peran.anggota='" . $this->session->userdata('sesi_dosen') . "' OR FIND_IN_SET('" . $this->session->userdata('sesi_dosen') . "',(SELECT anggotadosen from usulan_pkm WHERE id_usulan=pkm.id_usulan)))");
 		}
 
 		$this->db->where_not_in("pkm.status", "Usulan Disetujui,Usulan Tidak Disetujui");
@@ -787,6 +787,7 @@ class Mpengabdian extends CI_Model
 		if ($hasil->num_rows() > 0) {
 			$data = $hasil->result();
 		}
+		//echo $this->db->last_query();
 		return $data;
 	}
 

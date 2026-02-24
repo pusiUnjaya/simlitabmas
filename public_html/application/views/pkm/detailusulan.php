@@ -184,21 +184,23 @@
 
 							if ($cekcek > 0 && $reviewernya == 0 && $this->session->userdata('sesi_id') <> $usulan['pengusul']) {
 								$getidrev = $this->mpengabdian->getidrev($usulan['reviewer']);
-								$readrev = $this->mpengabdian->hitrev($this->uri->segment(3), $getidrev['user']);
+								if ((count($getidrev)) > 0) {
+									$readrev = $this->mpengabdian->hitrev($this->uri->segment(3), $getidrev['user']);
 
-								$hitrev = $this->mpengabdian->hitrev($this->uri->segment(3), $this->session->userdata('sesi_id'));
-								if ($hitrev > 0 || $readrev > 0) {
-									$isianreview = $this->mpengabdian->lihatisianreview($this->uri->segment(3), $getidrev['user']);
-									echo '<br><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <?php echo $nomor; ?></a>';
-								} elseif ($hitrev == 0 && $this->session->userdata('sesi_dosen') == $usulan['reviewer']) {
+									$hitrev = $this->mpengabdian->hitrev($this->uri->segment(3), $this->session->userdata('sesi_id'));
+									if ($hitrev > 0 || $readrev > 0) {
+										$isianreview = $this->mpengabdian->lihatisianreview($this->uri->segment(3), $getidrev['user']);
+										echo '<br><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <?php echo $nomor; ?></a>';
+									} elseif ($hitrev == 0 && $this->session->userdata('sesi_dosen') == $usulan['reviewer']) {
 							?>
-									<div class="row" style="margin-top:40px">
-										<div class="col-md-6">
-											<a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-target="#reviewer-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Review Usulan</a>
+										<div class="row" style="margin-top:40px">
+											<div class="col-md-6">
+												<a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-target="#reviewer-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Review Usulan</a>
+											</div>
 										</div>
-									</div>
 							<?php
-								} else {
+									} else {
+									}
 								}
 							}
 						}

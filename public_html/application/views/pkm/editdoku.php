@@ -459,6 +459,12 @@ $anggotamhs = json_encode($datamhs);
 <script src="<?php echo base_url(); ?>assets/vendor/select2/dist/js/select2.min.js"></script>
 
 <script>
+	$(document).ready(function() {
+		$('#m-id').select2({
+			dropdownParent: $("#m-modal")
+		});
+	});
+
 	$('.select2-single-placeholder').select2({
 		placeholder: "Pilih Judul Penelitian sebagai sumber pelaksanaan Pengabdian",
 		allowClear: true
