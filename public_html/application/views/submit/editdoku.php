@@ -404,7 +404,7 @@
 									<label>Status Usulan</label>
 									<select name="statususulan" class="form-control">
 										<?php
-										$jenis = array('Usulan Baru', 'Usulan Dikirim', 'Reviewed', 'Usulan Disetujui Reviewer 1', 'Usulan Tidak Disetujui Reviewer 1', 'Usulan Disetujui Reviewer 2', 'Usulan Tidak Disetujui Reviewer 2', 'Usulan Disetujui', 'Usulan Tidak Disetujui');
+										$jenis = array('Usulan Baru', 'Usulan Dikirim', 'Usulan Disetujui Prodi', 'Reviewed', 'Usulan Disetujui Reviewer 1', 'Usulan Tidak Disetujui Reviewer 1', 'Usulan Disetujui Reviewer 2', 'Usulan Tidak Disetujui Reviewer 2', 'Usulan Disetujui', 'Usulan Tidak Disetujui');
 										$n = count($jenis);
 										for ($i = 0; $i < $n; $i++) {
 											if ($usulan['status'] == $jenis[$i])

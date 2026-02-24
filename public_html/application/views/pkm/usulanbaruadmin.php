@@ -122,10 +122,16 @@ if ($this->session->userdata('sesi_user') == '') {
 										  <br>Ketua : " . $ketua['namalengkap'] . " | Prodi : " . $prodi['prodi'] . " | Skema : " . $p->skema . "
 										  <br>Anggota : ";
 									$anggotadosen =  $this->msubmit->perananggota($p->id_usulan, 'Pengabdian');
-									if ((count($anggotadosen)) > 0) {
+
+									$anggdosenluar = $this->msubmit->perananggotadosenluar($p->id_usulan, 'Pengabdian');
+									$hitsdosenluar = count($anggdosenluar);
+									if ((count($anggotadosen)) > 0 || $hitsdosenluar > 0) {
 										echo '<ol>';
 										foreach ($anggotadosen as $ad) {
 											echo '<li>' . $ad->namalengkap . '</li>';
+										}
+										foreach ($anggdosenluar as $adl) {
+											echo '<li>' . $adl->namalengkap . ' dari ' . $adl->namadepartmen . ', ' . $adl->namainstitusi . ' ' . $adl->negara_institusi . '</li>';
 										}
 										echo '</ol>';
 									} else {

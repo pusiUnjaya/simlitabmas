@@ -284,7 +284,7 @@
 							$namarev = [];
 							foreach ($hasilreview as $h) {
 								if ($is_dashboardpengusul) {
-									$namarev['namalengkap'] = 'Reviewer Anonim ' . $nrev;
+									$namarev['namalengkap'] = 'Reviewer Anonimous ' . $nrev;
 									$nrev++;
 								} else {
 									$namarev['namalengkap'] = $this->mdosen->dosennya($h->reviewer);

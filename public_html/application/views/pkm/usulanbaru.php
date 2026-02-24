@@ -555,12 +555,14 @@ if ($this->session->userdata('sesi_user') == '') {
 							// echo $this->db->last_query();exit;	
 							$n = count($sudah);
 							$i = 0;
+							$nrev = 1;
 							if ($n > 0) {
 								foreach ($sudah as $s) {
-									echo '<b style="color:green">' . $s->namalengkap . '</b>';
+									echo '<b style="color:green">Reviewer Anonimous ' . $nrev . ' </b>';
 									if ($i < ($n - 1))
 										echo ' dan ';
 									$i++;
+									$nrev++;
 								}
 							} else
 								echo '<b style="color:red">-</b>';

@@ -143,13 +143,21 @@ if ($this->session->userdata('sesi_user') == '') {
 										  <br>Anggota : ";
 
 									$anggotadosen =  $this->msubmit->perananggota($p->id_usulan, 'Penelitian');
+									$anggdosenluar = $this->msubmit->perananggotadosenluar($p->id_usulan, 'Penelitian');
+									$hitsdosenluar = count($anggdosenluar);
+									echo '<ol>';
 									if ((count($anggotadosen)) > 0) {
-										echo '<ol>';
+
 										foreach ($anggotadosen as $ad) {
 											echo '<li>' . $ad->namalengkap . '</li>';
 										}
-										echo '</ol>';
 									}
+									if ($hitsdosenluar > 0) {
+										foreach ($anggdosenluar as $adl) {
+											echo '<li>' . $adl->namalengkap . ' dari ' . $adl->namadepartmen . ', ' . $adl->namainstitusi . ' ' . $adl->negara_institusi . '</li>';
+										}
+									}
+									echo '</ol>';
 									echo "RAB : ";
 									$prodinya = $this->mdosen->dosennya($p->pengusul);
 									if ($p->sumberdana == 'Internal' && $p->totaldana <> 0 && $prodinya['prodi'] == 2) {
