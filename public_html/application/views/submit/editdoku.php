@@ -1020,7 +1020,7 @@ $anggotamhs = json_encode($datamhs);
 				url: "<?php echo site_url('submit/load_anggota_dosenluar/' . $this->uri->segment(3)); ?>",
 				method: "POST",
 				data: {
-					skema: 'Pengabdian'
+					skema: 'Penelitian'
 				},
 				success: function(data) {
 					hsl = data;
