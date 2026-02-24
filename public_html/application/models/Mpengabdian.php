@@ -2323,15 +2323,37 @@ class Mpengabdian extends CI_Model
 
 	function simpananggotasetuju($id)
 	{
-		$waktu = date('Y-m-d H:i:s');
-		$data = array(
-			"id_usulan"	=> $id,
-			"jenis"		=> $this->input->post("jenis", true),
-			"idanggota"	=> $this->input->post("anggota", true),
-			"setuju"	=> $this->input->post("setuju", true),
-			"modified"	=> $waktu
-		);
-		$this->db->insert("anggotasetuju", $data);
+		$anggota = $this->input->post("anggota", true);
+		//cek dulu apakah anggota sudah menyetujui usulan ini atau belum
+		$this->db->where("id_usulan", $id);
+		$this->db->where("idanggota", $anggota);
+		$this->db->where("jenis", $this->input->post("jenis", true));
+		$cek = $this->db->get("anggotasetuju");
+
+		//jika belum maka insert, jika sudah maka update
+		if ($cek->num_rows() > 0) {
+			$waktu = date('Y-m-d H:i:s');
+			$this->db->where("id_usulan", $id);
+			$this->db->where("idanggota", $anggota);
+			$this->db->where("jenis", $this->input->post("jenis", true));
+			$data = array(
+				"setuju"	=> $this->input->post("setuju", true),
+				"modified"	=> $waktu
+			);
+			$this->db->update("anggotasetuju", $data);
+		} else {
+			$waktu = date('Y-m-d H:i:s');
+			$data = array(
+				"id_usulan"	=> $id,
+				"jenis"		=> $this->input->post("jenis", true),
+				"idanggota"	=> $this->input->post("anggota", true),
+				"setuju"	=> $this->input->post("setuju", true),
+				"modified"	=> $waktu
+			);
+			$this->db->insert("anggotasetuju", $data);
+		}
+
+
 
 		//masukan logs sistem
 		$data = array(
@@ -2722,5 +2744,58 @@ class Mpengabdian extends CI_Model
 	{
 		$this->db->where("idperan", $id);
 		return $this->db->delete("peran");
+	}
+
+	function nudeal($id, $usulan, $skema)
+	{
+		$data = array();
+		$this->db->select("*");
+		$this->db->from("anggotasetuju");
+		$this->db->join("peran", "peran.id_usulan=anggotasetuju.id_usulan");
+		$this->db->where("anggotasetuju.id_usulan", $usulan);
+		$this->db->where("anggotasetuju.idanggota", $id);
+		$this->db->where("jenis", $skema);
+		$hasil = $this->db->get();
+
+		$data = $hasil->num_rows();
+
+		return $data;
+	}
+
+
+	function getAllanggota($usulan, $jenis, $skema)
+	{
+		$data = array();
+		$this->db->select("peran.*,anggotasetuju.setuju,anggotasetuju.modified as modifsetuju");
+		$this->db->from("peran");
+		$this->db->join("anggotasetuju", "peran.id_usulan=anggotasetuju.id_usulan AND peran.anggota=anggotasetuju.idanggota AND peran.skema = anggotasetuju.jenis", 'left');
+		$this->db->where("peran.id_usulan", $usulan);
+		$this->db->where("peran.jenis_anggota", $jenis);
+		$this->db->where("peran.skema", $skema);
+		$hasil = $this->db->get();
+
+		if ($hasil->num_rows() > 0) {
+			$data = $hasil->result_object();
+		}
+
+		$hasil->free_result();
+		return $data;
+	}
+
+	function cekanggotasetuju($id, $usulan)
+	{
+		$data = array();
+		$this->db->select("*");
+		$this->db->from("anggotasetuju");
+		$this->db->where("idanggota", $id);
+		// $this->db->where("FIND_IN_SET(idanggota,'".$list."')");
+		$this->db->where("setuju", "Setuju");
+		$this->db->where("id_usulan", $usulan);
+		$this->db->where("jenis", "Pengabdian");
+		$hasil = $this->db->get();
+
+		$data = $hasil->num_rows();
+
+		return $data;
 	}
 }

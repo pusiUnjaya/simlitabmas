@@ -198,8 +198,7 @@
 												<a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-target="#reviewer-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Review Usulan</a>
 											</div>
 										</div>
-							<?php
-									} else {
+								<?php
 									}
 								}
 							}
@@ -207,13 +206,67 @@
 
 						$cekrab = $this->mpengabdian->cekrab($this->uri->segment(3));
 						if ($usulan['status'] == 'Usulan Baru' && $this->session->userdata('sesi_status') <> 1 && $cekrab > 0) {
-							?>
-							<div class="row" style="margin-top:40px">
-								<div class="col-md-6">
-									<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#kirim-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Kirim Usulan</a>
-								</div>
-							</div>
-							<?php
+							//cek apakah semua anggota sudah menyetujui untuk menjadi anggota penelitian, jika ini dashboard pengusul maka kirim usulan hanya bisa dilakukan ketika semua anggota sudah menyetujui untuk menjadi anggota penelitian, jika ini dashboard anggoa, maka anggota hanya bisa menyetujui untuk menjadi anggota penelitian jika belum menyetujui dan belum menolak, jika sudah menyetujui atau sudah menolak maka tidak bisa menyetujui atau menolak lagi
+							$getAllanggota = $this->mpengabdian->getAllanggota($this->uri->segment(3), 'Dosen', 'Pengabdian');
+							$jumlahanggotasetuju = 0;
+							if (count($getAllanggota) > 0) {
+								foreach ($getAllanggota as $anggota) {
+									if ($anggota->setuju == 'Setuju') {
+										$jumlahanggotasetuju++;
+									}
+								}
+							}
+
+
+							if ($this->session->userdata('sesi_id') == $usulan['pengusul']) {
+								if ($jumlahanggotasetuju == count($getAllanggota)) {
+									echo '
+									<div class="row" style="margin-top:40px">
+										<div class="col-md-6">
+											<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#kirim-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Kirim Usulan</a>
+										</div>
+									</div>
+									';
+								} else {
+									echo '<div class="row" style="margin-top:40px">
+										<div class="col-md-6">
+											<p>Menunggu Persetujuan Anggota Dosen</p>
+										</div>
+									</div>';
+								}
+							} else {
+								if ($this->session->userdata('sesi_id') <> $usulan['pengusul']) {
+									if (count($getAllanggota) > 0) {
+										foreach ($getAllanggota as $anggota) {
+											if ($anggota->anggota == $this->session->userdata('sesi_dosen')) {
+												//echo '<h1>' . $anggota->anggota . ' - = - ' . $this->session->userdata('sesi_dosen') . '</h1><br>';
+												if ($anggota->setuju == 'Setuju') {
+													echo '<div class="row" style="margin-top:40px">
+														<div class="col-md-12">
+															<p>Anda Telah Menyetujui untuk Menjadi Anggota pada ' . tgl_indo($anggota->modifsetuju, 1) . '</p>
+														</div>
+													</div>';
+												} elseif ($anggota->setuju == 'Tidak Setuju') {
+													echo '<div class="row" style="margin-top:40px">
+														<div class="col-md-6">
+															<p>Anda Telah Menolak untuk Menjadi Anggota pada ' . tgl_indo($anggota->modifsetuju, 1) . '</p>
+														</div>
+														<div class="col-md-6">
+																<a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-usulan="<?php echo $this->uri->segment(3);?>" data-toggle="modal" data-target="#anggota-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Persetujuan Anggota</a>
+														</div>
+													</div>';
+												} else {
+													echo '<div class="row" style="margin-top:40px">
+															<div class="col-md-12">
+																<a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-usulan="<?php echo $this->uri->segment(3);?>" data-toggle="modal" data-target="#anggota-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Persetujuan Anggota</a>
+															</div>
+														</div>';
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 						if ((($usulan['status'] == 'Reviewed' || $usulan['status'] == 'Usulan Disetujui Reviewer') && $this->session->userdata('sesi_status') <> 1 && $this->session->userdata('sesi_id') == $usulan['pengusul']) || $this->session->userdata('sesi_status') == 1) {
 
@@ -222,7 +275,7 @@
 							echo '<div class="row" style="margin-top:40px">';
 							foreach ($hasilreview as $h) {
 								$namarev = $this->mdosen->dosennya($h->reviewer);
-							?>
+								?>
 								<div class="col-md-6">
 									<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-catatan="<?php echo $h->hasilreview; ?>" data-skor="<?php echo $h->skor; ?>" data-file="<?php echo $h->filereview; ?>" data-reviewer="<?php echo $namarev['namalengkap']; ?>" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <br><?php echo $namarev['namalengkap']; ?></a>
 								</div>

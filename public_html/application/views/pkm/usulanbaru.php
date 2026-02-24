@@ -397,16 +397,30 @@ if ($this->session->userdata('sesi_user') == '') {
 										  <br>Ketua : " . $ketua['namalengkap'] . " | Prodi : " . $prodi['prodi'] . " | Skema : " . $p->skema . "
 										  <br>Anggota : ";
 
+							$jmldeal = 0;
 							$angg = $this->msubmit->perananggota($p->id_usulan, 'Pengabdian');
-							$hits = count($angg);
-							if ($hits > 0) {
+							$hitpisah = count($angg);
+							if ($hitpisah > 0) {
 								$num = 1;
 								echo '<ol>';
 								foreach ($angg as $a) {
-									if ($hits == 1)
-										echo $a->namalengkap;
+									$okdeal = $this->mpengabdian->cekanggotasetuju($a->id_dosen, $p->id_usulan);
+
+									if ($okdeal > 0) {
+										$setok = 'Setuju';
+										$jmldeal++;
+									} else {
+										$setok = '<span class="badge badge-warning">Belum Setuju</span>';
+
+										//cek apakah id_dosen samaa dengan sesi_dosen, jika sama maka tampilkan tombol setuju
+										if ($a->id_dosen == $this->session->userdata('sesi_dosen') && $p->status == 'Usulan Baru') {
+											$setok = '<span class="badge badge-warning">Anda Belum Setujui</span>' . " &nbsp;<a href='" . base_url() . "pengabdian/detail/" . $p->id_usulan . "' data-id='" . $p->id_usulan . "' class='btn btn-success btn-sm setuju' title='Setujui Keanggotaan'><i class='fas fa-check fa-sm'></i></a>";
+										}
+									}
+									if (($hitpisah) == 1)
+										echo $a->namalengkap . ' (' . $setok . ')';
 									else {
-										echo '<li>' . $a->namalengkap . '</li>';
+										echo '<li>' . $a->namalengkap . ' (' . $setok . ')</li>';
 									}
 								}
 								echo '</ol>';
@@ -419,19 +433,48 @@ if ($this->session->userdata('sesi_user') == '') {
 									echo '<ol>';
 									for ($i = 0; $i < $hitpisah; $i++) {
 										$revnya = $this->mdosen->namadosen($pisah[$i]);
-										echo '<li>' . $revnya['namalengkap'] . '</li>';
+										$okdeal = $this->mpengabdian->cekanggotasetuju($pisah[$i], $p->id_usulan);
+
+										if ($okdeal > 0) {
+											$setok = 'Setuju';
+											$jmldeal++;
+										} else {
+											$setok = '<span class="badge badge-warning">Belum Setuju</span>';
+											if ($pisah[$i] == $this->session->userdata('sesi_dosen') && $p->status == 'Usulan Baru') {
+												$setok = '<span class="badge badge-warning">Anda Belum Setujui</span>' . " &nbsp;<a href='" . base_url() . "pengabdian/detail/" . $p->id_usulan . "' data-id='" . $p->id_usulan . "' class='btn btn-success btn-sm setuju' title='Setujui Keanggotaan'><i class='fas fa-check fa-sm'></i></a>";
+											}
+										}
+
+										if ($hitpisah == 1) {
+											echo $revnya['namalengkap'] . ' (' . $setok . ')';
+										} else {
+											echo '<li>' . $revnya['namalengkap'] . ' (' . $setok . ')</li>';
+										}
 									}
 									echo '</ol>';
 								} elseif ($p->anggotadosen == '' && $hitangg > 0) {
 									$angg = $this->msubmit->perananggota($p->id_usulan, 'Pengabdian');
-									$hits = count($angg);
+									$hitpisah = count($angg);
 									$num = 1;
 									echo '<ol>';
 									foreach ($angg as $a) {
-										if ($hits == 1)
-											echo $a->namalengkap;
+										$okdeal = $this->mpengabdian->cekanggotasetuju($a->id_dosen, $p->id_usulan);
+
+										if ($okdeal > 0) {
+											$setok = 'Setuju';
+											$jmldeal++;
+										} else {
+											$setok = '<span class="badge badge-warning">Belum Setuju</span>';
+
+											//cek apakah id_dosen samaa dengan sesi_dosen, jika sama maka tampilkan tombol setuju
+											if ($a->id_dosen == $this->session->userdata('sesi_dosen') && $p->status == 'Usulan Baru') {
+												$setok = '<span class="badge badge-warning">Anda Belum Setujui</span>' . " &nbsp;<a href='" . base_url() . "pengabdian/detail/" . $p->id_usulan . "' data-id='" . $p->id_usulan . "' class='btn btn-success btn-sm setuju' title='Setujui Keanggotaan'><i class='fas fa-check fa-sm'></i></a>";
+											}
+										}
+										if (($hitpisah) == 1)
+											echo $a->namalengkap . ' (' . $setok . ')';
 										else {
-											echo '<li>' . $a->namalengkap . '</li>';
+											echo '<li>' . $a->namalengkap . ' (' . $setok . ')</li>';
 										}
 									}
 									echo '</ol>';
@@ -470,14 +513,25 @@ if ($this->session->userdata('sesi_user') == '') {
 								}
 							} else
 								echo '<b style="color:red">-</b>';
-							echo "</td><td>";
-							$up = '';
-							if ($p->status == 'Usulan Baru') {
+
+							echo '<br>';
+
+							if ($this->session->userdata('sesi_id') == $p->pengusul && $jmldeal == $hitpisah && $p->status == 'Usulan Baru') {
 								$cekrab = $this->mpengabdian->cekrab($p->id_usulan);
 								if ($cekrab > 0) {
-									$up = "<a href='#' data-idusul='" . $p->id_usulan . "' data-toggle='modal' data-target='#kirim-modal' type='button' class='btn btn-success px-3' title='Kirim Usulan'><i class='fas fa-upload fa-sm'></i>&nbsp;Kirim Usulan</a>";
+									echo "<a href='#' data-idusul='" . $p->id_usulan . "' data-toggle='modal' data-target='#kirim-modal' type='button' class='btn btn-success px-3' title='Kirim Usulan'><i class='fas fa-upload fa-sm'></i>&nbsp;Kirim Usulan</a>";
+								} else {
+									echo '<b class="badge badge-danger">RAB Belum Dibuat, Tidak Bisa Mengirim Usulan</b>';
 								}
-
+							} else {
+								if ($jmldeal < $hitpisah)
+									echo '<b class="badge badge-warning">Masih ada Anggota Dosen yang belum Menyetujui Keanggotaan</b>';
+								else
+									echo '';
+							}
+							echo "</td><td>";
+							$up = '';
+							if ($this->session->userdata('sesi_id') == $p->pengusul && $p->status == 'Usulan Baru') {
 								echo "<a href='" . base_url() . "pengabdian/detail/" . $p->id_usulan . "' class='shadow-sm' title='Lihat Detail'><i class='fas fa-folder-open fa-sm'></i></a>&nbsp;&nbsp;<a href='" . base_url() . "pengabdian/rab/" . $p->id_usulan . "' class='shadow-sm' title='Buat RAB'><i class='fas fa-dollar-sign fa-sm'></i></a>&nbsp;&nbsp;<a href='" . base_url() . "pengabdian/edit/" . $p->id_usulan . "' class='shadow-sm' title='Edit Usulan'><i class='fas fa-edit fa-sm'></i></a>&nbsp;&nbsp;
 									  <a href='#' data-id='" . $p->id_usulan . "' class='shadow-sm hapus' title='Hapus Usulan'><i class='fas fa-trash fa-sm'></i></a><br><br>";
 								echo $up;
