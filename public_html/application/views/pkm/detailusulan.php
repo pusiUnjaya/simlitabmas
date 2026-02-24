@@ -111,13 +111,26 @@
 							<div class="col-md-12">
 								<label>Reviewer</label>
 								<?php
+								$is_dashboardpengusul = false;
+								if ($this->session->userdata('sesi_id') == $usulan['pengusul']) {
+									$is_dashboardpengusul = true;
+								}
+
+
 								if ($usulan['reviewer'] <> '') {
 									$pisah = explode(',', $usulan['reviewer']);
 									$hitpisah = count($pisah);
 									echo '<ol>';
+									$nrev = 1;
 									for ($i = 0; $i < $hitpisah; $i++) {
 										$revnya = $this->mdosen->namadosen($pisah[$i]);
-										echo '<li>' . $revnya['namalengkap'] . '</li>';
+										if ($is_dashboardpengusul) {
+											echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+											$nrev++;
+										} else {
+											echo '<li>' . $revnya['namalengkap'] . '</li>';
+										}
+										$nrev++;
 									}
 									echo '</ol>';
 								} else
@@ -277,8 +290,14 @@
 							$hasilreview = $this->mpengabdian->lihathasilreview($usulan['id_usulan']);
 							$nomor = 1;
 							echo '<div class="row" style="margin-top:40px">';
+							$nrev = 1;
 							foreach ($hasilreview as $h) {
-								$namarev = $this->mdosen->dosennya($h->reviewer);
+								if ($is_dashboardpengusul) {
+									$namarev = 'Reviewer Anonim ' . $nrev;
+									$nrev++;
+								} else {
+									$namarev = $this->mdosen->dosennya($h->reviewer);
+								}
 								?>
 								<div class="col-md-6">
 									<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-catatan="<?php echo $h->hasilreview; ?>" data-skor="<?php echo $h->skor; ?>" data-file="<?php echo $h->filereview; ?>" data-reviewer="<?php echo $namarev['namalengkap']; ?>" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <br><?php echo $namarev['namalengkap']; ?></a>
