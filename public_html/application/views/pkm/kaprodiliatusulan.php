@@ -218,8 +218,8 @@
 									echo '<ol>';
 									foreach ($angg as $a) {
 										//cek persetujuan
-										$deal = $this->mpengabdian->hitanggotausulan($a->id, $id_usulan);
-										$okdeal = $this->mpengabdian->anggotausulan($a->id, $id_usulan);
+										$deal = $this->mpengabdian->hitanggotausulan($a->id_dosen, $id_usulan);
+										$okdeal = $this->mpengabdian->anggotausulan($a->id_dosen, $id_usulan);
 										if ($deal > 0)
 											$setuju = '<span class="badge badge-success">' . $okdeal['setuju'] . '</span>';
 										else
