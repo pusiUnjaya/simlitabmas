@@ -3106,4 +3106,12 @@ class MSubmit extends CI_Model
 		$this->db->limit(10, ($page - 1) * 10);
 		return $this->db->get()->result();
 	}
+
+	function cekSesiDosenIsAnggota($id_usulan)
+	{
+		$sesi_dosen = $this->session->userdata('sesi_dosen');
+		$anggota_dosen = $this->db->select('anggota')->get_where('peran', ['id_usulan' => $id_usulan, 'jenis_anggota' => 'Dosen', 'anggota' => $sesi_dosen])->result_array();
+
+		return (count($anggota_dosen)) > 0;
+	}
 }

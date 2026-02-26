@@ -112,7 +112,7 @@
 								<label>Reviewer</label>
 								<?php
 								$is_dashboardpengusul = false;
-								if ($this->session->userdata('sesi_id') == $usulan['pengusul']) {
+								if ($this->session->userdata('sesi_id') == $usulan['pengusul'] || $this->msubmit->cekSesiDosenIsAnggota($usulan['id_usulan'])) {
 									$is_dashboardpengusul = true;
 								}
 
