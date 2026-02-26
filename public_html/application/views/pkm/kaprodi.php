@@ -62,9 +62,9 @@
 									  <td>".$prodi['prodi']."</td>
 									  <td>".rupiah($total['bahan']+$total['kumpul']+$total['sewa']+$total['analis']+$total['lapor'])."</td>";
 							echo "<td>";
-								echo "<a href='' class='btn btn-success btn-icon-split' data-usulan='".$p->id_usulan."' data-roadmap='".$p->roadmap."' data-multi='".$p->multi."'  data-toggle='modal' data-target='#setuju-modal' title='Usulan Disetujui'>
+								echo "<a href='' class='btn btn-warning btn-icon-split' data-usulan='".$p->id_usulan."' data-roadmap='".$p->roadmap."' data-multi='".$p->multi."'  data-toggle='modal' data-target='#setuju-modal' title='Usulan Disetujui'>
 									<span class='icon text-white-50'>
-									<i class='fas fa-check'></i>
+									<i class='fas fa-exclamation'></i>
 									</span>
 									<span class='text'>Persetujuan Kaprodi</span>
 									</a>";
