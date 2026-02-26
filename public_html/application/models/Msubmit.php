@@ -821,6 +821,22 @@ class MSubmit extends CI_Model
 
 		if ($hasil->num_rows() > 0) {
 			$data = $hasil->result();
+			if ((count($data)) > 0) {
+				foreach ($data as $key => $value) {
+					$anggota = array();
+					$this->db->select("peran.anggota, peran.jenis_anggota");
+					$this->db->from("peran");
+					$this->db->where("peran.id_usulan", $value->id_usulan);
+					$hasilanggota = $this->db->get();
+
+					if ($hasilanggota->num_rows() > 0) {
+						$anggota = $hasilanggota->result();
+						$data[$key]->anggota = $anggota;
+					} else {
+						$data[$key]->anggota = array();
+					}
+				}
+			}
 		}
 		return $data;
 	}
@@ -2590,6 +2606,21 @@ class MSubmit extends CI_Model
 		$this->db->select("*");
 		$this->db->from("allmhs");
 		$this->db->where("idmhs", $id);
+		$hasil = $this->db->get();
+		if ($hasil->num_rows() > 0) {
+			$data = $hasil->row_array();
+		}
+		$hasil->free_result();
+		return $data;
+	}
+
+	function allnamamhsfromnpm($npm)
+	{
+		$data = array();
+		$this->db->select("allmhs.namamhs, prodi.prodi");
+		$this->db->from("allmhs");
+		$this->db->join("prodi", "prodi.id_prodi=allmhs.prodi", "left");
+		$this->db->where("npm", $npm);
 		$hasil = $this->db->get();
 		if ($hasil->num_rows() > 0) {
 			$data = $hasil->row_array();

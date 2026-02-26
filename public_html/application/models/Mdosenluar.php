@@ -59,4 +59,19 @@ class Mdosenluar extends CI_Model
 		$this->db->limit(10, ($page - 1) * 10);
 		return $this->db->get()->result();
 	}
+
+	public function namadosenluar($id)
+	{
+		$data = [];
+		$this->db->select('dosenluar.namalengkap, dosenluar.namadepartmen, dosenluar.namainstitusi, m_negara.kode_negara, m_negara.nama_negara as negara, negara_institusi.nama_negara as negara_institusi');
+		$this->db->from($this->table);
+		$this->db->join('m_negara', 'dosenluar.id_negara = m_negara.id_negara', 'left');
+		$this->db->join('m_negara as negara_institusi', 'dosenluar.id_negara_institusi = negara_institusi.id_negara', 'left');
+		$this->db->where('id_dosen', $id);
+		$result = $this->db->get();
+		if ($result->num_rows() > 0) {
+			$data = $result->row_array();
+		}
+		return $data;
+	}
 }
