@@ -1639,6 +1639,18 @@
 </div>
 
 <script>
+
+	$(document).on('input', '.rev', function() {
+    var value = $(this).val();
+    this.value = this.value.replace(/[^0-9.]/g, '');
+
+    // Paksa batas 1-4
+    if (value !== "") {
+        if (parseFloat(value) > 4) $(this).val(4);
+        if (parseFloat(value) < 1) $(this).val(1);
+    }
+	});
+
 	function satu(ish) {
 		document.getElementById("nilai1").innerHTML = 10 * ish;
 	}
@@ -1692,8 +1704,10 @@
 				totalSum += parseFloat((inputVal * inputSkor) / 4);
 			} else if ($.isNumeric(inputVal) && (year >= 2024 && month >= 5)) {
 				totalSum += parseFloat((inputVal * inputSkor) / 4);
-			} else {
+			} else if (year == 2025) {
 				totalSum += parseFloat((inputVal * inputSkor) / 7);
+			} else {
+				totalSum += parseFloat((inputVal * inputSkor) / 4);
 			}
 		});
 		document.getElementById("jmlnilai").innerHTML = totalSum.toFixed(4);
@@ -1713,9 +1727,12 @@
 			var total = ((skorarray[0] * 20) + (skorarray[1] * 15) + (skorarray[2] * 20) + (skorarray[3] * 15) + (skorarray[4] * 10) + (skorarray[5] * 20)) / 4;
 		else if (year >= 2024 && month >= 5)
 			var total = ((skorarray[0] * 10) + (skorarray[1] * 10) + (skorarray[2] * 10) + (skorarray[3] * 10) + (skorarray[4] * 10) + (skorarray[5] * 10) + (skorarray[6] * 10) + (skorarray[7] * 10) + (skorarray[8] * 10) + (skorarray[9] * 10)) / 4;
-		else
+		else if (year == 2025){
 			var total = ((skorarray[0] * 20) + (skorarray[1] * 15) + (skorarray[2] * 20) + (skorarray[3] * 15) + (skorarray[4] * 10) + (skorarray[5] * 20)) / 7;
-
+		} else {
+			var total = ((skorarray[0] * 10) + (skorarray[1] * 10) + (skorarray[2] * 10) + (skorarray[3] * 10) + (skorarray[4] * 10) + (skorarray[5] * 10) + (skorarray[6] * 10) + (skorarray[7] * 10) + (skorarray[8] * 10) + (skorarray[9] * 10)) / 4;			
+		}
+		
 		$(".modal-body .revskor1").text(skorarray[0]);
 		$(".modal-body .revnilai1").text(10 * skorarray[0]);
 		$(".modal-body .revskor2").text(skorarray[1]);
