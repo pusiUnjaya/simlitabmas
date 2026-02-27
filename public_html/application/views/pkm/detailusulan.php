@@ -112,7 +112,7 @@
 								<label>Reviewer</label>
 								<?php
 								$is_dashboardpengusul = false;
-								if ($this->session->userdata('sesi_id') == $usulan['pengusul']) {
+								if ($this->session->userdata('sesi_id') == $usulan['pengusul'] || $this->msubmit->cekSesiDosenIsAnggota($usulan['id_usulan'])) {
 									$is_dashboardpengusul = true;
 								}
 
@@ -293,7 +293,8 @@
 							$nrev = 1;
 							foreach ($hasilreview as $h) {
 								if ($is_dashboardpengusul) {
-									$namarev = 'Reviewer Anonim ' . $nrev;
+									$namarev = [];
+									$namarev['namalengkap'] = 'Reviewer Anonim ' . $nrev;
 									$nrev++;
 								} else {
 									$namarev = $this->mdosen->dosennya($h->reviewer);

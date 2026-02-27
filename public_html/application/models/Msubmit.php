@@ -821,6 +821,22 @@ class MSubmit extends CI_Model
 
 		if ($hasil->num_rows() > 0) {
 			$data = $hasil->result();
+			if ((count($data)) > 0) {
+				foreach ($data as $key => $value) {
+					$anggota = array();
+					$this->db->select("peran.anggota, peran.jenis_anggota");
+					$this->db->from("peran");
+					$this->db->where("peran.id_usulan", $value->id_usulan);
+					$hasilanggota = $this->db->get();
+
+					if ($hasilanggota->num_rows() > 0) {
+						$anggota = $hasilanggota->result();
+						$data[$key]->anggota = $anggota;
+					} else {
+						$data[$key]->anggota = array();
+					}
+				}
+			}
 		}
 		return $data;
 	}
@@ -2598,6 +2614,21 @@ class MSubmit extends CI_Model
 		return $data;
 	}
 
+	function allnamamhsfromnpm($npm)
+	{
+		$data = array();
+		$this->db->select("allmhs.namamhs, prodi.prodi");
+		$this->db->from("allmhs");
+		$this->db->join("prodi", "prodi.id_prodi=allmhs.prodi", "left");
+		$this->db->where("npm", $npm);
+		$hasil = $this->db->get();
+		if ($hasil->num_rows() > 0) {
+			$data = $hasil->row_array();
+		}
+		$hasil->free_result();
+		return $data;
+	}
+
 	function simpansetuju($id)
 	{
 		$waktu = date('Y-m-d H:i:s');
@@ -3074,5 +3105,13 @@ class MSubmit extends CI_Model
 
 		$this->db->limit(10, ($page - 1) * 10);
 		return $this->db->get()->result();
+	}
+
+	function cekSesiDosenIsAnggota($id_usulan)
+	{
+		$sesi_dosen = $this->session->userdata('sesi_dosen');
+		$anggota_dosen = $this->db->select('anggota')->get_where('peran', ['id_usulan' => $id_usulan, 'jenis_anggota' => 'Dosen', 'anggota' => $sesi_dosen])->result_array();
+
+		return (count($anggota_dosen)) > 0;
 	}
 }
