@@ -916,19 +916,19 @@
 										</tr>
 										<tr>
 											<td>1</td>
-											<td>Latar belakang masalah yang diuraikan tidak menggambarkan analisis situasi yang ada pada lokasi pengabdian</td>
+											<td>Analisis situasi permasalahan mitra sasaran tidak jelas</td>
 										</tr>
 										<tr>
 											<td>2</td>
-											<td>Latar belakang masalah yang diuraikan kurang menggambarkan analisis situasi yang ada pada lokasi pengabdian</td>
+											<td>Analisis situasi permasalahan mitra sasaran cukup jelas</td>
 										</tr>
 										<tr>
 											<td>3</td>
-											<td>Latar belakang masalah yang diuraikan cukup menggambarkan analisis situasi yang ada pada lokasi pengabdian</td>
+											<td>Analisis situasi permasalahan mitra sasaran jelas</td>
 										</tr>
 										<tr>
 											<td>4</td>
-											<td>Latar belakang masalah yang diuraikan sudah menggambarkan analisis situasi yang ada pada lokasi pengabdian.</td>
+											<td>Analisis situasi permasalahan mitra sasaran sangat jelas.</td>
 										</tr>
 									</table>
 								</td>
@@ -939,7 +939,29 @@
 							<tr>
 								<td>2</td>
 								<td>
-									Kecocokan permasalahan dengan program serta kompetensi tim
+									Rumusan masalah prioritas mitra
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Rumusan masalah prioritas mitra tidak jelas</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Rumusan masalah prioritas mitra cukup jelas</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Rumusan masalah prioritas mitra jelas</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Rumusan masalah prioritas mitra sangat jelas</td>
+										</tr>
+									</table>
 								</td>
 								<td><b id="skor2">15</b></td>
 								<td><input type="text" name="poindua" data-poin="15" onkeyup="dua(value)" class="form-control rev" required></td>
@@ -949,6 +971,28 @@
 								<td>3</td>
 								<td>
 									Solusi yang ditawarkan (Ketepatan Metode pendekatan untuk mengatasi permasalahan, Rencana kegiatan, kontribusi partisipasi tim)
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Ketepatan Metode pendekatan untuk mengatasi permasalahan, Rencana kegiatan, kontribusi partisipasi tim tidak sesuai</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Ketepatan Metode pendekatan untuk mengatasi permasalahan, Rencana kegiatan, kontribusi partisipasi tim kurang sesuai</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Ketepatan Metode pendekatan untuk mengatasi permasalahan, Rencana kegiatan, kontribusi partisipasi tim cukup sesuai</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Ketepatan Metode pendekatan untuk mengatasi permasalahan, Rencana kegiatan, kontribusi partisipasi sesuai</td>
+										</tr>
+									</table>
 								</td>
 								<td><b id="skor3">20</b></td>
 								<td><input type="text" name="pointiga" data-poin="20" onkeyup="tiga(value)" class="form-control rev" required></td>
@@ -957,7 +1001,29 @@
 							<tr>
 								<td>4</td>
 								<td>
-									Target Luaran (Jenis luaran dan spesifikasinya sesuai kegiatan yang diusulkan)
+									Target Luaran (Jenis luaran dan spesifikasinya sesuai kegiatan yang diusulkan) terdapat jurnal, media massa, video kegiatan dan poster
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Jenis luaran yang ditargetkan dan spesifikasi dengan kegiatan yang diusulkan tidak sesuai. Luaran hanya 1 diantara jurnal, media massa, video kegiatan dan poster</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Jenis luaran yang ditargetkan dan spesifikasi dengan kegiatan yang diusulkan kurang sesuai. Luaran hanya 2 diantara jurnal, media massa, video kegiatan dan poster</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Jenis luaran yang ditargetkan dan spesifikasi dengan kegiatan yang diusulkan cukup sesuai. Luaran hanya 3 diantara jurnal, media massa, video kegiatan dan poster</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Jenis luaran yang ditargetkan dan spesifikasi dengan kegiatan yang diusulkan sesuai. Terdapat semua luaran yaitu jurnal, media massa, video kegiatan dan poster</td>
+										</tr>
+									</table>
 								</td>
 								<td><b id="skor4">15</b></td>
 								<td><input type="text" name="poinempat" data-poin="15" onkeyup="empat(value)" class="form-control rev" required></td>
@@ -967,6 +1033,28 @@
 								<td>5</td>
 								<td>
 									Kesesuaian dengan fokus unggulan road map unggulan program studi
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Topik pengabdian tidak sesuai dengan fokus roadmap unggulan program studi dan universitas</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Topik pengabdian kurang sesuai dengan fokus roadmap unggulan program studi dan universitas</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Topik pengabdian cukup sesuai dengan fokus roadmap unggulan program studi dan universitas</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Topik pengabdian sesuai dengan fokus roadmap unggulan program studi dan universitas</td>
+										</tr>
+									</table>
 								</td>
 								<td><b id="skor5">10</b></td>
 								<td><input type="text" name="poinlima" data-poin="10" onkeyup="lima(value)" class="form-control rev" required></td>
@@ -975,7 +1063,29 @@
 							<tr>
 								<td>6</td>
 								<td>
-									Pengabdian merupakan tindak lanjut dari hasil penelitian
+									Kesesuaian penugasan, kompetensi tim pelaksana, dan mahasiswa
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Penugasan, kompetensi tim pelaksana dan mahasiswa, tidak sesuai</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Penugasan, kompetensi tim pelaksana, dan mahasiswa kurang sesuai</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Penugasan, kompetensi tim pelaksana, dan mahasiswa cukup sesuai</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Penugasan, kompetensi tim pelaksana dan mahasiswa sangat sesuai</td>
+										</tr>
+									</table>
 								</td>
 								<td><b id="skor6">10</b></td>
 								<td><input type="text" name="poinenam" data-poin="10" onkeyup="enam(value)" class="form-control rev" required></td>
@@ -984,7 +1094,29 @@
 							<tr>
 								<td>7</td>
 								<td>
-									Keterkaitan dengan proses pembelajaran
+									Kualitas Iptek yang ditawarkan (hasil penelitian)
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Kualitas Iptek yang ditawarkan kurang baik dan bukan dari hasil penelitian pengusul</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Kualitas Iptek yang ditawarkan cukup baik namun bukan dari hasil penelitian pengusul</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Kualitas Iptek yang ditawarkan baik namun bukan dari hasil penelitian pengusul</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Kualitas Iptek yang ditawarkan cukup baik/baik dan dari hasil penelitian pengusul</td>
+										</tr>
+									</table>
 								</td>
 								<td><b id="skor7">10</b></td>
 								<td><input type="text" name="pointujuh" data-poin="10" onkeyup="tujuh(value)" class="form-control rev" required></td>
