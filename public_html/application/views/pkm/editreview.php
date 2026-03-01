@@ -186,6 +186,17 @@
 	?>
 
 <script>
+	$(document).on('input', '.rev', function() {
+    var value = $(this).val();
+    this.value = this.value.replace(/[^0-9.]/g, '');
+
+    // Paksa batas 1-4
+    if (value !== "") {
+        if (parseFloat(value) > 4) $(this).val(4);
+        if (parseFloat(value) < 1) $(this).val(1);
+    }
+	});
+
 	function satu(ish){
 		document.getElementById("nilai1").innerHTML = 20*ish;
 	}
@@ -222,6 +233,12 @@
 		$('.user .rev').each(function() {
 			var inputVal = $(this).val();
 			var inputSkor = $(this).data('poin');
+
+			if (inputVal !== "") {
+				if (parseFloat(inputVal) > 4) inputVal=4;
+				if (parseFloat(inputVal) < 1) inputVal=1;
+			}
+
 			if($.isNumeric(inputVal)){
 				totalSum += parseFloat((inputVal*inputSkor)/4);
 			}

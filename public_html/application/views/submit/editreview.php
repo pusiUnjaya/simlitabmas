@@ -50,12 +50,15 @@
 								$poin10 = $skor[9];
 								$tahun = date('Y',strtotime($review['modified']));
 								$bulan = date('m',strtotime($review['modified']));
-								if($tahun>=2023 && ($tahun<=2024 && $bulan<5))
+								if ($tahun>=2023 && ($tahun<=2024 && $bulan<5))
 									$final = (($skor[0]*20)+($skor[1]*15)+($skor[2]*20)+($skor[3]*15)+($skor[4]*10)+($skor[5]*20))/4;
 								else if($tahun>=2024 && $bulan>=5)
 									$final = (($skor[0]*10)+($skor[1]*10)+($skor[2]*10)+($skor[3]*10)+($skor[4]*10)+($skor[5]*10)+($skor[6]*10)+($skor[7]*10)+($skor[8]*10)+($skor[9]*10))/4;
-								else
+								else if ($tahun==2025)
 									$final = (($skor[0]*20)+($skor[1]*15)+($skor[2]*20)+($skor[3]*15)+($skor[4]*10)+($skor[5]*20))/7;
+								else 
+									$final = (($skor[0]*10)+($skor[1]*10)+($skor[2]*10)+($skor[3]*10)+($skor[4]*10)+($skor[5]*10)+($skor[6]*10)+($skor[7]*10)+($skor[8]*10)+($skor[9]*10))/4;
+
 							}
 							else
 							{
@@ -303,6 +306,19 @@
 	?>
 
 <script>
+
+	$(document).on('input', '.rev', function() {
+    var value = $(this).val();
+    this.value = this.value.replace(/[^0-9.]/g, '');
+
+    // Paksa batas 1-4
+    if (value !== "") {
+        if (parseFloat(value) > 4) $(this).val(4);
+        if (parseFloat(value) < 1) $(this).val(1);
+    }
+	});
+
+
 	function satu(ish){
 		document.getElementById("nilai1").innerHTML = 10*ish;
 	}
@@ -350,16 +366,24 @@
 			var inputVal = $(this).val();
 			var inputSkor = $(this).data('poin');
 			var year = <?php echo date('Y', strtotime($review['modified'])); ?>;
-		  var month = <?php echo date('m', strtotime($review['modified'])); ?>;
+			var month = <?php echo date('m', strtotime($review['modified'])); ?>;
 
-			if(year>=2023 && (year<=2024 && month<5))
-		 		totalSum += parseFloat((inputVal*inputSkor)/4);
-		 	else if(year>=2024 && month>=5)
-		 		totalSum += parseFloat((inputVal*inputSkor)/4);
-			else
-			{
-				totalSum += parseFloat((inputVal*inputSkor)/7);	
+			if (inputVal !== "") {
+				if (parseFloat(inputVal) > 4) inputVal=4;
+				if (parseFloat(inputVal) < 1) inputVal=1;
 			}
+
+			
+			if ($.isNumeric(inputVal) && (year >= 2023 && (year <= 2024 && month < 5))) {
+				totalSum += parseFloat((inputVal * inputSkor) / 4);
+			} else if ($.isNumeric(inputVal) && (year >= 2024 && month >= 5)) {
+				totalSum += parseFloat((inputVal * inputSkor) / 4);
+			} else if (year == 2025) {
+				totalSum += parseFloat((inputVal * inputSkor) / 7);
+			} else {
+				totalSum += parseFloat((inputVal * inputSkor) / 4);
+			}
+			
 		});
 		document.getElementById("jmlnilai").innerHTML = totalSum.toFixed(4);
 	});

@@ -1297,8 +1297,10 @@
 			var month = <?php echo date('m', strtotime($usulan['modified'])); ?>;
 			if ($.isNumeric(inputVal) && year >= 2024) {
 				totalSum += parseFloat((inputVal * inputSkor) / 4);
-			} else {
+			} else if (year == 2025){
 				totalSum += parseFloat((inputVal * inputSkor) / 7);
+			} else {
+				totalSum += parseFloat((inputVal * inputSkor) / 4);
 			}
 		});
 		document.getElementById("jmlnilai").innerHTML = totalSum.toFixed(4);
