@@ -768,10 +768,11 @@ class Pengabdian extends CI_Controller
 		$data = $this->upload->data();
 
 		$file = $_FILES['hasilreview']['size'] && $_FILES['hasilreview']['name'] ? $data["file_name"] : '';
-		// echo $this->db->last_query();exit;	
+		$this->mpengabdian->simpanreview($this->uri->segment(3), $file);	
+		// echo $this->db->last_query();exit;
 
 		$this->session->set_flashdata('result', 'Hasil Review Penelitian Telah Sukses Disimpan!');
-		redirect("pengabdian/detail/" . $this->uri->segment(3));
+		redirect("pengabdian/detail/" .$id_usulan);
 	}
 
 	function simpanreviewlaporan()

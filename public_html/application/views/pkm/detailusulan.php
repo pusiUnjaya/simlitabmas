@@ -207,7 +207,7 @@
 									$hitrev = $this->mpengabdian->hitrev($this->uri->segment(3), $this->session->userdata('sesi_id'));
 									if ($hitrev > 0 || $readrev > 0) {
 										$isianreview = $this->mpengabdian->lihatisianreview($this->uri->segment(3), $getidrev['user']);
-										echo '<br><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <?php echo $nomor; ?></a>';
+										echo '<br><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-rekomendasi="'.$isianreview['rekomendasi'].'" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <?php echo $nomor; ?></a>';
 									} elseif ($hitrev == 0 && $this->session->userdata('sesi_dosen') == $usulan['reviewer']) {
 							?>
 										<div class="row" style="margin-top:40px">
@@ -775,13 +775,34 @@
 				</table>
 				<?php
 				//if($this->session->userdata('sesi_status')==1) {
-				echo '<b>Nama Reviewer :</b><p class="reviewer"></p>';
+				echo '<b>Nama Reviewer :</b>';
+				if ($usulan['reviewer'] <> '') {
+					$pisah = explode(',', $usulan['reviewer']);
+					$hitpisah = count($pisah);
+					echo '<ol>';
+					$nrev = 1;
+					for ($i = 0; $i < $hitpisah; $i++) {
+						$revnya = $this->mdosen->namadosen($pisah[$i]);
+						if ($is_dashboardpengusul) {
+							echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+							$nrev++;
+						} else {
+							echo '<li>' . $revnya['namalengkap'] . '</li>';
+						}
+						$nrev++;
+					}
+					echo '</ol>';
+				} else
+					echo '-';
 				//}
 				?>
 				<b>Catatan dari Reviewer :</b>
 				<pre><p class="catatan"></p></pre>
+				<b>Rekomendasi dari Reviewer :</b>
+				<pre><p class="rekomendasi"></p></pre>
 				<b>Silakan Download File Hasil Review</b>
 				<p id="tautanfile"></p>
+				
 				<form name="kirimrevisi" method="post" action="<?php echo base_url() . 'pengabdian/simpanperbaikan/' . $usulan['id_usulan']; ?>" enctype="multipart/form-data">
 					<?php if ($this->session->userdata('sesi_id') == $usulan['pengusul'] && ($usulan['filerevisi'] == '' || $usulan['status'] == 'Reviewed')) { ?>
 						<div class="form-group">
@@ -1139,6 +1160,14 @@
 						<label for="recipient-name" class="col-form-label">File Review:</label>
 						<input type="file" name="hasilreview" class="form-control unggah" id="hasilreview">
 					</div>
+					<div class="form-group">
+						<label for="rekomendasi" class="col-form-label">Rekomendasi:</label>
+						<select id="rekomendasi" name="rekomendasi" class="form-control rekomendasi">
+							<option value="Direkomendasikan">Direkomendasikan</option>
+							<option value="Direkomendasikan Turun skema">Direkomendasikan Turun skema</option>
+							<option value="Tidak direkomendasikan">Tidak direkomendasikan</option>
+						</select>
+					</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -1278,6 +1307,7 @@
 	$(document).on("click", ".pencet", function() {
 		var catatan = $(this).data('catatan');
 		var reviewer = $(this).data('reviewer');
+		var rekomendasi = $(this).data('rekomendasi');
 		var file = $(this).data('file');
 		var skor = $(this).data('skor');
 		var skorarray = skor.split(',');
@@ -1305,6 +1335,7 @@
 		$(".modal-body .revnilai7").text(10 * skorarray[6]);
 		$(".modal-body .revtotalnilai").text(total.toFixed(4));
 		$(".modal-body .reviewer").text(reviewer);
+		$(".modal-body .rekomendasi").text(rekomendasi);
 		$(".modal-body .catatan").text(catatan);
 		if (file == '') {
 			var str = "Tidak Ada File";

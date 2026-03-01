@@ -262,6 +262,26 @@
 					<input type="file" name="hasilreview" class="form-control unggah" id="hasilreview">
 					<p><?php echo $review['filereview']; ?></p>
 				  </div>
+				  <div class="form-group">
+					<label for="rekomendasi" class="col-form-label">Rekomendasi:</label>
+					<select id="rekomendasi" name="rekomendasi" class="form-control rekomendasi">
+						<?php
+							if ($review['rekomendasi']=='Direkomendasikan') {
+								echo '<option value="Direkomendasikan" selected>Direkomendasikan</option>';
+								echo '<option value="Direkomendasikan Turun skema">Direkomendasikan Turun skema</option>';
+								echo '<option value="Tidak direkomendasikan">Tidak direkomendasikan</option>';
+							}else if ($review['rekomendasi']=='Direkomendasikan Turun skema'){
+								echo '<option value="Direkomendasikan">Direkomendasikan</option>';
+								echo '<option value="Direkomendasikan Turun skema" selected>Direkomendasikan Turun skema</option>';
+								echo '<option value="Tidak direkomendasikan">Tidak direkomendasikan</option>';
+							}else {
+								echo '<option value="Direkomendasikan">Direkomendasikan</option>';
+								echo '<option value="Direkomendasikan Turun skema">Direkomendasikan Turun skema</option>';
+								echo '<option value="Tidak direkomendasikan" selected>Tidak direkomendasikan</option>';
+							}
+						?>
+					</select>
+				  </div>
 			  </div>
 			  <div class="col-sm-12 d-sm-flex align-items-center justify-content-between mb-4">
 					<input type="button" onclick="history.back()" value="Cancel" class="d-sm-inline-block col-sm-5 btn btn-danger btn-user btn-block">

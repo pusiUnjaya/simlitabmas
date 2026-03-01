@@ -2037,6 +2037,7 @@ class MSubmit extends CI_Model
 			"hasilreview"		=> $this->input->post("review", true),
 			"skor"				=> $skor,
 			"filereview"		=> $filereview,
+			"rekomendasi"		=> $this->input->post("rekomendasi", true),
 			"reviewer"			=> $this->session->userdata("sesi_id"),
 			"modified"			=> $waktu
 		);
@@ -2099,6 +2100,7 @@ class MSubmit extends CI_Model
 				//"usulan"			=> $id,
 				"hasilreview"		=> $this->input->post("review", true),
 				"skor"				=> $skor,
+				"rekomendasi"			=> $this->input->post("rekomendasi", true),
 				"filereview"		=> $filereview,
 				//"reviewer"			=> $this->session->userdata("sesi_id"),
 				"modified"			=> $waktu
@@ -2108,6 +2110,7 @@ class MSubmit extends CI_Model
 				//"usulan"			=> $id,
 				"hasilreview"		=> $this->input->post("review", true),
 				"skor"				=> $skor,
+				"rekomendasi"			=> $this->input->post("rekomendasi", true),
 				//"reviewer"			=> $this->session->userdata("sesi_id"),
 				"modified"			=> $waktu
 			);

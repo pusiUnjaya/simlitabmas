@@ -1807,11 +1807,13 @@ class Mpengabdian extends CI_Model
 			"hasilreview"			=> $this->input->post("review", true),
 			"skor"					=> $skor,
 			"filereview"			=> $filereview,
+			"rekomendasi"			=> $this->input->post("rekomendasi", true),
 			"reviewer"				=> $this->session->userdata("sesi_id"),
 			"modified"				=> $waktu
 		);
-
+		//print_r($data);
 		$this->db->insert("hasilreview_pkm", $data);
+		echo $this->db->last_query();
 
 		//update data usulan
 		$data = array(
@@ -1909,6 +1911,7 @@ class Mpengabdian extends CI_Model
 				//"usulan"				=> $id,
 				"hasilreview_laporan"	=> $this->input->post("review", true),
 				"skor"					=> $skor,
+				"rekomendasi"			=> $this->input->post("rekomendasi", true),
 				"filereview_laporan"	=> $filereview,
 				//"reviewer"			=> $this->session->userdata("sesi_id"),
 				"modified"			=> $waktu
@@ -1918,6 +1921,7 @@ class Mpengabdian extends CI_Model
 				//"usulan"				=> $id,
 				"hasilreview_laporan"	=> $this->input->post("review", true),
 				"skor"					=> $skor,
+				"rekomendasi"			=> $this->input->post("rekomendasi", true),
 				//"reviewer"			=> $this->session->userdata("sesi_id"),
 				"modified"			=> $waktu
 			);
