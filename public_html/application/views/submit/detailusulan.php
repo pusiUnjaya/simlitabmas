@@ -1603,6 +1603,10 @@
 							<option value="Tidak direkomendasikan">Tidak direkomendasikan</option>
 						</select>
 					</div>
+					<div class="form-group">
+						<label for="recipient-name" class="col-form-label">Catatan untuk Pengusul:</label>
+						<input type="text" id="catatan" name="catatan" class="form-control" >
+					</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -1750,38 +1754,50 @@
 		var skorarray = skor.split(',');
 		var year = <?php echo date('Y', strtotime($usulan['modified'])); ?>;
 		var month = <?php echo date('m', strtotime($usulan['modified'])); ?>;
+		
+		poin1 = parseFloat(skorarray[0]);
+		poin2 = parseFloat(skorarray[1]);
+		poin3 = parseFloat(skorarray[2]);
+		poin4 = parseFloat(skorarray[3]);
+		poin5 = parseFloat(skorarray[4]);
+		poin6 = parseFloat(skorarray[5]);
+		poin7 = parseFloat(skorarray[6]);
+		poin8 = parseFloat(skorarray[7]);
+		poin9 = parseFloat(skorarray[8]);
+		poin10 = parseFloat(skorarray[9]);
 
+		print ()
 		// if(year>=2023 && month>9)
 		if (year >= 2023 && (year <= 2024 && month < 5))
-			var total = ((skorarray[0] * 20) + (skorarray[1] * 15) + (skorarray[2] * 20) + (skorarray[3] * 15) + (skorarray[4] * 10) + (skorarray[5] * 20)) / 4;
+			var total = ((poin2 * 20) + (poin2 * 15) + (poin3 * 20) + (poin4 * 15) + (poin5 * 10) + (poin6 * 20)) / 4;
 		else if (year >= 2024 && month >= 5)
-			var total = ((skorarray[0] * 10) + (skorarray[1] * 10) + (skorarray[2] * 10) + (skorarray[3] * 10) + (skorarray[4] * 10) + (skorarray[5] * 10) + (skorarray[6] * 10) + (skorarray[7] * 10) + (skorarray[8] * 10) + (skorarray[9] * 10)) / 4;
+			var total = ((poin2 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;
 		else if (year == 2025){
-			var total = ((skorarray[0] * 20) + (skorarray[1] * 15) + (skorarray[2] * 20) + (skorarray[3] * 15) + (skorarray[4] * 10) + (skorarray[5] * 20)) / 7;
+			var total = ((poin2 * 20) + (poin2 * 15) + (poin3 * 20) + (poin4 * 15) + (poin5 * 10) + (poin6 * 20)) / 7;
 		} else {
-			var total = ((skorarray[0] * 10) + (skorarray[1] * 10) + (skorarray[2] * 10) + (skorarray[3] * 10) + (skorarray[4] * 10) + (skorarray[5] * 10) + (skorarray[6] * 10) + (skorarray[7] * 10) + (skorarray[8] * 10) + (skorarray[9] * 10)) / 4;			
+			var total = ((poin2 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;			
 		}
 		
 		$(".modal-body .revskor1").text(skorarray[0]);
-		$(".modal-body .revnilai1").text(10 * skorarray[0]);
+		$(".modal-body .revnilai1").text(10 * poin1);
 		$(".modal-body .revskor2").text(skorarray[1]);
-		$(".modal-body .revnilai2").text(10 * skorarray[1]);
+		$(".modal-body .revnilai2").text(10 * poin2);
 		$(".modal-body .revskor3").text(skorarray[2]);
-		$(".modal-body .revnilai3").text(10 * skorarray[2]);
+		$(".modal-body .revnilai3").text(10 * poin3);
 		$(".modal-body .revskor4").text(skorarray[3]);
-		$(".modal-body .revnilai4").text(10 * skorarray[3]);
+		$(".modal-body .revnilai4").text(10 * poin4);
 		$(".modal-body .revskor5").text(skorarray[4]);
-		$(".modal-body .revnilai5").text(10 * skorarray[4]);
+		$(".modal-body .revnilai5").text(10 * poin5);
 		$(".modal-body .revskor6").text(skorarray[5]);
-		$(".modal-body .revnilai6").text(10 * skorarray[5]);
+		$(".modal-body .revnilai6").text(10 * poin6);
 		$(".modal-body .revskor7").text(skorarray[6]);
-		$(".modal-body .revnilai7").text(10 * skorarray[6]);
+		$(".modal-body .revnilai7").text(10 * poin7);
 		$(".modal-body .revskor8").text(skorarray[7]);
-		$(".modal-body .revnilai8").text(10 * skorarray[7]);
+		$(".modal-body .revnilai8").text(10 * poin8);
 		$(".modal-body .revskor9").text(skorarray[8]);
-		$(".modal-body .revnilai9").text(10 * skorarray[8]);
+		$(".modal-body .revnilai9").text(10 * poin9);
 		$(".modal-body .revskor10").text(skorarray[9]);
-		$(".modal-body .revnilai10").text(10 * skorarray[9]);
+		$(".modal-body .revnilai10").text(10 * poin10);
 		$(".modal-body .revtotalnilai").text(total.toFixed(4));
 		$(".modal-body .reviewer").text(reviewer);
 		$(".modal-body .rekomendasi").text(rekomendasi);

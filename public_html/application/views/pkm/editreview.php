@@ -38,14 +38,14 @@
 							$hitskor = count($skor);
 							if($review['skor']<>'' && $skor[0]<>'' && $hitskor>0)
 							{
-								$poin1 = $skor[0];
-								$poin2 = $skor[1];
-								$poin3 = $skor[2];
-								$poin4 = $skor[3];
-								$poin5 = $skor[4];
-								$poin6 = $skor[5];
+								$poin1 = (float) $skor[0];
+								$poin2 = (float) $skor[1];
+								$poin3 = (float) $skor[2];
+								$poin4 = (float) $skor[3];
+								$poin5 = (float) $skor[4];
+								$poin6 = (float) $skor[5];
 								if(array_key_exists("6",$skor))
-									$poin7 = $skor[6];
+									$poin7 = (float) $skor[6];
 								else
 									$poin7 = 0;
 								$final = (($poin1*20)+($poin2*15)+($poin3*20)+($poin4*15)+($poin5*10)+($poin6*10)+($poin7*10))/4;

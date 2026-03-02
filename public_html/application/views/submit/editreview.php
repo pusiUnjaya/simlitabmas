@@ -38,26 +38,26 @@
 							$hitskor = count($skor);
 							if($review['skor']<>'' && $skor[0]<>'' && $hitskor>0)
 							{
-								$poin1 = $skor[0];
-								$poin2 = $skor[1];
-								$poin3 = $skor[2];
-								$poin4 = $skor[3];
-								$poin5 = $skor[4];
-								$poin6 = $skor[5];
-								$poin7 = $skor[6];
-								$poin8 = $skor[7];
-								$poin9 = $skor[8];
-								$poin10 = $skor[9];
+								$poin1 = (float) $skor[0];
+								$poin2 = (float) $skor[1];
+								$poin3 = (float) $skor[2];
+								$poin4 = (float) $skor[3];
+								$poin5 = (float) $skor[4];
+								$poin6 = (float) $skor[5];
+								$poin7 = (float) $skor[6];
+								$poin8 = (float) $skor[7];
+								$poin9 = (float) $skor[8];
+								$poin10 = (float) $skor[9];
 								$tahun = date('Y',strtotime($review['modified']));
 								$bulan = date('m',strtotime($review['modified']));
 								if ($tahun>=2023 && ($tahun<=2024 && $bulan<5))
-									$final = (($skor[0]*20)+($skor[1]*15)+($skor[2]*20)+($skor[3]*15)+($skor[4]*10)+($skor[5]*20))/4;
+									$final = (($poin1*20)+($poin2*15)+($poin3*20)+($poin4*15)+($poin5*10)+($poin6*20))/4;
 								else if($tahun>=2024 && $bulan>=5)
-									$final = (($skor[0]*10)+($skor[1]*10)+($skor[2]*10)+($skor[3]*10)+($skor[4]*10)+($skor[5]*10)+($skor[6]*10)+($skor[7]*10)+($skor[8]*10)+($skor[9]*10))/4;
+									$final = (($poin1*10)+($poin2*10)+($poin3*10)+($poin4*10)+($poin5*10)+($poin6*10)+($poin7*10)+($poin8*10)+($poin9*10)+($poin10*10))/4;
 								else if ($tahun==2025)
-									$final = (($skor[0]*20)+($skor[1]*15)+($skor[2]*20)+($skor[3]*15)+($skor[4]*10)+($skor[5]*20))/7;
+									$final = (($poin1*20)+($poin2*15)+($poin3*20)+($poin4*15)+($spoin5*10)+($poin6*20))/7;
 								else 
-									$final = (($skor[0]*10)+($skor[1]*10)+($skor[2]*10)+($skor[3]*10)+($skor[4]*10)+($skor[5]*10)+($skor[6]*10)+($skor[7]*10)+($skor[8]*10)+($skor[9]*10))/4;
+									$final = (($poin1*10)+($poin2*10)+($poin3*10)+($poin4*10)+($poin5*10)+($poin6*10)+($poin7*10)+($poin8*10)+($poin9*10)+($poin10*10))/4;
 
 							}
 							else

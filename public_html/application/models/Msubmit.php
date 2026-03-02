@@ -2093,7 +2093,11 @@ class MSubmit extends CI_Model
 	function updatereview($id, $filereview)
 	{
 		$waktu = date('Y-m-d H:i:s');
-		$skor = $this->input->post("poinsatu", true) . ',' . $this->input->post("poindua", true) . ',' . $this->input->post("pointiga", true) . ',' . $this->input->post("poinempat", true) . ',' . $this->input->post("poinlima", true) . ',' . $this->input->post("poinenam", true) . ',' . $this->input->post("pointujuh", true) . ',' . $this->input->post("poinlapan", true) . ',' . $this->input->post("poisembilan", true) . ',' . $this->input->post("poinsepuluh", true);
+		$skor = $this->input->post("poinsatu", true) . ',' . $this->input->post("poindua", true) . ',' . $this->input->post("pointiga", true) . ',' . $this->input->post("poinempat", true) . ',' . $this->input->post("poinlima", true) . ',' . $this->input->post("poinenam", true) . ',' . $this->input->post("pointujuh", true) . ',' . $this->input->post("poinlapan", true) . ',' . $this->input->post("poinsembilan", true) . ',' . $this->input->post("poinsepuluh", true);
+		
+		//echo '<pre>';
+		//print_r($_POST);
+		//echo '</pre>';
 
 		if ($filereview <> '') {
 			$data = array(
