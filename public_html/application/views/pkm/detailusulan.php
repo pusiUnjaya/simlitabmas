@@ -126,9 +126,16 @@
 										$revnya = $this->mdosen->namadosen($pisah[$i]);
 										if ($is_dashboardpengusul) {
 											echo '<li>Reviewer Anonim ' . $nrev . '</li>';
-											$nrev++;
 										} else {
-											echo '<li>' . $revnya['namalengkap'] . '</li>';
+											if ($revnya['id_dosen'] == $this->session->userdata('sesi_dosen')) {
+												echo '<li><b>' . $revnya['namalengkap'] . '</b></li>';
+											} else {
+												if ($this->sesi_status == 1) {
+													echo '<li>' . $revnya['namalengkap'] . '</li>';
+												} else {
+													echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+												}
+											}
 										}
 										$nrev++;
 									}
@@ -207,7 +214,7 @@
 									$hitrev = $this->mpengabdian->hitrev($this->uri->segment(3), $this->session->userdata('sesi_id'));
 									if ($hitrev > 0 || $readrev > 0) {
 										$isianreview = $this->mpengabdian->lihatisianreview($this->uri->segment(3), $getidrev['user']);
-										echo '<br><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-rekomendasi="'.$isianreview['rekomendasi'].'" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <?php echo $nomor; ?></a>';
+										echo '<br><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-rekomendasi="' . $isianreview['rekomendasi'] . '" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <?php echo $nomor; ?></a>';
 									} elseif ($hitrev == 0 && $this->session->userdata('sesi_dosen') == $usulan['reviewer']) {
 							?>
 										<div class="row" style="margin-top:40px">
@@ -785,9 +792,16 @@
 						$revnya = $this->mdosen->namadosen($pisah[$i]);
 						if ($is_dashboardpengusul) {
 							echo '<li>Reviewer Anonim ' . $nrev . '</li>';
-							$nrev++;
 						} else {
-							echo '<li>' . $revnya['namalengkap'] . '</li>';
+							if ($revnya['id_dosen'] == $this->session->userdata('sesi_dosen')) {
+								echo '<li><b>' . $revnya['namalengkap'] . '</b></li>';
+							} else {
+								if ($this->sesi_status == 1) {
+									echo '<li>' . $revnya['namalengkap'] . '</li>';
+								} else {
+									echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+								}
+							}
 						}
 						$nrev++;
 					}
@@ -802,7 +816,7 @@
 				<pre><p class="rekomendasi"></p></pre>
 				<b>Silakan Download File Hasil Review</b>
 				<p id="tautanfile"></p>
-				
+
 				<form name="kirimrevisi" method="post" action="<?php echo base_url() . 'pengabdian/simpanperbaikan/' . $usulan['id_usulan']; ?>" enctype="multipart/form-data">
 					<?php if ($this->session->userdata('sesi_id') == $usulan['pengusul'] && ($usulan['filerevisi'] == '' || $usulan['status'] == 'Reviewed')) { ?>
 						<div class="form-group">
@@ -1232,16 +1246,15 @@
 </div>
 
 <script>
-
 	$(document).on('input', '.rev', function() {
-    var value = $(this).val();
-    this.value = this.value.replace(/[^0-9.]/g, '');
+		var value = $(this).val();
+		this.value = this.value.replace(/[^0-9.]/g, '');
 
-    // Paksa batas 1-4
-    if (value !== "") {
-        if (parseFloat(value) > 4) $(this).val(4);
-        if (parseFloat(value) < 1) $(this).val(1);
-    }
+		// Paksa batas 1-4
+		if (value !== "") {
+			if (parseFloat(value) > 4) $(this).val(4);
+			if (parseFloat(value) < 1) $(this).val(1);
+		}
 	});
 
 	function satu(ish) {
@@ -1297,7 +1310,7 @@
 			var month = <?php echo date('m', strtotime($usulan['modified'])); ?>;
 			if ($.isNumeric(inputVal) && year >= 2024) {
 				totalSum += parseFloat((inputVal * inputSkor) / 4);
-			} else if (year == 2025){
+			} else if (year == 2025) {
 				totalSum += parseFloat((inputVal * inputSkor) / 7);
 			} else {
 				totalSum += parseFloat((inputVal * inputSkor) / 4);

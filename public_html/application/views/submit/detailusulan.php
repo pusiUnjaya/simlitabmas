@@ -125,10 +125,18 @@
 										$revnya = $this->mdosen->namadosen($pisah[$i]);
 										if ($is_dashboardpengusul) {
 											echo '<li>Reviewer Anonim ' . $nrev . '</li>';
-											$nrev++;
 										} else {
-											echo '<li>' . $revnya['namalengkap'] . '</li>';
+											if ($revnya['id_dosen'] == $this->session->userdata('sesi_dosen')) {
+												echo '<li><b>' . $revnya['namalengkap'] . '</b></li>';
+											} else {
+												if ($this->sesi_status == 1) {
+													echo '<li>' . $revnya['namalengkap'] . '</li>';
+												} else {
+													echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+												}
+											}
 										}
+										$nrev++;
 									}
 									echo '</ol>';
 								} else
@@ -217,7 +225,7 @@
 								$hitrev = $this->msubmit->hitrev($this->uri->segment(3), $this->session->userdata('sesi_id'));
 								if ($hitrev > 0) {
 									$isianreview = $this->msubmit->lihatisianreview($this->uri->segment(3), $this->session->userdata('sesi_id'));
-									echo '<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-rekomendasi="'.$isianreview['rekomendasi'].'" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <?php echo $nomor; ?></a>';
+									echo '<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-rekomendasi="' . $isianreview['rekomendasi'] . '" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <?php echo $nomor; ?></a>';
 								} else {
 									if ($cekrevnya > 0) {
 							?>
@@ -1127,10 +1135,18 @@
 						$revnya = $this->mdosen->namadosen($pisah[$i]);
 						if ($is_dashboardpengusul) {
 							echo '<li>Reviewer Anonim ' . $nrev . '</li>';
-							$nrev++;
 						} else {
-							echo '<li>' . $revnya['namalengkap'] . '</li>';
+							if ($revnya['id_dosen'] == $this->session->userdata('sesi_dosen')) {
+								echo '<li><b>' . $revnya['namalengkap'] . '</b></li>';
+							} else {
+								if ($this->sesi_status == 1) {
+									echo '<li>' . $revnya['namalengkap'] . '</li>';
+								} else {
+									echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+								}
+							}
 						}
+						$nrev++;
 					}
 					echo '</ol>';
 				} else
@@ -1605,7 +1621,7 @@
 					</div>
 					<div class="form-group">
 						<label for="recipient-name" class="col-form-label">Catatan untuk Pengusul:</label>
-						<input type="text" id="catatan" name="catatan" class="form-control" >
+						<input type="text" id="catatan" name="catatan" class="form-control">
 					</div>
 			</div>
 			<div class="modal-footer">
@@ -1671,16 +1687,15 @@
 </div>
 
 <script>
-
 	$(document).on('input', '.rev', function() {
-    var value = $(this).val();
-    this.value = this.value.replace(/[^0-9.]/g, '');
+		var value = $(this).val();
+		this.value = this.value.replace(/[^0-9.]/g, '');
 
-    // Paksa batas 1-4
-    if (value !== "") {
-        if (parseFloat(value) > 4) $(this).val(4);
-        if (parseFloat(value) < 1) $(this).val(1);
-    }
+		// Paksa batas 1-4
+		if (value !== "") {
+			if (parseFloat(value) > 4) $(this).val(4);
+			if (parseFloat(value) < 1) $(this).val(1);
+		}
 	});
 
 	function satu(ish) {
@@ -1754,7 +1769,7 @@
 		var skorarray = skor.split(',');
 		var year = <?php echo date('Y', strtotime($usulan['modified'])); ?>;
 		var month = <?php echo date('m', strtotime($usulan['modified'])); ?>;
-		
+
 		poin1 = parseFloat(skorarray[0]);
 		poin2 = parseFloat(skorarray[1]);
 		poin3 = parseFloat(skorarray[2]);
@@ -1766,18 +1781,18 @@
 		poin9 = parseFloat(skorarray[8]);
 		poin10 = parseFloat(skorarray[9]);
 
-		print ()
+		print()
 		// if(year>=2023 && month>9)
 		if (year >= 2023 && (year <= 2024 && month < 5))
 			var total = ((poin2 * 20) + (poin2 * 15) + (poin3 * 20) + (poin4 * 15) + (poin5 * 10) + (poin6 * 20)) / 4;
 		else if (year >= 2024 && month >= 5)
 			var total = ((poin2 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;
-		else if (year == 2025){
+		else if (year == 2025) {
 			var total = ((poin2 * 20) + (poin2 * 15) + (poin3 * 20) + (poin4 * 15) + (poin5 * 10) + (poin6 * 20)) / 7;
 		} else {
-			var total = ((poin2 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;			
+			var total = ((poin2 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;
 		}
-		
+
 		$(".modal-body .revskor1").text(skorarray[0]);
 		$(".modal-body .revnilai1").text(10 * poin1);
 		$(".modal-body .revskor2").text(skorarray[1]);

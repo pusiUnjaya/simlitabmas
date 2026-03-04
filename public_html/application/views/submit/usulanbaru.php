@@ -324,9 +324,16 @@ if ($this->session->userdata('sesi_user') == '') {
 									// echo $this->db->last_query();exit;	
 									$n = count($sudah);
 									$i = 0;
+									$nrev = 0;
 									if ($n > 0) {
 										foreach ($sudah as $s) {
-											echo '<b style="color:green">' . $s->namalengkap . '</b>';
+											$nrev++;
+											if ($s->id_dosen == $this->session->userdata('sesi_dosen')) {
+												echo '<b style="color:blue">Anda</b>';
+											} else {
+												echo '<b style="color:green">Reviewer Anonimous ' . $nrev . '</b>';
+											}
+
 											if ($i < ($n - 1))
 												echo ' dan ';
 											$i++;
