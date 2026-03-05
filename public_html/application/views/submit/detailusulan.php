@@ -112,6 +112,7 @@
 								<label>Reviewer</label>
 								<?php
 								$is_dashboardpengusul = false;
+								$is_rev = false;
 								if ($this->session->userdata('sesi_id') == $usulan['pengusul'] || $this->msubmit->cekSesiDosenIsAnggota($usulan['id_usulan'])) {
 									$is_dashboardpengusul = true;
 								}
@@ -127,6 +128,7 @@
 											echo '<li>Reviewer Anonim ' . $nrev . '</li>';
 										} else {
 											if ($revnya['id_dosen'] == $this->session->userdata('sesi_dosen')) {
+												$is_rev = true;
 												echo '<li><b>' . $revnya['namalengkap'] . '</b></li>';
 											} else {
 												if ($this->sesi_status == 1) {
@@ -782,347 +784,352 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">Kriteria Penilaian</th>
-							<th scope="col">Bobot</th>
-							<th scope="col" width="14%">Skor (1-4)</th>
-							<th scope="col">Nilai</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>
-								Latar Belakang dan Perumusan Masalah :<br>
-								<ol type="a">
-									<li>Ketajaman Perumusan Masalah</li>
-									<li>Tujuan Penelitian</li>
-									<li>Spesifikasi keterkaitan topik penelitian dengan keunggulan PT (ketahanan nasional)</li>
-								</ol>
-								<table class="table table-bordered">
-									<tr>
-										<th>Skor</th>
-										<th>Keterangan</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>Rumusan masalah tidak tajam dan tujuan penelitian tidak jelas</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>Rumusan masalah kurang jelas dan kurang tajam, tujuan penelitian jelas</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>Rumusan masalah jelas dan tajam akan tetapi tujuan jelas tetapi tidak terdapat uraian spesifikasi keterkaitan skema dengan bidang fokus atau renstra penelitian perguruan tinggi.</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>Rumusan masalah jelas dan tajam akan tetapi tujuan jelas, serta terdapat uraian spesifikasi keterkaitan skema dengan bidang fokus atau renstra penelitian perguruan tinggi.</td>
-									</tr>
-								</table>
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor1"></b></td>
-							<td><b class="revnilai1"></b></td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>
-								State of the art dan kebaruan :<br>
-								<table class="table table-bordered">
-									<tr>
-										<th>Skor</th>
-										<th>Keterangan</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>Tidak ada kebaruan dan tidak ada state of the art</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>Kebaruan kurang signifikan namun ada state of the art</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>Kebaruan cukup signifikan dan ada state of the art</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>Kebaruan sangat signifikan dan ada state of the art</td>
-									</tr>
-								</table>
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor2"></b></td>
-							<td><b class="revnilai2"></b></td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>
-								Kesesuaian dengan Roadmap Penelitian Program Studi dan Universitas
-								<table class="table table-bordered">
-									<tr>
-										<th>Skor</th>
-										<th>Keterangan</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>Tidak ada roadmap</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>Ada roadmap namun tidak jelas. Roadmap penelitian dosen tidak sesuai dengan roadmap program studi tetapi masih bisa dipayungi oleh roadmap universitas</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>Roadmap jelas namun tidak ada penelitian sebelumnya yang mendasari, dan tidak ada keterkaitan antara milestone dengan usulan penelitian. Roadmap penelitian dosen tidak sesuai dengan roadmap program studi tetapi sesuai dengan keilmuan program studi</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>Roadmap jelas, ada penelitian sebelumnya yang mendasari, dan ada keterkaitan antara milestone dengan usulan penelitian. Roadmap penelitian dosen sesuai dengan roadmap program studi dan universitas</td>
-									</tr>
-								</table>
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor3"></b></td>
-							<td><b class="revnilai3"></b></td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>
-								Ketepatan dan kesesuaian metode yang digunakan
-								<table class="table table-bordered">
-									<tr>
-										<th>Skor</th>
-										<th>Keterangan</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>Metode tidak tepat dan tidak sesuai dengan tujuan penelitian. Tidak terdapat diagram alir penelitian.</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>Metode kurang tepat untuk menjawab tujuan penelitian. Diagram alir penelitian belum sesuai dengan tahapan penelitian.</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>Metode tepat, diagram alir penelitian sesuai tahapan penelitian, tetapi belum mencantumkan tugas masing-masing anggota pengusul</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>Metode tepat, diagram alir penelitian sesuai tahapan penelitian, dan mencantumkan tugas masing-masing anggota pengusul.</td>
-									</tr>
-								</table>
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor4"></b></td>
-							<td><b class="revnilai4"></b></td>
-						</tr>
-						<tr>
-							<td>5</td>
-							<td>
-								Kejelasan pembagian tugas tim peneliti dan keterlibatan mahasiswa MBKM<br>
-								<table class="table table-bordered">
-									<tr>
-										<th>Skor</th>
-										<th>Keterangan</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>Tidak ada pembagian tim</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>Ada pembagian tim tapi tidak jelas</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>Pembagian tim jelas tapi ada yang tidak sesuai dengan kepakaran.</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>Pembagian tim jelas dan sesuai dengan kepakaran.</td>
-									</tr>
-								</table>
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor5"></b></td>
-							<td><b class="revnilai5"></b></td>
-						</tr>
-						<tr>
-							<td>6</td>
-							<td>
-								Kesesuaian metode dengan waktu, luaran dan anggaran<br>
-								<table class="table table-bordered">
-									<tr>
-										<th>Skor</th>
-										<th>Keterangan</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>Metode tidak sinkron dengan waktu, luaran, dan fasilitas</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>Metode ada yang sinkron dengan 1 kondisi diantara waktu, luaran, dan fasilitas</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>Metode ada yang sinkron dengan 2 kondisi diantara waktu, luaran, dan fasilitas</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>Secara keseluruhan metode sinkron dengan waktu, luaran, dan fasilitas</td>
-									</tr>
-								</table>
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor6"></b></td>
-							<td><b class="revnilai6"></b></td>
-						</tr>
-						<tr>
-							<td>7</td>
-							<td>
-								Kesesuaian target TKT<br>
-								<table class="table table-bordered">
-									<tr>
-										<th>Skor</th>
-										<th>Keterangan</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>Penjelasan TKT tidak ada</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>TKT tidak sesuai</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>TKT kurang sesuai</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>TKT sesuai.</td>
-									</tr>
-								</table>
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor7"></b></td>
-							<td><b class="revnilai7"></b></td>
-						</tr>
-						<tr>
-							<td>8</td>
-							<td>
-								Kebaruan referensi<br>
-								<table class="table table-bordered">
-									<tr>
-										<th>Skor</th>
-										<th>Keterangan</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>Tidak ada pustaka primer</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>Pustaka tergolong primer dan mutakhir kurang dari 50%</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>Pustaka tergolong primer dan mutakhir sejumlah 51-80%</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>Pustaka tergolong primer dan mutakhir lebih besar 80%</td>
-									</tr>
-								</table>
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor8"></b></td>
-							<td><b class="revnilai8"></b></td>
-						</tr>
-						<tr>
-							<td>9</td>
-							<td>
-								Relevansi dan kualitas referensi<br>
-								<table class="table table-bordered">
-									<tr>
-										<th>Skor</th>
-										<th>Keterangan</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>Referensi tidak relevan dan ada yang tidak disitasi dalam proposal</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>Sebagian referensi tidak relevan</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>Referensi relevan namun sebagian jurnal tidak bereputasi dan berdampak</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>Referensi relevan dan dari jurnal bereputasi dan berdampak</td>
-									</tr>
-								</table>
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor9"></b></td>
-							<td><b class="revnilai9"></b></td>
-						</tr>
-						<tr>
-							<td>10</td>
-							<td>
-								Peluang luaran penelitian<br>
-								<ol type="a">
-									<li>Publikasi Ilmiah</li>
-									<li>Pengembangan iptek Sosial Budaya</li>
-									<li>Pengayaan Bahan Ajar</li>
-									<li>HKI</li>
-								</ol>
-								<table class="table table-bordered">
-									<tr>
-										<th>Skor</th>
-										<th>Keterangan</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>Tidak terdapat rencana publikasi ilmiah, tidak terdapat pengembangan iptek sosial budaya, tidak terdapat pengayaan bahan ajar, dan HAKI</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>Terdapat perencanaan publikasi ilmiah, tapi tidak terdapat perencanaan pengembangan iptek sosial budaya pengayaan bahan ajar dan tidak terdapat HAKI</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>Terdapat perencanaan publikasi ilmiah, perencanaan pengembangan iptek sosial budaya pengayaan bahan ajar dan tidak terdapat perencanaan HAKI</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>Terdapat perencanaan publikasi ilmiah, perencanaan pengembangan iptek sosial budaya pengayaan bahan ajar dan HAKI.</td>
-									</tr>
-								</table>
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor10"></b></td>
-							<td><b class="revnilai10"></b></td>
-						</tr>
-						<tr>
-							<td colspan="2">Jumlah Nilai</td>
-							<td><b>100</b></td>
-							<td></td>
-							<td><b class="revtotalnilai"></b></td>
-						</tr>
-					</tbody>
-				</table>
 				<?php
+				//nilai-nilai review hanya dapat dilihat oleh admin dan reviewer yang memberikan review
+				if ($is_rev or $this->session->userdata('sesi_status') == 1) {
+				?>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Kriteria Penilaian</th>
+								<th scope="col">Bobot</th>
+								<th scope="col" width="14%">Skor (1-4)</th>
+								<th scope="col">Nilai</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td>
+									Latar Belakang dan Perumusan Masalah :<br>
+									<ol type="a">
+										<li>Ketajaman Perumusan Masalah</li>
+										<li>Tujuan Penelitian</li>
+										<li>Spesifikasi keterkaitan topik penelitian dengan keunggulan PT (ketahanan nasional)</li>
+									</ol>
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Rumusan masalah tidak tajam dan tujuan penelitian tidak jelas</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Rumusan masalah kurang jelas dan kurang tajam, tujuan penelitian jelas</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Rumusan masalah jelas dan tajam akan tetapi tujuan jelas tetapi tidak terdapat uraian spesifikasi keterkaitan skema dengan bidang fokus atau renstra penelitian perguruan tinggi.</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Rumusan masalah jelas dan tajam akan tetapi tujuan jelas, serta terdapat uraian spesifikasi keterkaitan skema dengan bidang fokus atau renstra penelitian perguruan tinggi.</td>
+										</tr>
+									</table>
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor1"></b></td>
+								<td><b class="revnilai1"></b></td>
+							</tr>
+							<tr>
+								<td>2</td>
+								<td>
+									State of the art dan kebaruan :<br>
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Tidak ada kebaruan dan tidak ada state of the art</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Kebaruan kurang signifikan namun ada state of the art</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Kebaruan cukup signifikan dan ada state of the art</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Kebaruan sangat signifikan dan ada state of the art</td>
+										</tr>
+									</table>
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor2"></b></td>
+								<td><b class="revnilai2"></b></td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td>
+									Kesesuaian dengan Roadmap Penelitian Program Studi dan Universitas
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Tidak ada roadmap</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Ada roadmap namun tidak jelas. Roadmap penelitian dosen tidak sesuai dengan roadmap program studi tetapi masih bisa dipayungi oleh roadmap universitas</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Roadmap jelas namun tidak ada penelitian sebelumnya yang mendasari, dan tidak ada keterkaitan antara milestone dengan usulan penelitian. Roadmap penelitian dosen tidak sesuai dengan roadmap program studi tetapi sesuai dengan keilmuan program studi</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Roadmap jelas, ada penelitian sebelumnya yang mendasari, dan ada keterkaitan antara milestone dengan usulan penelitian. Roadmap penelitian dosen sesuai dengan roadmap program studi dan universitas</td>
+										</tr>
+									</table>
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor3"></b></td>
+								<td><b class="revnilai3"></b></td>
+							</tr>
+							<tr>
+								<td>4</td>
+								<td>
+									Ketepatan dan kesesuaian metode yang digunakan
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Metode tidak tepat dan tidak sesuai dengan tujuan penelitian. Tidak terdapat diagram alir penelitian.</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Metode kurang tepat untuk menjawab tujuan penelitian. Diagram alir penelitian belum sesuai dengan tahapan penelitian.</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Metode tepat, diagram alir penelitian sesuai tahapan penelitian, tetapi belum mencantumkan tugas masing-masing anggota pengusul</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Metode tepat, diagram alir penelitian sesuai tahapan penelitian, dan mencantumkan tugas masing-masing anggota pengusul.</td>
+										</tr>
+									</table>
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor4"></b></td>
+								<td><b class="revnilai4"></b></td>
+							</tr>
+							<tr>
+								<td>5</td>
+								<td>
+									Kejelasan pembagian tugas tim peneliti dan keterlibatan mahasiswa MBKM<br>
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Tidak ada pembagian tim</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Ada pembagian tim tapi tidak jelas</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Pembagian tim jelas tapi ada yang tidak sesuai dengan kepakaran.</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Pembagian tim jelas dan sesuai dengan kepakaran.</td>
+										</tr>
+									</table>
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor5"></b></td>
+								<td><b class="revnilai5"></b></td>
+							</tr>
+							<tr>
+								<td>6</td>
+								<td>
+									Kesesuaian metode dengan waktu, luaran dan anggaran<br>
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Metode tidak sinkron dengan waktu, luaran, dan fasilitas</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Metode ada yang sinkron dengan 1 kondisi diantara waktu, luaran, dan fasilitas</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Metode ada yang sinkron dengan 2 kondisi diantara waktu, luaran, dan fasilitas</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Secara keseluruhan metode sinkron dengan waktu, luaran, dan fasilitas</td>
+										</tr>
+									</table>
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor6"></b></td>
+								<td><b class="revnilai6"></b></td>
+							</tr>
+							<tr>
+								<td>7</td>
+								<td>
+									Kesesuaian target TKT<br>
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Penjelasan TKT tidak ada</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>TKT tidak sesuai</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>TKT kurang sesuai</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>TKT sesuai.</td>
+										</tr>
+									</table>
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor7"></b></td>
+								<td><b class="revnilai7"></b></td>
+							</tr>
+							<tr>
+								<td>8</td>
+								<td>
+									Kebaruan referensi<br>
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Tidak ada pustaka primer</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Pustaka tergolong primer dan mutakhir kurang dari 50%</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Pustaka tergolong primer dan mutakhir sejumlah 51-80%</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Pustaka tergolong primer dan mutakhir lebih besar 80%</td>
+										</tr>
+									</table>
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor8"></b></td>
+								<td><b class="revnilai8"></b></td>
+							</tr>
+							<tr>
+								<td>9</td>
+								<td>
+									Relevansi dan kualitas referensi<br>
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Referensi tidak relevan dan ada yang tidak disitasi dalam proposal</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Sebagian referensi tidak relevan</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Referensi relevan namun sebagian jurnal tidak bereputasi dan berdampak</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Referensi relevan dan dari jurnal bereputasi dan berdampak</td>
+										</tr>
+									</table>
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor9"></b></td>
+								<td><b class="revnilai9"></b></td>
+							</tr>
+							<tr>
+								<td>10</td>
+								<td>
+									Peluang luaran penelitian<br>
+									<ol type="a">
+										<li>Publikasi Ilmiah</li>
+										<li>Pengembangan iptek Sosial Budaya</li>
+										<li>Pengayaan Bahan Ajar</li>
+										<li>HKI</li>
+									</ol>
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Tidak terdapat rencana publikasi ilmiah, tidak terdapat pengembangan iptek sosial budaya, tidak terdapat pengayaan bahan ajar, dan HAKI</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Terdapat perencanaan publikasi ilmiah, tapi tidak terdapat perencanaan pengembangan iptek sosial budaya pengayaan bahan ajar dan tidak terdapat HAKI</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Terdapat perencanaan publikasi ilmiah, perencanaan pengembangan iptek sosial budaya pengayaan bahan ajar dan tidak terdapat perencanaan HAKI</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Terdapat perencanaan publikasi ilmiah, perencanaan pengembangan iptek sosial budaya pengayaan bahan ajar dan HAKI.</td>
+										</tr>
+									</table>
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor10"></b></td>
+								<td><b class="revnilai10"></b></td>
+							</tr>
+							<tr>
+								<td colspan="2">Jumlah Nilai</td>
+								<td><b>100</b></td>
+								<td></td>
+								<td><b class="revtotalnilai"></b></td>
+							</tr>
+						</tbody>
+					</table>
+				<?php
+				}
 				//if($this->session->userdata('sesi_status')==1) {
 				echo '<b>Nama Reviewer :</b>';
 				//}
@@ -1781,7 +1788,6 @@
 		poin9 = parseFloat(skorarray[8]);
 		poin10 = parseFloat(skorarray[9]);
 
-		print()
 		// if(year>=2023 && month>9)
 		if (year >= 2023 && (year <= 2024 && month < 5))
 			var total = ((poin2 * 20) + (poin2 * 15) + (poin3 * 20) + (poin4 * 15) + (poin5 * 10) + (poin6 * 20)) / 4;

@@ -112,6 +112,7 @@
 								<label>Reviewer</label>
 								<?php
 								$is_dashboardpengusul = false;
+								$is_rev = false;
 								if ($this->session->userdata('sesi_id') == $usulan['pengusul'] || $this->msubmit->cekSesiDosenIsAnggota($usulan['id_usulan'])) {
 									$is_dashboardpengusul = true;
 								}
@@ -129,6 +130,7 @@
 										} else {
 											if ($revnya['id_dosen'] == $this->session->userdata('sesi_dosen')) {
 												echo '<li><b>' . $revnya['namalengkap'] . '</b></li>';
+												$is_rev = true;
 											} else {
 												if ($this->sesi_status == 1) {
 													echo '<li>' . $revnya['namalengkap'] . '</li>';
@@ -676,111 +678,116 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">Kriteria Penilaian</th>
-							<th scope="col">Bobot</th>
-							<th scope="col" width="14%">Skor (1-4)</th>
-							<th scope="col">Nilai</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>1</td>
-							<td>
-								Analisis Situasi (masalah yang diangkat sebagai latar belakang)
-								<table class="table table-bordered">
-									<tr>
-										<th>Skor</th>
-										<th>Keterangan</th>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>Latar belakang masalah yang diuraikan tidak menggambarkan analisis situasi yang ada pada lokasi pengabdian</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>Latar belakang masalah yang diuraikan kurang menggambarkan analisis situasi yang ada pada lokasi pengabdian</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>Latar belakang masalah yang diuraikan cukup menggambarkan analisis situasi yang ada pada lokasi pengabdian</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>Latar belakang masalah yang diuraikan sudah menggambarkan analisis situasi yang ada pada lokasi pengabdian.</td>
-									</tr>
-								</table>
-							</td>
-							<td><b>20</b></td>
-							<td><b class="revskor1"></b></td>
-							<td><b class="revnilai1"></b></td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>
-								Kecocokan permasalahan dengan program serta kompetensi tim
-							</td>
-							<td><b>15</b></td>
-							<td><b class="revskor2"></b></td>
-							<td><b class="revnilai2"></b></td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>
-								Solusi yang ditawarkan (Ketepatan Metode pendekatan untuk mengatasi permasalahan, Rencana kegiatan, kontribusi partisipasi tim)
-							</td>
-							<td><b>20</b></td>
-							<td><b class="revskor3"></b></td>
-							<td><b class="revnilai3"></b></td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>
-								Target Luaran (Jenis luaran dan spesifikasinya sesuai kegiatan yang diusulkan)
-							</td>
-							<td><b>15</b></td>
-							<td><b class="revskor4"></b></td>
-							<td><b class="revnilai4"></b></td>
-						</tr>
-						<tr>
-							<td>5</td>
-							<td>
-								Kesesuaian dengan fokus unggulan road map unggulan program studi
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor5"></b></td>
-							<td><b class="revnilai5"></b></td>
-						</tr>
-						<tr>
-							<td>6</td>
-							<td>
-								Pengabdian merupakan tindak lanjut dari hasil penelitian
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor6"></b></td>
-							<td><b class="revnilai6"></b></td>
-						</tr>
-						<tr>
-							<td>7</td>
-							<td>
-								Keterkaitan dengan proses pembelajaran
-							</td>
-							<td><b>10</b></td>
-							<td><b class="revskor7"></b></td>
-							<td><b class="revnilai7"></b></td>
-						</tr>
-						<tr>
-							<td colspan="2">Jumlah Nilai</td>
-							<td><b>100</b></td>
-							<td></td>
-							<td><b class="revtotalnilai"></b></td>
-						</tr>
-					</tbody>
-				</table>
 				<?php
+				//nilai-nilai review hanya dapat dilihat oleh admin dan reviewer yang memberikan review
+				if ($is_rev or $this->session->userdata('sesi_status') == 1) {
+				?>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Kriteria Penilaian</th>
+								<th scope="col">Bobot</th>
+								<th scope="col" width="14%">Skor (1-4)</th>
+								<th scope="col">Nilai</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td>
+									Analisis Situasi (masalah yang diangkat sebagai latar belakang)
+									<table class="table table-bordered">
+										<tr>
+											<th>Skor</th>
+											<th>Keterangan</th>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>Latar belakang masalah yang diuraikan tidak menggambarkan analisis situasi yang ada pada lokasi pengabdian</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>Latar belakang masalah yang diuraikan kurang menggambarkan analisis situasi yang ada pada lokasi pengabdian</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>Latar belakang masalah yang diuraikan cukup menggambarkan analisis situasi yang ada pada lokasi pengabdian</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>Latar belakang masalah yang diuraikan sudah menggambarkan analisis situasi yang ada pada lokasi pengabdian.</td>
+										</tr>
+									</table>
+								</td>
+								<td><b>20</b></td>
+								<td><b class="revskor1"></b></td>
+								<td><b class="revnilai1"></b></td>
+							</tr>
+							<tr>
+								<td>2</td>
+								<td>
+									Kecocokan permasalahan dengan program serta kompetensi tim
+								</td>
+								<td><b>15</b></td>
+								<td><b class="revskor2"></b></td>
+								<td><b class="revnilai2"></b></td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td>
+									Solusi yang ditawarkan (Ketepatan Metode pendekatan untuk mengatasi permasalahan, Rencana kegiatan, kontribusi partisipasi tim)
+								</td>
+								<td><b>20</b></td>
+								<td><b class="revskor3"></b></td>
+								<td><b class="revnilai3"></b></td>
+							</tr>
+							<tr>
+								<td>4</td>
+								<td>
+									Target Luaran (Jenis luaran dan spesifikasinya sesuai kegiatan yang diusulkan)
+								</td>
+								<td><b>15</b></td>
+								<td><b class="revskor4"></b></td>
+								<td><b class="revnilai4"></b></td>
+							</tr>
+							<tr>
+								<td>5</td>
+								<td>
+									Kesesuaian dengan fokus unggulan road map unggulan program studi
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor5"></b></td>
+								<td><b class="revnilai5"></b></td>
+							</tr>
+							<tr>
+								<td>6</td>
+								<td>
+									Pengabdian merupakan tindak lanjut dari hasil penelitian
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor6"></b></td>
+								<td><b class="revnilai6"></b></td>
+							</tr>
+							<tr>
+								<td>7</td>
+								<td>
+									Keterkaitan dengan proses pembelajaran
+								</td>
+								<td><b>10</b></td>
+								<td><b class="revskor7"></b></td>
+								<td><b class="revnilai7"></b></td>
+							</tr>
+							<tr>
+								<td colspan="2">Jumlah Nilai</td>
+								<td><b>100</b></td>
+								<td></td>
+								<td><b class="revtotalnilai"></b></td>
+							</tr>
+						</tbody>
+					</table>
+				<?php
+				}
 				//if($this->session->userdata('sesi_status')==1) {
 				echo '<b>Nama Reviewer :</b>';
 				if ($usulan['reviewer'] <> '') {
