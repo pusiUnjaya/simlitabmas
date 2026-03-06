@@ -131,7 +131,7 @@
 												$is_rev = true;
 												echo '<li><b>' . $revnya['namalengkap'] . '</b></li>';
 											} else {
-												if ($this->sesi_status == 1) {
+												if ($this->session->userdata('sesi_status') == 1) {
 													echo '<li>' . $revnya['namalengkap'] . '</li>';
 												} else {
 													echo '<li>Reviewer Anonim ' . $nrev . '</li>';
@@ -1146,7 +1146,7 @@
 							if ($revnya['id_dosen'] == $this->session->userdata('sesi_dosen')) {
 								echo '<li><b>' . $revnya['namalengkap'] . '</b></li>';
 							} else {
-								if ($this->sesi_status == 1) {
+								if ($this->session->userdata('sesi_status') == 1) {
 									echo '<li>' . $revnya['namalengkap'] . '</li>';
 								} else {
 									echo '<li>Reviewer Anonim ' . $nrev . '</li>';
