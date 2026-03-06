@@ -227,7 +227,7 @@
 								$hitrev = $this->msubmit->hitrev($this->uri->segment(3), $this->session->userdata('sesi_id'));
 								if ($hitrev > 0) {
 									$isianreview = $this->msubmit->lihatisianreview($this->uri->segment(3), $this->session->userdata('sesi_id'));
-									echo '<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-rekomendasi="' . $isianreview['rekomendasi'] . '" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <?php echo $nomor; ?></a>';
+									echo '<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-rekomendasi="' . $isianreview['rekomendasi'] . '" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer ' . $nomor . '</a>';
 								} else {
 									if ($cekrevnya > 0) {
 							?>
@@ -285,10 +285,11 @@
 							</div>
 							<?php
 						}
+						$nomor = 1;
 						if ((($usulan['status'] == 'Reviewed' || $usulan['status'] == 'Usulan Disetujui Reviewer 1' || $usulan['status'] == 'Usulan Disetujui Reviewer 2') && $this->session->userdata('sesi_status') <> 1 && $this->session->userdata('sesi_id') == $usulan['pengusul']) || $this->session->userdata('sesi_status') == 1) {
 
 							$hasilreview = $this->msubmit->lihathasilreview($usulan['id_usulan']);
-							$nomor = 1;
+
 							echo '<div class="row" style="margin-top:40px">';
 							$nrev = 1;
 							$namarev = [];
@@ -297,7 +298,7 @@
 									$namarev['namalengkap'] = 'Reviewer Anonimous ' . $nrev;
 									$nrev++;
 								} else {
-									$namarev['namalengkap'] = $this->mdosen->dosennya($h->reviewer);
+									$namarev = $this->mdosen->dosennya($h->reviewer);
 								}
 							?>
 
