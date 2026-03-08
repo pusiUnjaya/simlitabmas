@@ -973,6 +973,37 @@ class MSubmit extends CI_Model
 		return $data;
 	}
 
+	function rekapreview($tahun)
+	{
+		$data = array();
+		$this->db->select("*");
+		$this->db->from("v_usulan");
+		$this->db->where("reviewer<>", 0);
+		$this->db->where("YEAR(tglmulai)", $tahun);
+		$this->db->where_in("status", array("Usulan Disetujui Prodi", "Reviewed", "Usulan Disetujui Reviewer 1", "Usulan Disetujui Reviewer 2"));
+		$this->db->order_by("tglmulai", "desc");
+		$hasil = $this->db->get();
+
+		if ($hasil->num_rows() > 0) {
+			$data = $hasil->result();
+		}
+		return $data;
+	}
+
+	function rekaphasilreview($id)
+	{
+		$data = array();
+		$this->db->select("*");
+		$this->db->from("v_hasilreview");
+		$this->db->where("usulan", $id);
+		$hasil = $this->db->get();
+
+		if ($hasil->num_rows() > 0) {
+			$data = $hasil->result();
+		}
+		return $data;
+	}
+
 	function hitusulanreview($id, $tahun)
 	{
 		$data = array();
@@ -2038,6 +2069,7 @@ class MSubmit extends CI_Model
 			"skor"				=> $skor,
 			"filereview"		=> $filereview,
 			"rekomendasi"		=> $this->input->post("rekomendasi", true),
+			"catatan"			=> $this->input->post("catatan", true),
 			"reviewer"			=> $this->session->userdata("sesi_id"),
 			"modified"			=> $waktu
 		);
@@ -2105,6 +2137,7 @@ class MSubmit extends CI_Model
 				"hasilreview"		=> $this->input->post("review", true),
 				"skor"				=> $skor,
 				"rekomendasi"			=> $this->input->post("rekomendasi", true),
+				"catatan"			=> $this->input->post("catatan", true),
 				"filereview"		=> $filereview,
 				//"reviewer"			=> $this->session->userdata("sesi_id"),
 				"modified"			=> $waktu
@@ -2115,6 +2148,7 @@ class MSubmit extends CI_Model
 				"hasilreview"		=> $this->input->post("review", true),
 				"skor"				=> $skor,
 				"rekomendasi"			=> $this->input->post("rekomendasi", true),
+				"catatan"			=> $this->input->post("catatan", true),
 				//"reviewer"			=> $this->session->userdata("sesi_id"),
 				"modified"			=> $waktu
 			);

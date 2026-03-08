@@ -237,6 +237,22 @@ class Submit extends CI_Controller
 		$this->load->view('dashboard/dashboard', $data);
 	}
 
+	function rekapreview()
+	{
+		$this->check_login();
+
+		$tahun=date('Y');
+		$data = [];
+		$data['active'] = 'active ';
+		$data['show'] = 'show ';
+
+		$data['usulan'] = $this->msubmit->rekapreview($tahun);
+		// echo $this->db->last_query();exit;
+
+		$data['page'] = 'submit/rekapreview';
+		$this->load->view('dashboard/dashboard', $data);
+	}
+
 	function editreview($id_usulan)
 	{
 		$this->check_login();
