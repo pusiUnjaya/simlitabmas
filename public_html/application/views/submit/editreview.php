@@ -285,6 +285,10 @@
 						?>
 					</select>
 				  </div>
+					<div class="form-group">
+						<label for="recipient-name" class="col-form-label">Catatan untuk Pengusul:</label>
+						<input type="text" id="catatan" name="catatan" class="form-control" value="<?php echo $review['catatan']; ?>" >
+					</div>
 			  </div>
 			  <div class="col-sm-12 d-sm-flex align-items-center justify-content-between mb-4">
 					<input type="button" onclick="history.back()" value="Cancel" class="d-sm-inline-block col-sm-5 btn btn-danger btn-user btn-block">

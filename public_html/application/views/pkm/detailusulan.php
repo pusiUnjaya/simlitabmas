@@ -216,7 +216,7 @@
 									$hitrev = $this->mpengabdian->hitrev($this->uri->segment(3), $this->session->userdata('sesi_id'));
 									if ($hitrev > 0 || $readrev > 0) {
 										$isianreview = $this->mpengabdian->lihatisianreview($this->uri->segment(3), $getidrev['user']);
-										echo '<br><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-rekomendasi="' . $isianreview['rekomendasi'] . '" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <?php echo $nomor; ?></a>';
+										echo '<br><a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-hasil="' . $isianreview['hasilreview'] . '" data-catatan="' . $isianreview['catatan'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview'] . '" data-rekomendasi="' . $isianreview['rekomendasi'] . '" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <?php echo $nomor; ?></a>';
 									} elseif ($hitrev == 0 && $this->session->userdata('sesi_dosen') == $usulan['reviewer']) {
 							?>
 										<div class="row" style="margin-top:40px">
@@ -310,7 +310,7 @@
 								}
 								?>
 								<div class="col-md-6">
-									<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-catatan="<?php echo $h->hasilreview; ?>" data-skor="<?php echo $h->skor; ?>" data-file="<?php echo $h->filereview; ?>" data-reviewer="<?php echo $namarev['namalengkap']; ?>" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <br><?php echo $namarev['namalengkap']; ?></a>
+									<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-hasil="<?php echo $h->hasilreview; ?>" data-catatan="<?php echo $h->catatan; ?>" data-skor="<?php echo $h->skor; ?>" data-file="<?php echo $h->filereview; ?>" data-reviewer="<?php echo $namarev['namalengkap']; ?>" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer <br><?php echo $namarev['namalengkap']; ?></a>
 								</div>
 
 							<?php
@@ -817,10 +817,12 @@
 					echo '-';
 				//}
 				?>
-				<b>Catatan dari Reviewer :</b>
-				<pre><p class="catatan"></p></pre>
+				<b>Hasil Review :</b>
+				<pre><p class="hasil"></p></pre>
 				<b>Rekomendasi dari Reviewer :</b>
 				<pre><p class="rekomendasi"></p></pre>
+				<b>Catatan untuk Pengusul :</b>
+				<pre><p class="catatan"></p></pre>
 				<b>Silakan Download File Hasil Review</b>
 				<p id="tautanfile"></p>
 
@@ -1189,6 +1191,10 @@
 							<option value="Tidak direkomendasikan">Tidak direkomendasikan</option>
 						</select>
 					</div>
+					<div class="form-group">
+						<label for="recipient-name" class="col-form-label">Catatan untuk Pengusul:</label>
+						<input type="text" id="catatan" name="catatan" class="form-control">
+					</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -1328,6 +1334,7 @@
 
 	$(document).on("click", ".pencet", function() {
 		var catatan = $(this).data('catatan');
+		var hasil = $(this).data('hasil');
 		var reviewer = $(this).data('reviewer');
 		var rekomendasi = $(this).data('rekomendasi');
 		var file = $(this).data('file');
@@ -1359,6 +1366,7 @@
 		$(".modal-body .reviewer").text(reviewer);
 		$(".modal-body .rekomendasi").text(rekomendasi);
 		$(".modal-body .catatan").text(catatan);
+		$(".modal-body .hasil").text(hasil);
 		if (file == '') {
 			var str = "Tidak Ada File";
 			var result = str.link("");

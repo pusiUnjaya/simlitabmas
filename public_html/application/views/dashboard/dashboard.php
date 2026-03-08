@@ -318,6 +318,11 @@
             <a class="collapse-item <?php if($this->uri->segment(1)=='submit' && $this->uri->segment(2)=='plotreviewer') echo $active; ?>" href="<?php echo base_url(); ?>submit/plotreviewer">
           <i class="fas fa-fw fa-folder"></i>
           <span>Plot Reviewer</span></a>
+
+            <a class="collapse-item <?php if($this->uri->segment(1)=='submit' && $this->uri->segment(2)=='rekapreview') echo $active; ?>" href="<?php echo base_url(); ?>submit/rekapreview">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Rekap Review</span></a>
+
 		  <a class="collapse-item <?php if($this->uri->segment(1)=='submit' && $this->uri->segment(2)=='progress') echo $active; ?>" href="<?php echo base_url(); ?>submit/progress">
           <i class="fas fa-fw fa-folder"></i>
           <span>Progress Usulan</span></a>
@@ -364,6 +369,11 @@
             <a class="collapse-item <?php if($this->uri->segment(1)=='pengabdian' && $this->uri->segment(2)=='plotreviewer') echo $active; ?>" href="<?php echo base_url(); ?>pengabdian/plotreviewer">
           <i class="fas fa-fw fa-folder"></i>
           <span>Plot Reviewer</span></a>
+
+            <a class="collapse-item <?php if($this->uri->segment(1)=='pengabdian' && $this->uri->segment(2)=='rekapreview') echo $active; ?>" href="<?php echo base_url(); ?>pengabdian/rekapreview">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Rekap Review</span></a>
+          
 			<?php } ?>
             <a class="collapse-item <?php if($this->uri->segment(1)=='pengabdian' && $this->uri->segment(2)=='kemajuan') echo $active; ?>" href="<?php echo base_url(); ?>pengabdian/kemajuan">
           <i class="fas fa-fw fa-folder"></i>

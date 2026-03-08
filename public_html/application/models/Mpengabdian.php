@@ -1086,6 +1086,38 @@ class Mpengabdian extends CI_Model
 		return $data;
 	}
 
+	function rekapreview($tahun)
+	{
+		$data = array();
+		$this->db->select("*");
+		$this->db->from("v_usulanpkm");
+		$this->db->where("reviewer<>", 0);
+		$this->db->where("YEAR(tglmulai)", $tahun);
+		$this->db->where_in("status", array("Usulan Disetujui Prodi", "Reviewed", "Usulan Disetujui Reviewer"));
+		$this->db->order_by("tglmulai", "desc");
+		$hasil = $this->db->get();
+
+		if ($hasil->num_rows() > 0) {
+			$data = $hasil->result();
+		}
+		return $data;
+	}
+
+	function rekaphasilreview($id)
+	{
+		$data = array();
+		$this->db->select("*");
+		$this->db->from("v_hasilreviewpkm");
+		$this->db->where("usulan", $id);
+		$hasil = $this->db->get();
+
+		if ($hasil->num_rows() > 0) {
+			$data = $hasil->result();
+		}
+		return $data;
+	}
+
+
 	function rab()
 	{
 		$data = array();
@@ -1808,6 +1840,7 @@ class Mpengabdian extends CI_Model
 			"skor"					=> $skor,
 			"filereview"			=> $filereview,
 			"rekomendasi"			=> $this->input->post("rekomendasi", true),
+			"catatan"			=> $this->input->post("catatan", true),
 			"reviewer"				=> $this->session->userdata("sesi_id"),
 			"modified"				=> $waktu
 		);
@@ -1866,6 +1899,7 @@ class Mpengabdian extends CI_Model
 			$data = array(
 				//"usulan"			=> $id,
 				"hasilreview"		=> $this->input->post("review", true),
+				"catatan"		=> $this->input->post("catatan", true),
 				"skor"				=> $skor,
 				"filereview"		=> $filereview,
 				//"reviewer"			=> $this->session->userdata("sesi_id"),
@@ -1875,6 +1909,7 @@ class Mpengabdian extends CI_Model
 			$data = array(
 				//"usulan"			=> $id,
 				"hasilreview"		=> $this->input->post("review", true),
+				"catatan"		=> $this->input->post("catatan", true),
 				"skor"				=> $skor,
 				//"reviewer"			=> $this->session->userdata("sesi_id"),
 				"modified"			=> $waktu

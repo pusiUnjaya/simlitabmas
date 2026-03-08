@@ -270,6 +270,21 @@ class Pengabdian extends CI_Controller
 		$this->load->view('dashboard/dashboard', $data);
 	}
 
+	function rekapreview()
+	{
+		empty($this->session->userdata('sesi_user')) and redirect('login');
+
+		$tahun=date('Y');
+		$data = [];
+		$data['active'] = 'active ';
+		$data['show'] = 'show ';
+
+		$data['usulan'] = $this->mpengabdian->rekapreview($tahun);
+
+		$data['page'] = 'pkm/rekapreview';
+		$this->load->view('dashboard/dashboard', $data);
+	}
+
 	function editreview()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
