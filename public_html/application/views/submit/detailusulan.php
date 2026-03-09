@@ -1794,13 +1794,13 @@
 
 		// if(year>=2023 && month>9)
 		if (year >= 2023 && (year <= 2024 && month < 5))
-			var total = ((poin2 * 20) + (poin2 * 15) + (poin3 * 20) + (poin4 * 15) + (poin5 * 10) + (poin6 * 20)) / 4;
+			var total = ((poin1 * 20) + (poin2 * 15) + (poin3 * 20) + (poin4 * 15) + (poin5 * 10) + (poin6 * 20)) / 4;
 		else if (year >= 2024 && month >= 5)
-			var total = ((poin2 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;
-		else if (year == 2025) {
-			var total = ((poin2 * 20) + (poin2 * 15) + (poin3 * 20) + (poin4 * 15) + (poin5 * 10) + (poin6 * 20)) / 7;
+			var total = ((poin1 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;
+		else if (year == 2025){
+			var total = ((poin1 * 20) + (poin2 * 15) + (poin3 * 20) + (poin4 * 15) + (poin5 * 10) + (poin6 * 20)) / 7;
 		} else {
-			var total = ((poin2 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;
+			var total = ((poin1 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;			
 		}
 
 		$(".modal-body .revskor1").text(skorarray[0]);
