@@ -14,123 +14,141 @@ pre {
 <table class="table" border="1" id="dataTable" width="100%" cellspacing="0">
 	  <thead>
 		<tr>
-		  <th>No</th>
-		  <th>Nama Dosen</th>
-		  <th>NIDN</th>
-		  <th>Fakultas</th>
-		  <th>Program Studi</th>
-		  <th>Judul Usulan</th>
-		  <th>Link Dokumen Usulan</th>
-		  <th>Nilai per Komponen</th>
-		  <th>Nilai Akhir</th>
-		  <th>Isian Revisi</th>
-		  <th>Link Dokumen Reviewer</th>
+			<th width="30%">Judul Penelitian</th>
+			<th width="10%">Tim Peneliti</th>
+			<th width="30%">Hasil Review</th>
+			<th width="15%">Rekomendasi</th>
+			<th width="15%">Nilai</th>
 		</tr>
 	  </thead>
 	  <tbody>
 		<?php
-			$no = 1;
-			$fakultas = '';
-			$prodi = '';
 			foreach($hasilreview as $p)
 			{
-				$fakultas = $this->mdosen->namafakultas($p->fakultas);
-				$prodi = $this->mdosen->namaprodi($p->prodi);
-				if($p->pengusul<>'')
+				echo "<tr><td>$p->judul</td><td>Ketua :".$p->namapengusul."
+						<br>Anggota :<br>";
+						$anggotadosen = $this->msubmit->perananggota($p->id_usulan,'Penelitian');
+						$hitangg = count($anggotadosen);
+						if($hitangg>0)
+						{
+							echo '<ol>';
+							for($i=0;$i<$hitangg;$i++)
+							{
+								$revnya = $anggotadosen[$i]->namalengkap;
+								echo '<li>'.$revnya.'</li>';
+							}
+							echo '</ol>';			
+						}
+				$dosenluar = $this->msubmit->perananggotadosenluar($p->id_usulan,'Penelitian');
+				$hitangg = count($dosenluar);
+				if($hitangg>0)
 				{
-					$ketua = $this->mdosen->dosennya($p->pengusul);
-					$ketua = $ketua['namalengkap'];
-				}
-				else
-					$ketua = '';
-				
-				$ad = '';
-				
-				$ambil = explode(',',$p->anggotadosen);
-				$hit = count($ambil);
-				
-				if($p->anggotadosen<>'') 
-				{
-					// $ad = '<ol>';
-					for($i=0;$i<$hit;$i++)
+					echo '<ol>';
+					for($i=0;$i<$hitangg;$i++)
 					{
-						$dosen = $this->mdosen->namadosen($ambil[$i]);
-						if($hit>1)
-							$ad .= ($i+1).'. ';
-					
-						$ad .= $dosen['namalengkap'].'<br>';
+						$revnya = $dosenluar[$i]->namalengkap;
+						echo '<li>'.$revnya.'</li>';
 					}
-					// $ad .= '</ol>';
+					echo '</ol>';			
 				}
-				else
-					$ad = 'Tidak Ada Anggota Dosen';  
-				
-				$skor = explode(',',$p->skor);
-				$hitskor = count($skor);
-				if($p->skor<>'' && $skor[0]<>'' && $hitskor>0)
+				else {
+					echo '-';
+				}
+
+				echo "</td><td>";
+				$hasilreview = $this->msubmit->rekaphasilreview($p->id_usulan);
+				$hitangg = count($hasilreview);
+				echo '<ol>';
+				for($i=0;$i<$hitangg;$i++)
 				{
-					$poin1 = $skor[0];
-					$poin2 = $skor[1];
-					$poin3 = $skor[2];
-					$poin4 = $skor[3];
-					$poin5 = $skor[4];
-					$poin6 = $skor[5];
-					$final = (($skor[0]*20)+($skor[1]*15)+($skor[2]*20)+($skor[3]*15)+($skor[4]*10)+($skor[5]*20))/7;
+					$revnya = 'Reviewer :'.$hasilreview[$i]->namareviewer;
+					echo '<li>'.$revnya.'<br>'.$hasilreview[$i]->hasilreview.'</li>';
 				}
-				else
+				echo '</ol></td><td><ol>';			
+
+				for($i=0;$i<$hitangg;$i++)
 				{
-					$poin1 = 0;
-					$poin2 = 0;
-					$poin3 = 0;
-					$poin4 = 0;
-					$poin5 = 0;
-					$poin6 = 0;
-					$final = 0;
+					$revnya = 'Reviewer :'.$hasilreview[$i]->namareviewer;
+					echo '<li>'.$revnya.'<br>'.$hasilreview[$i]->rekomendasi.'</li>';
 				}
-				
-				if($p->usulan<>'')
-					$fileusulan = 'https://simlitabmas.unjaya.ac.id/assets/uploadbox/'.$p->fileusulan;
-				else
-					$fileusulan = '';
-				
-				if($p->filereview<>'')
-					$filereview = 'https://simlitabmas.unjaya.ac.id/assets/uploadbox/'.$p->filereview;
-				else
-					$filereview = '';
-				
-				
-				echo "<tr>
-						  <td>".$no."</td>
-						  <td>".$ketua."</td>
-						  <td>".$p->nidn."</td>
-						  <td>".$fakultas['fakultas']."</td>
-						  <td>".$prodi['prodi']."</td>
-						  <td>".$p->judul."</td>
-						  <td>".$fileusulan."</td>
-						  <td>
-							1. Perumusan Masalah : ".$poin1."
-									a. Ketajaman Perumusan Masalah
-									b. Tujuan Penelitian
-							2. Kesesuaian dengan Renstra Penelitian Unjani Yogyakarta : ".$poin2."
-							3. Metode Penelitian : ".$poin3."<br>
-									Ketepatan dan kesesuaian metode yang digunakan
-							4. Tinjauan Pustaka : ".$poin4."
-									a. Relevansi
-									b. Kemutakhiran
-									c. Penyusunan Daftar Pustaka
-							5. Kelayakan Penelitian : ".$poin5."
-									a. Kesesuaian Waktu
-									b. Kesesuaian Biaya
-							6. Peluang Luaran Penelitian : ".$poin6."
-									a. Publikasi Ilmiah
-									b. Pengembangan iptek Sosial Budaya
-									c. Pengayaan Bahan Ajar
-						  </td>
-						  <td>".number_format($final,4)."</td>
-						  <td>".$p->hasilreview."</td>
-						  <td>".$filereview."</td>
-						</tr>";
-						$no++;
+				echo '</ol></td><td><ol>';			
+
+				for($i=0;$i<$hitangg;$i++)
+				{
+					$revnya = 'Reviewer :'.$hasilreview[$i]->namareviewer;
+					if ($hasilreview[$i]->skor<>''){
+
+						$skor = explode(',',$hasilreview[$i]->skor);
+						echo '<li>'.$revnya.'<br>';
+
+						$poin1 = (float) $skor[0];
+						$poin2 = (float) $skor[1];
+						$poin3 = (float) $skor[2];
+						$poin4 = (float) $skor[3];
+						$poin5 = (float) $skor[4];
+						$poin6 = (float) $skor[5];
+						$poin7 = (float) $skor[6];
+						$poin8 = (float) $skor[7];
+						$poin9 = (float) $skor[8];
+						$poin10 = (float) $skor[9];
+						$tahun = date('Y',strtotime($hasilreview[$i]->modified));
+						$bulan = date('m',strtotime($hasilreview[$i]->modified));
+						if ($tahun>=2023 && ($tahun<=2024 && $bulan<5)){
+							$final = (($poin1*20)+($poin2*15)+($poin3*20)+($poin4*15)+($poin5*10)+($poin6*20))/4;
+							$poin1 = 20*(float) $skor[0];
+							$poin2 = 15*(float) $skor[1];
+							$poin3 = 20*(float) $skor[2];
+							$poin4 = 15*(float) $skor[3];
+							$poin5 = 10*(float) $skor[4];
+							$poin6 = 20*(float) $skor[5];
+							
+							echo 'Poin item : '.$poin1.','.$poin2.','.$poin3.','.$poin4.','.$poin5.','.$poin6;
+						}else if($tahun>=2024 && $bulan>=5){
+							$final = (($poin1*10)+($poin2*10)+($poin3*10)+($poin4*10)+($poin5*10)+($poin6*10)+($poin7*10)+($poin8*10)+($poin9*10)+($poin10*10))/4;
+							$poin1 = 10*(float) $skor[0];
+							$poin2 = 10*(float) $skor[1];
+							$poin3 = 10*(float) $skor[2];
+							$poin4 = 10*(float) $skor[3];
+							$poin5 = 10*(float) $skor[4];
+							$poin6 = 10*(float) $skor[5];
+							$poin7 = 10*(float) $skor[6];
+							$poin8 = 10*(float) $skor[7];
+							$poin9 = 10*(float) $skor[8];
+							$poin10 = 10*(float) $skor[9];
+							echo 'Poin item : '.$poin1.','.$poin2.','.$poin3.','.$poin4.','.$poin5.','.$poin6.','.$poin7.','.$poin8.','.$poin9.','.$poin10;
+						}else if ($tahun==2025){
+							$final = (($poin1*20)+($poin2*15)+($poin3*20)+($poin4*15)+($spoin5*10)+($poin6*20))/7;
+							$poin1 = 20*(float) $skor[0];
+							$poin2 = 15*(float) $skor[1];
+							$poin3 = 20*(float) $skor[2];
+							$poin4 = 15*(float) $skor[3];
+							$poin5 = 10*(float) $skor[4];
+							$poin6 = 20*(float) $skor[5];
+							echo 'Poin item : '.$poin1.','.$poin2.','.$poin3.','.$poin4.','.$poin5.','.$poin6;
+						}else {
+							$final = (($poin1*10)+($poin2*10)+($poin3*10)+($poin4*10)+($poin5*10)+($poin6*10)+($poin7*10)+($poin8*10)+($poin9*10)+($poin10*10))/4;
+							$poin1 = 10*(float) $skor[0];
+							$poin2 = 10*(float) $skor[1];
+							$poin3 = 10*(float) $skor[2];
+							$poin4 = 10*(float) $skor[3];
+							$poin5 = 10*(float) $skor[4];
+							$poin6 = 10*(float) $skor[5];
+							$poin7 = 10*(float) $skor[6];
+							$poin8 = 10*(float) $skor[7];
+							$poin9 = 10*(float) $skor[8];
+							$poin10 = 10*(float) $skor[9];
+							echo 'Poin item : '.$poin1.','.$poin2.','.$poin3.','.$poin4.','.$poin5.','.$poin6.','.$poin7.','.$poin8.','.$poin9.','.$poin10;
+						}
+						
+						echo '<br>Skor : '.$final.'</li>';
+					}else{
+						$revnya = 'Reviewer :'.$hasilreview[$i]->namareviewer;
+						echo '<li>'.$revnya.'<br>-</li>';
+					}
+				}
+				echo '</ol></td>';			
+
+				echo "</tr>";
 			}
 		?>	
 	  </tbody>
