@@ -939,14 +939,24 @@ class MSubmit extends CI_Model
 		return $data;
 	}
 
-	function hasilreview()
+	function hasilreview($tahun)
 	{
-		$data = array();
+		
+	/*	$data = array();
 		$this->db->select("*");
 		$this->db->from("hasilreview");
 		$this->db->join("usulan", "hasilreview.usulan=usulan.id_usulan");
 		$this->db->join("dosen", "dosen.user=usulan.pengusul");
 		$this->db->order_by("hasilreview.modified", "desc");
+		$hasil = $this->db->get();*/
+	
+		$data = array();
+		$this->db->select("*");
+		$this->db->from("v_usulan");
+		$this->db->where("reviewer<>", 0);
+		$this->db->where("YEAR(tglmulai)", $tahun);
+		$this->db->where_in("status", array("Usulan Disetujui Prodi", "Reviewed", "Usulan Disetujui Reviewer 1", "Usulan Disetujui Reviewer 2"));
+		$this->db->order_by("tglmulai", "desc");
 		$hasil = $this->db->get();
 
 		if ($hasil->num_rows() > 0) {

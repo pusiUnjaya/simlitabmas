@@ -3,6 +3,7 @@
 		header('location:'.base_url());
 ?>
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/jquery-ui.css">
+
 <style>
 	.ui-autocomplete {
 		position: absolute;
@@ -26,6 +27,7 @@
 						$this->session->flashdata('result').'
 						</div>';
 				}
+
 			?>
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
@@ -34,13 +36,13 @@
 						<div class="col-md-9">
 						  <h6 class="m-0 font-weight-bold text-primary">Daftar Usulan Penelitian</h6>
 						</div>
-				<!--		<div class="col-md-3 float-right">
+						<div class="col-md-3 float-right">
 						<?php if($this->session->userdata('sesi_status')==1) { ?>
-						  <a href="<?php echo base_url().'submit/eksporeview'; ?>" class="btn btn-sm btn-success shadow-sm" title="Ekspor Rekap" style="margin-left: 1em;color:white"><i class="fas fa-file-excel fa-sm text-white-50"></i> Ekspor Rekap</a>
+						  <a href="<?php echo base_url().'submit/eksporhasilreview'; ?>" class="btn btn-sm btn-success shadow-sm" title="Ekspor Rekap" style="margin-left: 1em;color:white"><i class="fas fa-file-excel fa-sm text-white-50"></i> Ekspor Rekap</a>
 						<?php } ?>
-							<form class="user col-md-5 float-right" action="<?php echo base_url(); ?>submit" method="post">
+						<!--	<form class="user col-md-5 float-right" action="<?php echo base_url(); ?>submit" method="post">
 								<select name="periode" class="form-control" onchange="this.form.submit()">
-									<?php
+						-->			<?php
 									$tahun = 2018;
 									$aktif = date('Y');
 									$selisih = $aktif - $tahun;
@@ -49,21 +51,21 @@
 										$pilih = date('Y');
 									else
 										$pilih = $this->input->post('periode');
-									for ($i = 0; $i <= $selisih; $i++) {
+								/*	for ($i = 0; $i <= $selisih; $i++) {
 										if ($pilih == ($aktif - $i))
 											echo '<option value="' . ($aktif - $i) . '" selected>' . ($aktif - $i) . '</option>';
 										else
 											echo '<option value="' . ($aktif - $i) . '">' . ($aktif - $i) . '</option>';
-									}
+									} */
 									?>
-								</select>
-							</form>
-						</div> -->
+						<!--		</select>
+							</form> 
+					--></div>
 				</div>
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
                       <th width="30%">Judul Penelitian</th>
@@ -300,6 +302,7 @@
 
 
 <script>
+
 	$(document).ready(function() {
         $('#plot-modal').on('show.bs.modal', function (event) {
             var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
@@ -310,6 +313,7 @@
             modal.find('#plotreviewer').attr("placeholder",div.data('warn'));
             modal.find('#revnya').html(div.data('dosen'));
         });
+
     });
 	
 	$(".hapus").click(function(){

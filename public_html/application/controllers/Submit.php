@@ -158,10 +158,10 @@ class Submit extends CI_Controller
 	function eksporhasilreview()
 	{
 		$this->check_login();
-
+		$tahun=date('Y');
 		$data = [];
 		$data['date'] = date('dmYHis');
-		$data['hasilreview'] = $this->msubmit->hasilreview();
+		$data['hasilreview'] = $this->msubmit->hasilreview($tahun);
 
 		$this->load->view('submit/eksporhasilreview', $data);
 	}

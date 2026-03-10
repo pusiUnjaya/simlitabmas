@@ -59,9 +59,19 @@ class Pengabdian extends CI_Controller
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
 
+		/*$data = [];
+		$data['date'] = date('dmYHis');
+		$data['hasilreview'] = $this->mpengabdian->hasilreview();*/
+
+		$tahun=date('Y');
 		$data = [];
 		$data['date'] = date('dmYHis');
-		$data['hasilreview'] = $this->mpengabdian->hasilreview();
+		//$data['active'] = 'active ';
+		//$data['show'] = 'show ';
+
+		$data['usulan'] = $this->mpengabdian->rekapreview($tahun);
+
+
 
 		$this->load->view('pkm/eksporhasilreview', $data);
 	}

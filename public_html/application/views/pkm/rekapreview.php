@@ -30,15 +30,16 @@
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Daftar Usulan PkM</h6>
-            </div>
-
-			<!--			<div class="col-md-3 float-right">
+              <div class="row">
+						<div class="col-md-9">
+						  <h6 class="m-0 font-weight-bold text-primary">Daftar Usulan Pengabdian</h6>
+						</div>
+						<div class="col-md-3 float-right">
 						<?php if($this->session->userdata('sesi_status')==1) { ?>
-						  <a href="<?php echo base_url().'submit/eksporeview'; ?>" class="btn btn-sm btn-success shadow-sm" title="Ekspor Rekap" style="margin-left: 1em;color:white"><i class="fas fa-file-excel fa-sm text-white-50"></i> Ekspor Rekap</a>
+						  <a href="<?php echo base_url().'pengabdian/eksporhasilreview'; ?>" class="btn btn-sm btn-success shadow-sm" title="Ekspor Rekap" style="margin-left: 1em;color:white"><i class="fas fa-file-excel fa-sm text-white-50"></i> Ekspor Rekap</a>
 						<?php } ?>
-							<form class="user col-md-5 float-right" action="<?php echo base_url(); ?>submit" method="post">
-								<select name="periode" class="form-control" onchange="this.form.submit()">
+						<!--	<form class="user col-md-5 float-right" action="<?php //echo base_url(); ?>submit" method="post">
+								<select name="periode" class="form-control" onchange="this.form.submit()"> -->
 									<?php
 									$tahun = 2018;
 									$aktif = date('Y');
@@ -48,17 +49,18 @@
 										$pilih = date('Y');
 									else
 										$pilih = $this->input->post('periode');
-									for ($i = 0; $i <= $selisih; $i++) {
+								/*	for ($i = 0; $i <= $selisih; $i++) {
 										if ($pilih == ($aktif - $i))
 											echo '<option value="' . ($aktif - $i) . '" selected>' . ($aktif - $i) . '</option>';
 										else
 											echo '<option value="' . ($aktif - $i) . '">' . ($aktif - $i) . '</option>';
-									}
+									} */
 									?>
-								</select>
-							</form>
-						</div> -->
-
+					<!--			</select>
+							</form> -->
+						</div> 
+				</div>		
+			</div>
 
             <div class="card-body">
               <div class="table-responsive">
