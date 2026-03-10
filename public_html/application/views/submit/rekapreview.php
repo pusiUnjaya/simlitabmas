@@ -27,8 +27,6 @@
 						$this->session->flashdata('result').'
 						</div>';
 				}
-				$tahun = 2018;
-				$aktif = date('Y');
 
 			?>
           <!-- DataTales Example -->
