@@ -311,6 +311,20 @@ class Surat extends LPPM_Controller {
 		$this->load->view('dashboard/dashboard',$data);
 	}
 
+	function terbit()
+	{
+		empty($this->session->userdata('sesi_user')) and redirect('login');
+		
+		$data = [];
+		$data['active'] = 'active ';
+		$data['show'] = 'show ';
+		
+		$data['terbit'] = $this->msurat->selectterbit();
+		// echo $this->db->last_query();exit;
+		$data['page'] = 'surat/terbit';
+		$this->load->view('dashboard/dashboard',$data);
+	}
+
 	function tambahdasar()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
