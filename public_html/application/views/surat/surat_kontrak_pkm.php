@@ -33,7 +33,7 @@
 		</style>
 	</head>
 	<body>
-		<img style="margin-top:-20" width="100%" src="<?php echo base_url().'assets/img/kop.png' ?>">
+		<img style="margin-top:-20" width="100%" src="<?php echo FCPATH.'assets/img/kop.png' ?>">
 		<h3 align="center">KONTRAK PENGABDIAN KEPADA MASYARAKAT<br>
 ANTARA<br>
 LEMBAGA PENELITIAN DAN PENGABDIAN KEPADA MASYARAKAT <br>
@@ -49,14 +49,21 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 			if($tugas['semester']=='Genap')
 			{
 				$th = date('Y', strtotime($tugas['tglmulai']));
+				$tgl = substr($tugas['tglmulai'],-6);
+
 				$getdate = $this->mpengabdian->tglterbit($th,'Genap');
-				$tanggal = tanggal_ke_kalimat($th.'-04-02');
+				$tanggal = tanggal_ke_kalimat($th.$tgl);
 			}
 			else
 			{
 				$th = date('Y', strtotime($tugas['tglmulai']));
-				$tanggal = tanggal_ke_kalimat($th.'-09-02');
+				$tgl = substr($tugas['tglmulai'],-6);
+
+				$getdate = $this->mpengabdian->tglterbit($th,'Ganjil');
+				$tanggal = tanggal_ke_kalimat($th.$tgl);
 			}
+			
+			$textgetdate=tgl_indo($getdate['surat_kontrak'],1);
 		?>
 		<p>Pada hari ini, <?php echo $tanggal; ?>, kami yang bertanda tangan di bawah ini:</p>
 		<table style="margin-top:10">
@@ -165,7 +172,7 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 				<li>melakukan pemantauan dan evaluasi; </li>
 				<li>melakukan penilaian luaran Pengabdian kepada Masyarakat untuk skema yang diajukan.</li>
 			</ol>
-			<li><b>PIHAK KEDUA</b> mempunyai kewajiban atas terunggahnya dokumen pertanggungjawaban pelaksanaan Pengabdian kepada Masyarakat ke laman <b>simlitabmas.unjaya.ac.id</b> dokumen sebagai berikut: revisi proposal, laporan kemajuan pelaksanaan Pengabdian kepada Masyarakat, SPTB, laporan akhir Pengabdian kepada Masyarakat, luaran Pengabdian kepada Masyarakat paling lambat tanggal <b>17 Juli 2024 (Pelaksanaan di Semester Genap) & 6 Desember 2024 (Pelaksanaan di Semester Gasal)</b>.</li>
+			<li><b>PIHAK KEDUA</b> mempunyai kewajiban atas terunggahnya dokumen pertanggungjawaban pelaksanaan Pengabdian kepada Masyarakat ke laman <b>simlitabmas.unjaya.ac.id</b> dokumen sebagai berikut: revisi proposal, laporan kemajuan pelaksanaan Pengabdian kepada Masyarakat, SPTB, laporan akhir Pengabdian kepada Masyarakat, luaran Pengabdian kepada Masyarakat paling lambat tanggal <b><?php echo $textgetdate; ?></b>.</li>
 			<li><b>PIHAK PERTAMA</b> mempunyai hak menerima dokumen hasil unggahan di laman <b>simlitabmas.unjaya.ac.id</b> sebagaimana tersebut pada ayat (2), <b>paling lambat 3 hari terhitung sejak batas akhir pengunggahan di laman simlitabmas.unjaya.ac.id.</b></li>
 			<li><b>PIHAK KEDUA</b> mempunyai hak mendapatkan dana Pengabdian kepada Masyarakat dari <b>PIHAK PERTAMA</b></li>
 		</ol>
@@ -232,9 +239,16 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 				<td width="300px"><b>PIHAK KEDUA</b><br>Ketua Pengusul</td>
 			</tr>
 			<tr>
-				<td width="300px"><p style="margin-top:80">Dr. Bdn. Tri Sunarsih, SST., M.Kes. </p></td>
+				<?php if($tugas['suratkontrak']<>'') {
+				echo '<td width="350px"><img style="margin-top:0" width="60%" src="'.FCPATH.'assets/img/disetujui.png'.'"</td>
+				      <td width="350px"><img style="margin-top:0" width="60%" src="'.FCPATH.'assets/img/disetujui.png'.'"</td>';
+				}
+				?>
+			</tr>
+			<tr>
+				<td width="300px"><p style="margin-top:10">Dr. Bdn. Tri Sunarsih, SST., M.Kes. </p></td>
 				<td width="300px">
-					<p style="margin-top:80"><?php echo $ketua['namalengkap']; ?></p>
+					<p style="margin-top:10"><?php echo $ketua['namalengkap']; ?></p>
 				</td>
 			</tr>
 		</table>

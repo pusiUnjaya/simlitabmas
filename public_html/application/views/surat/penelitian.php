@@ -184,6 +184,7 @@
 								}
 								else
 									$revo = '<b style="color:red">-</b>';
+								$revo = 'Anonim';
 								echo '<b style="color:green">'.$revo.'</b>';
 								if($p->nomortugas<>'')
 								{
@@ -205,14 +206,24 @@
 									$teks = 'Unduh Surat Kontrak';
 									$target = "data-target='#kontrak-modal'";
 									$surat_kontrak = base_url()."surat/kontrakpenelitian/".$p->id_usulan;
+
+									$warnasetujui = 'btn-success';
+									$tutupsetujui = '';
+									$urlsetujui = base_url()."surat/setujuipenelitian/".$p->id_usulan;
 								}
 								elseif($p->nomorkontrak<>'' && $p->suratkontrak<>'')
 								{
 									$warnak = 'btn-success';
 									$tutup = '';
 									$target = "data-target='#kontrak-modal'";
-									$teks = 'Unduh Scan Surat Kontrak';
-									$surat_kontrak = base_url()."assets/uploadbox/".$p->suratkontrak;
+									$teks = 'Unduh Final Surat Kontrak';
+									//$surat_kontrak = base_url()."assets/uploadbox/".$p->suratkontrak;
+									$surat_kontrak = base_url()."surat/kontrakpenelitian/".$p->id_usulan;
+
+									$warnasetujui = 'btn-secondary';
+									$tutupsetujui = "onclick='return false;'";
+									$urlsetujui = '#';
+
 								}
 								else	
 								{
@@ -221,13 +232,18 @@
 									$teks = 'Unduh Surat Kontrak';
 									$target = "";
 									$warnak = 'btn-secondary';
+
+									$warnasetujui = 'btn-secondary';
+									$tutupsetujui = "onclick='return false;'";
+									$urlsetujui = '#';
 								}
 								
 								echo "<td><a href='".$surat_tugas."' class='btn ".$warna."' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' target='_blank' title='Unduh Surat Tugas' ".$tutupjob."><i class='fas fa-download fa-sm'></i> Unduh Surat Tugas</a></td>
-										  <td><a href='".$surat_kontrak."' class='btn ".$warnak."' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' target='_blank' title='".$teks."' ".$tutup."><i class='fas fa-download fa-sm'></i> ".$teks."</a><br><br>";
+									  <td><a href='".$surat_kontrak."' class='btn ".$warnak."' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' target='_blank' title='".$teks."' ".$tutup."><i class='fas fa-download fa-sm'></i> ".$teks."</a><br><br>";
 								if($p->pengusul==$this->session->userdata('sesi_id'))
 								{
-									echo "<a href='' class='btn btn-info' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' data-toggle='modal' ".$target." title='Unggah Surat Kontrak' ".$tutup."><i class='fas fa-upload fa-sm'></i> Unggah Surat Kontrak</a>";
+									//echo "<a href='' class='btn btn-info' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' data-toggle='modal' ".$target." title='Unggah Surat Kontrak' ".$tutup."><i class='fas fa-upload fa-sm'></i> Unggah Surat Kontrak</a>";
+									echo "<a href='".$urlsetujui."' class='btn ".$warnasetujui."' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' target='_blank' title='Setujui Kontrak' ".$tutupsetujui."><i class='fas fa-check fa-sm'></i> Setujui</a>";
 								}
 								echo "</td></tr>";
 							}
