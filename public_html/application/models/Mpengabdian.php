@@ -1310,7 +1310,7 @@ class Mpengabdian extends CI_Model
 		if ($hasil->num_rows() > 0) {
 			$data = $hasil->row_array();
 		}
-		print_r($data);
+		//print_r($data);
 		return $data;
 	}
 

@@ -42,7 +42,7 @@ DENGAN<br>
 DOSEN PENERIMA HIBAH INTERNAL <br>
 SKEMA PENGABDIAN KEPADA MASYARAKAT<br>
 
-NOMOR: <?php echo $tugas['nomorkontrak'];?>
+NOMOR: 
 </h3>
 		<div id="isian" style="margin-left: 30px;margin-right: 30px; text-align: justify-all;">
 		<?php
@@ -52,7 +52,8 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 				$tgl = substr($tugas['tglmulai'],-6);
 
 				$getdate = $this->mpengabdian->tglterbit($th,'Genap');
-				$tanggal = tanggal_ke_kalimat($th.$tgl);
+				//$tanggal = tanggal_ke_kalimat($th.$tgl);
+				
 			}
 			else
 			{
@@ -60,8 +61,10 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 				$tgl = substr($tugas['tglmulai'],-6);
 
 				$getdate = $this->mpengabdian->tglterbit($th,'Ganjil');
-				$tanggal = tanggal_ke_kalimat($th.$tgl);
+				//$tanggal = tanggal_ke_kalimat($th.$tgl);
 			}
+			$tanggal = tanggal_ke_kalimat($getdate['surat_kontrak']);
+			$akhirkontrak = tgl_indo($getdate['akhirkontrak'],1);
 			
 			$textgetdate=tgl_indo($getdate['surat_kontrak'],1);
 		?>
@@ -172,7 +175,7 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 				<li>melakukan pemantauan dan evaluasi; </li>
 				<li>melakukan penilaian luaran Pengabdian kepada Masyarakat untuk skema yang diajukan.</li>
 			</ol>
-			<li><b>PIHAK KEDUA</b> mempunyai kewajiban atas terunggahnya dokumen pertanggungjawaban pelaksanaan Pengabdian kepada Masyarakat ke laman <b>simlitabmas.unjaya.ac.id</b> dokumen sebagai berikut: revisi proposal, laporan kemajuan pelaksanaan Pengabdian kepada Masyarakat, SPTB, laporan akhir Pengabdian kepada Masyarakat, luaran Pengabdian kepada Masyarakat paling lambat tanggal <b><?php echo $textgetdate; ?></b>.</li>
+			<li><b>PIHAK KEDUA</b> mempunyai kewajiban atas terunggahnya dokumen pertanggungjawaban pelaksanaan Pengabdian kepada Masyarakat ke laman <b>simlitabmas.unjaya.ac.id</b> dokumen sebagai berikut: revisi proposal, laporan kemajuan pelaksanaan Pengabdian kepada Masyarakat, SPTB, laporan akhir Pengabdian kepada Masyarakat, luaran Pengabdian kepada Masyarakat paling lambat tanggal <b><?php echo $akhirkontrak; ?></b>.</li>
 			<li><b>PIHAK PERTAMA</b> mempunyai hak menerima dokumen hasil unggahan di laman <b>simlitabmas.unjaya.ac.id</b> sebagaimana tersebut pada ayat (2), <b>paling lambat 3 hari terhitung sejak batas akhir pengunggahan di laman simlitabmas.unjaya.ac.id.</b></li>
 			<li><b>PIHAK KEDUA</b> mempunyai hak mendapatkan dana Pengabdian kepada Masyarakat dari <b>PIHAK PERTAMA</b></li>
 		</ol>
