@@ -33,7 +33,7 @@
 		</style>
 	</head>
 	<body>
-		<img style="margin-top:-20" width="100%" src="<?php echo base_url().'assets/img/kop.png' ?>">
+		<img style="margin-top:-20" width="100%" src="<?php echo FCPATH.'assets/img/kop.png' ?>">
 		<div id="halaman">
 		<h2 align="center"><u>S&nbsp;U&nbsp;R&nbsp;A&nbsp;T&nbsp;&nbsp;T&nbsp;U&nbsp;G&nbsp;A&nbsp;S</u></h2>
 		<p align="center" style="margin-top:-10"><?php echo $tugas['nomortugas'];?></p>
@@ -181,8 +181,8 @@
 			<tr>
 				<td width="280"></td>
 				<td>
-					<img style="margin-top:-30;margin-left:-60;z-index:99" width="130" src="<?php echo base_url().'assets/img/stempel.png'; ?>">
-					<img style="position:absolute;margin-top:-15;margin-left:-40;z-index:-1" width="110" src="<?php echo base_url().'assets/img/ttd.png'; ?>">
+					<img style="margin-top:-30;margin-left:-60;z-index:99" width="130" src="<?php echo FCPATH.'assets/img/stempel.png'; ?>">
+					<img style="position:absolute;margin-top:-15;margin-left:-40;z-index:-1" width="110" src="<?php echo FCPATH.'assets/img/ttd.png'; ?>">
 					<p style="margin-top:-30;">Dr. Bdn. Tri Sunarsih, SST., M.Kes. </p>
 				</td>
 			</tr>
