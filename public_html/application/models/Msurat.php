@@ -82,6 +82,22 @@ Class Msurat extends CI_Model
 		return $data;
 	}
 
+	function selectterbit()
+	{
+		$data = array();
+		$this->db->select("*");
+		$this->db->from("terbitsurat");
+		$this->db->order_by("tahun","desc");
+		
+		$hasil = $this->db->get();
+		
+		if($hasil->num_rows() > 0)
+		{
+			$data = $hasil->result();
+		}
+		return $data;
+	}
+
 	function dasartugaspkm()
 	{
 		$data = array();

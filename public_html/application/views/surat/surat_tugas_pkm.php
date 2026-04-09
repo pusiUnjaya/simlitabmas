@@ -169,10 +169,11 @@
 					else
 					{
 						$th = date('Y', strtotime($tugas['tglmulai']));
-						$getdate = $this->mpengabdian->tglterbit($th,'Gasal');
+						$getdate = $this->mpengabdian->tglterbit($th,'Ganjil');
 						// $tanggal = tgl_indo($th.'-04-02',1);
 						$tanggal = tgl_indo($getdate['surat_tugas'],1);
 					}
+				//echo $th;
 				?>
 				<td style="float:right">Dikeluarkan di Yogyakarta <br>pada tanggal <?php echo $tanggal; ?>
 				<p style="margin-top:1;">Ka. LPPM</p>
