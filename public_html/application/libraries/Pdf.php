@@ -9,8 +9,9 @@ class Pdf
 	{
 		$dompdf = new Dompdf\Dompdf([
 			'enable_remote' => true,
-			'chroot' => 'public_html/assets/img',
+			'chroot' => FCPATH,
 		]);
+
 		$dompdf->load_html($html);
 		$dompdf->set_paper($paper, $orientation);
 		// $dompdf->set_paper([0,0,609.4488,935.433]);

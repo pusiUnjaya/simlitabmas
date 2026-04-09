@@ -33,7 +33,7 @@
 		</style>
 	</head>
 	<body>
-		<img style="margin-top:-20" width="100%" src="<?php echo base_url().'assets/img/kop.png' ?>">
+		<img style="margin-top:-20" width="100%" src="<?php echo FCPATH.'assets/img/kop.png' ?>">
 		<h3 align="center">KONTRAK PENELITIAN<br>
 ANTARA<br>
 LEMBAGA PENELITIAN DAN PENGABDIAN KEPADA MASYARAKAT <br>
@@ -51,6 +51,7 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 			$getdate = $this->msubmit->tglterbit($th);
 			// $tanggal = tgl_indo($th.'-04-02',1);					
 			// $tanggal = tgl_indo($getdate['surat_tugas'],1);
+			$textgetdate=tgl_indo($getdate['surat_kontrak'],1);
 			$tanggal = tanggal_ke_kalimat($getdate['surat_tugas']);					
 		?>
 		<p>Pada hari ini, <?php echo $tanggal; ?>, kami yang bertanda tangan di bawah ini:</p>
@@ -160,7 +161,7 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 				<li>melakukan pemantauan dan evaluasi; </li>
 				<li>melakukan penilaian luaran Penelitian untuk skema yang diajukan.</li>
 			</ol>
-			<li><b>PIHAK KEDUA</b> mempunyai kewajiban atas terunggahnya dokumen pertanggungjawaban pelaksanaan Penelitian ke laman <b>simlitabmas.unjaya.ac.id</b> dokumen sebagai berikut: revisi proposal, laporan kemajuan pelaksanaan Penelitian, SPTB, laporan akhir Penelitian, luaran Penelitian paling lambat tanggal <b>27 November <?php echo $th; ?></b>.</li>
+			<li><b>PIHAK KEDUA</b> mempunyai kewajiban atas terunggahnya dokumen pertanggungjawaban pelaksanaan Penelitian ke laman <b>simlitabmas.unjaya.ac.id</b> dokumen sebagai berikut: revisi proposal, laporan kemajuan pelaksanaan Penelitian, SPTB, laporan akhir Penelitian, luaran Penelitian paling lambat tanggal <b><?php echo $textgetdate; ?></b>.</li>
 			<li><b>PIHAK PERTAMA</b> mempunyai hak menerima dokumen hasil unggahan di laman <b>simlitabmas.unjaya.ac.id</b> sebagaimana tersebut pada ayat (2), <b>paling lambat 3 hari terhitung sejak batas akhir pengunggahan di laman simlitabmas.unjaya.ac.id.</b></li>
 			<li><b>PIHAK KEDUA</b> mempunyai hak mendapatkan dana Penelitian dari <b>PIHAK PERTAMA</b></li>
 		</ol>
@@ -229,9 +230,16 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 				<td width="350px"><b>PIHAK KEDUA</b><br>Ketua Pengusul</td>
 			</tr>
 			<tr>
-				<td width="350px"><p style="margin-top:100px">Dr. Bdn. Tri Sunarsih, SST., M.Kes.</p></td>
+				<?php if($tugas['suratkontrak']<>'') {
+				echo '<td width="350px"><img style="margin-top:0" width="60%" src="'.FCPATH.'assets/img/disetujui.png'.'"</td>
+				      <td width="350px"><img style="margin-top:0" width="60%" src="'.FCPATH.'assets/img/disetujui.png'.'"</td>';
+				}
+				?>
+			</tr>
+			<tr>
+				<td width="350px"><p style="margin-top:10px">Dr. Bdn. Tri Sunarsih, SST., M.Kes.</p></td>
 				<td width="350px">
-					<p style="margin-top:100px"><?php echo $ketua['namalengkap']; ?></p>
+					<p style="margin-top:10px"><?php echo $ketua['namalengkap']; ?></p>
 				</td>
 			</tr>
 			</table>

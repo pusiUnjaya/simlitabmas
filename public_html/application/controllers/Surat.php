@@ -150,6 +150,7 @@ class Surat extends LPPM_Controller {
 		$this->load->library('pdf');
 		// $this->pdf->set_paper('F4', 'portrait');
 		$html = $this->load->view('surat/surat_tugas_pkm', $data,true);
+		//echo $html;
 		$this->pdf->createPDF($html, 'surat_tugas_pkm_'.date('dmYHis'), false);
 	}
 
@@ -165,7 +166,7 @@ class Surat extends LPPM_Controller {
 		$this->load->library('pdf');
 		// $this->pdf->set_paper('F4', 'portrait');
 		$html = $this->load->view('surat/surat_tugas_penelitian', $data,true);
-		// echo $html;
+		//echo $html;
 		$this->pdf->createPDF($html, 'surat_tugas_penelitian_'.date('dmYHis'), false);
 	}
 	
@@ -181,6 +182,8 @@ class Surat extends LPPM_Controller {
 		// $this->load->view('surat/surat_tugas_pkm',$data);
 		$this->load->library('pdf');
 		$html = $this->load->view('surat/surat_kontrak_pkm', $data,true);
+		//echo $html;
+
 		$this->pdf->createPDF($html, 'surat_kontrak_pkm_'.date('dmYHis'), false);
 	}
 
@@ -196,6 +199,8 @@ class Surat extends LPPM_Controller {
 		// $this->load->view('surat/surat_kontrak_penelitian', $data); return;
 		$this->load->library('pdf');
 		$html = $this->load->view('surat/surat_kontrak_penelitian', $data,true);
+		//echo $html;
+		
 		$this->pdf->createPDF($html, 'surat_kontrak_penelitian_'.date('dmYHis'), false, 'a4');
 	}
 	
@@ -209,6 +214,18 @@ class Surat extends LPPM_Controller {
 		redirect("surat/nomorpenelitian");
 		
 	}
+
+	function setujuipenelitian($id_usulan)
+	{
+		empty($this->session->userdata('sesi_user')) and redirect('login');
+
+		$this->msurat->setujuipenelitian($id_usulan);
+		$this->session->set_flashdata('result', 'Anda telah menyetujui Kontrak Penelitian!');
+		//echo $this->db->last_query();exit;	
+		redirect("surat/penelitian");
+		
+	}
+	
 
 	function simpankontrakpkm()
 	{
@@ -266,6 +283,17 @@ class Surat extends LPPM_Controller {
 		$this->session->set_flashdata('result', 'Nomor Surat Telah Sukses Ditambahkan!');
 		//echo $this->db->last_query();exit;	
 		redirect("surat/nomorpengabdian");
+		
+	}
+
+	function setujuipkm($id_usulan)
+	{
+		empty($this->session->userdata('sesi_user')) and redirect('login');
+		
+		$this->msurat->setujuipkm($id_usulan);
+		$this->session->set_flashdata('result', 'Nomor Surat Telah Sukses Ditambahkan!');
+		//echo $this->db->last_query();exit;	
+		redirect("surat/pengabdian");
 		
 	}
 

@@ -216,6 +216,53 @@ Class Msurat extends CI_Model
 		$this->db->insert("logs",$data);
 		//akhir masukan logs sistem
 	}
+
+	function setujuipenelitian($id_usulan)
+	{
+		$waktu = date('Y-m-d H:i:s');
+		$setuju = 'Setuju '.$waktu;
+
+		$data = array(
+			"suratkontrak"	=> $setuju,
+			"modified"		=> $waktu
+			);
+		
+		$this->db->where("id_usulan",$id_usulan);
+		$this->db->update("usulan",$data);	
+		
+		//masukan logs sistem
+		//$wkt = date('d-m-Y H:i:s');
+		$data = array(
+				"tgl" => date('Y-m-d'),
+				"keterangan" => $this->session->userdata('sesi_nama')." telah menyetujui Surat Kontrak Penelitian ".tgl_indo($waktu,1)
+				);
+		$this->db->insert("logs",$data);
+		//akhir masukan logs sistem
+	}
+
+	function setujuipkm($id_usulan)
+	{
+		$waktu = date('Y-m-d H:i:s');
+		$setuju = 'Setuju '.$waktu;
+
+		$data = array(
+			"suratkontrak"	=> $setuju,
+			"modified"		=> $waktu
+			);
+		
+		$this->db->where("id_usulan",$id_usulan);
+		$this->db->update("usulan_pkm",$data);	
+		
+		//masukan logs sistem
+		//$wkt = date('d-m-Y H:i:s');
+		$data = array(
+				"tgl" => date('Y-m-d'),
+				"keterangan" => $this->session->userdata('sesi_nama')." telah menyetujui Surat Kontrak PKM ".tgl_indo($waktu,1)
+				);
+		$this->db->insert("logs",$data);
+		//akhir masukan logs sistem
+	}
+
 	
 	function simpanpkm()
 	{
