@@ -144,7 +144,7 @@ NOMOR:
 				<td width="120" valign="top"><b><?php echo $ketua['namalengkap'];?></b></td>
 				<td valign="top">:</td>
 				<td valign="top" style="text-align: justify !important;">
-					Dosen Prodi <?php echo $prodi['prodi'].', '.$fak['fakultas']; ?>, Universitas Jenderal Achmad Yani Yogyakarta selaku penerima tugas (Ketua Pengusul) program pengabdian kepada masyarakat dosen penerima hibah internal Universitas Jenderal Achmad Yani Yogyakarta skema <?php echo $tugas['skema'] ?> Tahun Anggaran 2024 dengan judul "<?php echo ucwords(strtolower($tugas['judul'])); ?>" dengan anggota dosen <?php echo $anggotadosen; ?>, anggota mahasiswa <?php echo $anggotamhs;?> yang selanjutnya disebut <b>PIHAK KEDUA</b>
+					Dosen Prodi <?php echo $prodi['prodi'].', '.$fak['fakultas']; ?>, Universitas Jenderal Achmad Yani Yogyakarta selaku penerima tugas (Ketua Pengusul) program pengabdian kepada masyarakat dosen penerima hibah internal Universitas Jenderal Achmad Yani Yogyakarta skema <?php echo $tugas['skema'] ?> Tahun Anggaran <?php echo $th; ?> dengan judul "<?php echo ucwords(strtolower($tugas['judul'])); ?>" dengan anggota dosen <?php echo $anggotadosen; ?>, anggota mahasiswa <?php echo $anggotamhs;?> yang selanjutnya disebut <b>PIHAK KEDUA</b>
 				</td>
 			</tr>
 		</table>
@@ -163,7 +163,7 @@ NOMOR:
 			</ol>
 		</ol>
 		<h3 align="center" class="no-break-after">Pasal 2<br>RUANG LINGKUP</h3>
-		<p>Ruang lingkup Kontrak Pengabdian kepada Masyarakat ini meliputi Pelaksanaan Pengabdian kepada Masyarakat di perguruan tinggi <b>Universitas Jenderal Achmad Yani Yogyakarta</b> yang dibebankan pada Program Kerja dan Rancangan Anggaran (PKRA) tahun 2024.</p>
+		<p>Ruang lingkup Kontrak Pengabdian kepada Masyarakat ini meliputi Pelaksanaan Pengabdian kepada Masyarakat di perguruan tinggi <b>Universitas Jenderal Achmad Yani Yogyakarta</b> yang dibebankan pada Program Kerja dan Rancangan Anggaran (PKRA) tahun <?php echo $th; ?>.</p>
 		
 		<h3 align="center" class="no-break-after">Pasal 3<br>JANGKA WAKTU</h3>
 		<p>Kontrak Pengabdian kepada Masyarakat ini dilaksanakan dalam jangka 6 (enam) bulan dalam tahun berjalan setelah penandatangan kontrak;</p>
@@ -181,7 +181,7 @@ NOMOR:
 		</ol>
 		<h3 align="center" class="no-break-after">Pasal 5<br>CARA PEMBAYARAN</h3>
 		<ol type="1">
-			<li><b>PIHAK PERTAMA</b> memberikan pendanaan Pengabdian kepada Masyarakat sebagaimana dimaksud dalam Pasal 2 ayat (1) dengan besaran sesuai Pengumuman Penelitian dan Pengabdian kepada Masyarakat (PkM) Internal Unjaya Tahun 2024 Nomor: P/004/LPPMUNJAYA/IV/2024 dibebankan pada PKRA Universitas Jenderal Achmad Yani Yogyakarta Tahun 2024.</li>
+			<li><b>PIHAK PERTAMA</b> memberikan pendanaan Pengabdian kepada Masyarakat sebagaimana dimaksud dalam Pasal 2 ayat (1) dengan besaran sesuai Pengumuman Penelitian dan Pengabdian kepada Masyarakat (PkM) Internal Unjaya Tahun 2024 Nomor: P/004/LPPMUNJAYA/IV/2024 dibebankan pada PKRA Universitas Jenderal Achmad Yani Yogyakarta Tahun <?php echo $th; ?>.</li>
 			<li>Pendanaan Pelaksanaan Pengabdian kepada Masyarakat sebagaimana dimaksud pada ayat (1) dibayarkan oleh <b>PIHAK PERTAMA</b> kepada <b>PIHAK KEDUA</b> secara bertahap melalui rekening <b>PIHAK KEDUA</b>.</li>
 			<li><b>PIHAK PERTAMA</b> mempunyai hak menerima dokumen hasil unggahan di laman <b>simlitabmas.unjaya.ac.id</b> sebagaimana tersebut pada ayat (2), <b>paling lambat 3 hari terhitung sejak batas akhir pengunggahan di laman <b>simlitabmas.unjaya.ac.id.</b></li>
 			<li><b>PIHAK KEDUA</b> mempunyai hak mendapatkan dana Pengabdian kepada Masyarakat dari <b>PIHAK PERTAMA</b></li>
