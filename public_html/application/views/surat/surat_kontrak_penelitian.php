@@ -51,8 +51,8 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 			$getdate = $this->msubmit->tglterbit($th);
 			// $tanggal = tgl_indo($th.'-04-02',1);					
 			// $tanggal = tgl_indo($getdate['surat_tugas'],1);
-			$textgetdate=tgl_indo($getdate['surat_kontrak'],1);
-			$tanggal = tanggal_ke_kalimat($getdate['surat_tugas']);					
+			$textgetdate=tgl_indo($getdate['akhirkontrak'],1);
+			$tanggal = tanggal_ke_kalimat($getdate['surat_kontrak']);					
 		?>
 		<p>Pada hari ini, <?php echo $tanggal; ?>, kami yang bertanda tangan di bawah ini:</p>
 		<table style="margin-top:10">
