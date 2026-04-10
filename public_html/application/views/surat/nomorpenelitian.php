@@ -188,12 +188,27 @@
 									$revo = '<b style="color:red">-</b>';
 								
 								$suratkontrak = $p->suratkontrak;
-								if($suratkontrak<>'')
+								if($p->nomorkontrak<>'' && $suratkontrak<>'')
 								{
-									$getKontrak = "<a href='#' data-target='#liatfile' data-toggle='modal' data-kontrak='".site_url().'assets/uploadbox/'.$p->suratkontrak."' class='btn btn-info' title='Unduh Surat Kontrak'><i class='fas fa-download fa-sm'></i> Unduh Surat Kontrak</a>";
+									//$getKontrak = "<a href='#' data-target='#liatfile' data-toggle='modal' data-kontrak='".site_url().'assets/uploadbox/'.$p->suratkontrak."' class='btn btn-info' title='Unduh Surat Kontrak'><i class='fas fa-download fa-sm'></i> Unduh Surat Kontrak</a>";
+									$warnak = 'btn-success';
+									$tutup = '';
+									$target = "data-target='#kontrak-modal'";
+									$teks = 'Unduh Final Surat Kontrak';
+									//$surat_kontrak = FCPATH()."assets/uploadbox/".$p->suratkontrak;
+									$surat_kontrak = base_url()."surat/kontrakpenelitian/".$p->id_usulan;
+									$getKontrak = "<a href='".$surat_kontrak."' class='btn ".$warnak."' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' target='_blank' title='".$teks."' ".$tutup."><i class='fas fa-download fa-sm'></i> ".$teks."</a><br><br>";
 								}
-								else
+								elseif($p->nomorkontrak<>'' && $p->suratkontrak=='') 
 								{
+									$warnak = 'btn-info';
+									$tutup = '';
+									$teks = 'Unduh Draft Surat Kontrak';
+									$target = "data-target='#kontrak-modal'";
+									$surat_kontrak = base_url()."surat/kontrakpenelitian/".$p->id_usulan;
+									//$getKontrak = "<a href='javascript:void(0)' class='btn btn-secondary' title='Unduh Surat Kontrak'><i class='fas fa-download fa-sm'></i> Unduh Surat Kontrak</a>";
+									$getKontrak = "<a href='".$surat_kontrak."' class='btn ".$warnak."' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' target='_blank' title='".$teks."' ".$tutup."><i class='fas fa-download fa-sm'></i> ".$teks."</a><br><br>";
+								}else{
 									$getKontrak = "<a href='javascript:void(0)' class='btn btn-secondary' title='Unduh Surat Kontrak'><i class='fas fa-download fa-sm'></i> Unduh Surat Kontrak</a>";
 								}
 								echo '<b style="color:green">'.$revo.'</b>';

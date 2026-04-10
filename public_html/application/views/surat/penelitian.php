@@ -191,6 +191,7 @@
 									$warna = 'btn-success';
 									$surat_tugas = base_url()."surat/tugaspenelitian/".$p->id_usulan;
 									$tutupjob = '';
+
 								}
 								else	
 								{
@@ -203,7 +204,7 @@
 								{
 									$warnak = 'btn-info';
 									$tutup = '';
-									$teks = 'Unduh Surat Kontrak';
+									$teks = 'Unduh Draft Surat Kontrak';
 									$target = "data-target='#kontrak-modal'";
 									$surat_kontrak = base_url()."surat/kontrakpenelitian/".$p->id_usulan;
 
@@ -217,7 +218,7 @@
 									$tutup = '';
 									$target = "data-target='#kontrak-modal'";
 									$teks = 'Unduh Final Surat Kontrak';
-									//$surat_kontrak = base_url()."assets/uploadbox/".$p->suratkontrak;
+									//$surat_kontrak = FCPATH()."assets/uploadbox/".$p->suratkontrak;
 									$surat_kontrak = base_url()."surat/kontrakpenelitian/".$p->id_usulan;
 
 									$warnasetujui = 'btn-secondary';
