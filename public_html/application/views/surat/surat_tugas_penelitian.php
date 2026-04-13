@@ -155,9 +155,9 @@
 					// $tanggal = tgl_indo($th.'-04-02',1);					
 					$tanggal = tgl_indo($getdate['surat_tugas'],1);	
 
-					$hari_ini = date('Y-m-d'); 
+					/*$hari_ini = date('Y-m-d'); 
 					$sepuluh_hari_lalu = date('Y-m-d', strtotime('-10 days'));
-					$tanggal = tgl_indo($sepuluh_hari_lalu,1);
+					$tanggal = tgl_indo($sepuluh_hari_lalu,1);*/
 					
 				?>
 				<td style="float:right !important">Dikeluarkan di Yogyakarta <br>pada tanggal <?php echo $tanggal; ?>
