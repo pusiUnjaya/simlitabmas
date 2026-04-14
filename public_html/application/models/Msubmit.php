@@ -598,7 +598,7 @@ class MSubmit extends CI_Model
 		$data = array();
 		$this->db->select("mahasiswa.npm, mahasiswa.namamhs,peran.tugas, peran.jenis_anggota, peran.idperan as id");
 		$this->db->from("peran");
-		$this->db->join("mahasiswa", "CAST(mahasiswa.idmhs AS CHAR)=peran.anggota");
+		$this->db->join("mahasiswa", "CAST(mahasiswa.idmhs AS CHAR) = TRIM(peran.anggota)");
 		$this->db->where("peran.id_usulan", $id);
 		$this->db->where("peran.skema", $skema);
 		$this->db->where("peran.jenis_anggota", "Mahasiswa");
