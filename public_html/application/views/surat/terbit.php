@@ -24,19 +24,23 @@
 						  <th>Semester</th>
 						  <th>Surat Tugas</th>
 						  <th>Surat Kontrak</th>
+						  <th>Akhir Kontrak</th>
 						  <th>Aksi</th>
 						</tr>
 					  </thead>
 					  <tbody>
 						<?php
-							foreach($dasar as $p)
+							foreach($terbit as $p)
 							{
-								echo "<td>".$p->teks."</td>";
-								echo "<td>".$p->jenis."</td>";
+								//echo "<tr";
 								echo "<td>".$p->tahun."</td>";
-								echo "<td>".$p->urutan."</td>";
+								echo "<td>".$p->jenis."</td>";
+								echo "<td>".$p->semester."</td>";
+								echo "<td>".$p->surat_tugas."</td>";
+								echo "<td>".$p->surat_kontrak."</td>";
+								echo "<td>".$p->akhirkontrak."</td>";
 								echo "<td align='center'>";
-								if($p->status==0)
+								/*if($p->status==0)
 										echo '<a href="'.base_url().'surat/pakaidasar/'.$p->iddasar.'" class="btn btn-secondary" title="Pakai Dasar Hukum"><i class="fas fa-window-close fa-sm"></i> nonaktif</a>';
 								else
 										echo '<a href="'.base_url().'surat/tidakdasar/'.$p->iddasar.'" class="btn btn-success" title="Pakai Dasar Hukum"><i class="fas fa-check fa-sm"></i> aktif</a>';
@@ -44,7 +48,12 @@
 										  <td align='center'><a href='".base_url()."surat/editdasar/".$p->iddasar."' class='btn btn-warning' title='Edit Dasar Hukum'><i class='fas fa-edit fa-sm'></i></a>
 										  	<a href='#' data-id='".$p->iddasar."' class='btn btn-danger hapus' title='Hapus Dasar Hukum'><i class='fas fa-trash fa-sm'></i></a>
 										  </td>
+										</tr>";*/
+								echo " <a href='".base_url()."surat/editdasar/".$p->idsurat."' class='btn btn-warning' title='Edit Tanggal'><i class='fas fa-edit fa-sm'></i></a>
+									   <a href='#' data-id='".$p->idsurat."' class='btn btn-danger hapus' title='Hapus Tanggal'><i class='fas fa-trash fa-sm'></i></a>
+										  </td>
 										</tr>";
+								//echo "</td></tr>";		
 							}
 						?>	
 					  </tbody>
