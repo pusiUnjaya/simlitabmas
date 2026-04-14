@@ -65,49 +65,59 @@
 						?>
 						<li><?php echo $ketua['namalengkap'].'/'.$ketua['nidn']; ?></li>
 						<?php
-							$ambil = explode(',',$tugas['anggotadosen']);
-							$hit = count($ambil);
+							$angg = $this->msubmit->perananggota($tugas['id_usulan'],'Penelitian');
+							$hits = count($angg);
 							
-							if($tugas['anggotadosen']<>'') 
+							if($hits>0) //Ambil anggota dosen
+							{								
+								foreach($angg as $a)
+								{
+									if($hits==1)
+									{
+										echo '<li>'.$a->namalengkap.'/'.$a->nidn.'</li>';
+									}
+									else
+									{
+										echo '<li>'.$a->namalengkap.'/'.$a->nidn.'</li>';
+									}
+								}
+							}
+							else
 							{
+								$ambil = explode(',',$tugas['anggotadosen']);
+								$hit = count($ambil);
 								for($i=0;$i<$hit;$i++)
 								{
 									$dosen = $this->mdosen->namadosen($ambil[$i]);
 									echo '<li>'.$dosen['namalengkap'].'/'.$dosen['nidn'].'</li>';
 								}
 							}
-							else
+
+							//ambil anggota dosen luar
+							$angg = $this->msubmit->perananggotadosenluar($tugas['id_usulan'],'Penelitian');
+							$hits = count($angg);
+							foreach($angg as $a)
 							{
-								$angg = $this->msubmit->perananggota($tugas['id_usulan'],'Penelitian');
-								$hits = count($angg);
-								
-								foreach($angg as $a)
+								if($hits==1)
 								{
-									if($hits==1)
-									{
-										echo '<li>'.$a->namalengkap.'/'.$a->nidn.'</li>';
-									}
-									else
-									{
-										echo '<li>'.$a->namalengkap.'/'.$a->nidn.'</li>';
-									}
+									echo '<li>'.$a->namalengkap.'/'.$a->nidn.'</li>';
+								}
+								else
+								{
+									echo '<li>'.$a->namalengkap.'/'.$a->nidn.'</li>';
 								}
 							}
 
-							$split = explode(',',$tugas['anggotamhs']);
-							$n = count($split);
-							if($tugas['anggotamhs']<>'') 
-							{
-								for($i=0;$i<$n;$i++)
-								{
-									$mhs = $this->msubmit->namamhs($split[$i]);
-									echo '<li>'.$mhs['namamhs'].'/'.$mhs['npm'].'</li>';
-								}
-							}
-							else
-							{
-								$angg = $this->msubmit->peranmhs($tugas['id_usulan'],'Penelitian');
+							$angg = $this->msubmit->peranmhs($tugas['id_usulan'],'Penelitian');
+							$hits = count($angg);
+
+							if ($hits == 0) {
+								$angg = $this->msubmit->peranmhsid($tugas['id_usulan'], 'Penelitian');
 								$hits = count($angg);
+							}
+
+							if($hits>0) 
+							{
 								foreach($angg as $a)
 								{
 									if($hits==1)
@@ -117,6 +127,18 @@
 									else
 									{
 										echo '<li>'.$a->namamhs.'/'.$a->npm.'</li>';
+									}
+								}
+							}
+							else
+							{
+								$split = explode(',',$tugas['anggotamhs']);
+								$n = count($split);
+								if ($n>0){
+									for($i=0;$i<$n;$i++)
+									{
+										$mhs = $this->msubmit->namamhs($split[$i]);
+										echo '<li>'.$mhs['namamhs'].'/'.$mhs['npm'].'</li>';
 									}
 								}
 								echo '</ol>';
