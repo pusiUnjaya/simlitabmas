@@ -167,7 +167,7 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 		</ol>
 		<h3 align="center" class="no-break-after">Pasal 5<br>CARA PEMBAYARAN</h3>
 		<ol type="1">
-			<li><b>PIHAK PERTAMA</b> memberikan pendanaan Penelitian sebagaimana dimaksud dalam Pasal 2 ayat (1) dengan besaran sesuai Pengumuman Penelitian dan Pengabdian kepada Masyarakat (PkM) Internal Unjaya Tahun 2024 Nomor: P/004/LPPMUNJAYA/IV/2024 dibebankan pada PKRA Universitas Jenderal Achmad Yani Yogyakarta Tahun <?php echo $th; ?>.</li>
+			<li><b>PIHAK PERTAMA</b> memberikan pendanaan penelitian sebagaimana dimaksud dalam Pasal 2 ayat (1) dengan besaran sesuai Pengumuman Penelitian Internal Unjaya Tahun 2026 Nomor: Skep/034/UNJAYA/III/2026 tanggal 30 Maret 2026 dibebankan pada Program Kerja dan Rancangan Anggaran (PKRA) LPPM UNJAYA tahun  <?php echo $th; ?>.</li>
 			<li>Pendanaan Pelaksanaan Penelitian sebagaimana dimaksud pada ayat (1) dibayarkan oleh <b>PIHAK PERTAMA</b> kepada <b>PIHAK KEDUA</b> secara bertahap melalui rekening <b>PIHAK KEDUA</b>.</li>
 			<li><b>PIHAK PERTAMA</b> mempunyai hak menerima dokumen hasil unggahan di laman <b>simlitabmas.unjaya.ac.id</b> sebagaimana tersebut pada ayat (2), <b>paling lambat 3 hari terhitung sejak batas akhir pengunggahan di laman <b>simlitabmas.unjaya.ac.id.</b></li>
 			<li><b>PIHAK KEDUA</b> mempunyai hak mendapatkan dana Penelitian dari <b>PIHAK PERTAMA</b></li>

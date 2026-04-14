@@ -276,9 +276,9 @@
           <a class="collapse-item <?php if($this->uri->segment(1)=='surat' && ($this->uri->segment(2)=='dasar' || $this->uri->segment(2)=='tambahdasar' || $this->uri->segment(2)=='editdasar')) echo $active; ?>" href="<?php echo base_url(); ?>surat/dasar">
           <i class="fas fa-fw fa-folder"></i>
           <span>Dasar Surat</span></a>
-        <!--  <a class="collapse-item <?php //if($this->uri->segment(1)=='surat' && ($this->uri->segment(2)=='terbit' )) echo $active; ?>" href="<?php //echo base_url(); ?>surat/terbit">
+          <a class="collapse-item <?php if($this->uri->segment(1)=='surat' && ($this->uri->segment(2)=='terbit' )) echo $active; ?>" href="<?php echo base_url(); ?>surat/terbit">
           <i class="fas fa-fw fa-folder"></i>
-          <span>Tanggal Terbit Surat</span></a> -->
+          <span>Tanggal Terbit Surat</span></a> 
 		  <?php 
 		  } if($this->session->userdata('sesi_status')<>1) {
 			?>
