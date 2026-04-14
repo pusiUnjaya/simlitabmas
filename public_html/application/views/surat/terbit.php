@@ -25,6 +25,7 @@
 						  <th>Surat Tugas</th>
 						  <th>Surat Kontrak</th>
 						  <th>Akhir Kontrak</th>
+						  <th>SKep Kontrak</th>
 						  <th>Aksi</th>
 						</tr>
 					  </thead>
@@ -39,6 +40,7 @@
 								echo "<td>".$p->surat_tugas."</td>";
 								echo "<td>".$p->surat_kontrak."</td>";
 								echo "<td>".$p->akhirkontrak."</td>";
+								echo "<td>".$p->skepkontrak."</td>";
 								echo "<td align='center'>";
 								/*if($p->status==0)
 										echo '<a href="'.base_url().'surat/pakaidasar/'.$p->iddasar.'" class="btn btn-secondary" title="Pakai Dasar Hukum"><i class="fas fa-window-close fa-sm"></i> nonaktif</a>';
