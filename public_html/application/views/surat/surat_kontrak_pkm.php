@@ -42,7 +42,7 @@ DENGAN<br>
 DOSEN PENERIMA HIBAH INTERNAL <br>
 SKEMA PENGABDIAN KEPADA MASYARAKAT<br>
 
-NOMOR: 
+NOMOR: <?php echo $tugas['nomorkontrak'];?>
 </h3>
 		<div id="isian" style="margin-left: 30px;margin-right: 30px; text-align: justify-all;">
 		<?php
