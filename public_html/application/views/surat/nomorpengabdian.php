@@ -187,7 +187,7 @@
 								}
 								else
 									$revo = '<b style="color:red">-</b>';
-
+/*
 								$suratkontrak = $p->suratkontrak;
 								if($suratkontrak<>'')
 								{
@@ -219,7 +219,54 @@
 								echo $getKontrak;
 								echo "</td>
 										</tr>";
+							}*/
+								$suratkontrak = $p->suratkontrak;
+								if($p->nomorkontrak<>'' && $suratkontrak<>'')
+								{
+									//$getKontrak = "<a href='#' data-target='#liatfile' data-toggle='modal' data-kontrak='".site_url().'assets/uploadbox/'.$p->suratkontrak."' class='btn btn-info' title='Unduh Surat Kontrak'><i class='fas fa-download fa-sm'></i> Unduh Surat Kontrak</a>";
+									$warnak = 'btn-success';
+									$tutup = '';
+									$target = "data-target='#kontrak-modal'";
+									$teks = 'Unduh Final Surat Kontrak';
+									//$surat_kontrak = FCPATH()."assets/uploadbox/".$p->suratkontrak;
+									$surat_kontrak = base_url()."surat/kontrakpkm/".$p->id_usulan;
+									$getKontrak = "<a href='".$surat_kontrak."' class='btn ".$warnak."' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' target='_blank' title='".$teks."' ".$tutup."><i class='fas fa-download fa-sm'></i> ".$teks."</a><br><br>";
+								}
+								elseif($p->nomorkontrak<>'' && $p->suratkontrak=='') 
+								{
+									$warnak = 'btn-info';
+									$tutup = '';
+									$teks = 'Unduh Draft Surat Kontrak';
+									$target = "data-target='#kontrak-modal'";
+									$surat_kontrak = base_url()."surat/kontrakpkm/".$p->id_usulan;
+									//$getKontrak = "<a href='javascript:void(0)' class='btn btn-secondary' title='Unduh Surat Kontrak'><i class='fas fa-download fa-sm'></i> Unduh Surat Kontrak</a>";
+									$getKontrak = "<a href='".$surat_kontrak."' class='btn ".$warnak."' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' target='_blank' title='".$teks."' ".$tutup."><i class='fas fa-download fa-sm'></i> ".$teks."</a><br><br>";
+								}else{
+									$getKontrak = "<a href='javascript:void(0)' class='btn btn-secondary' title='Unduh Surat Kontrak'><i class='fas fa-download fa-sm'></i> Unduh Surat Kontrak</a>";
+								}
+								echo '<b style="color:green">'.$revo.'</b>';
+								echo "</td>
+										  <td><a href='' class='btn btn-success' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' data-toggle='modal' data-target='#nomor-modal' title='Nomor Surat'><i class='fas fa-edit fa-sm'></i> Nomor Surat</a><br><br>";
+								if($p->nomortugas<>'')
+								{
+									$warna = 'btn-success';
+									$surat_tugas = base_url()."surat/tugaspkm/".$p->id_usulan;
+									$tutupjob = '';
+								}
+								else	
+								{
+									$surat_tugas = '';
+									$warna = 'btn-secondary';
+									$tutupjob = "onclick='return false;'";
+								}
+
+								echo "<a href='".$surat_tugas."' class='btn ".$warna."' data-usulan='".$p->id_usulan."' data-tugas='".$p->nomortugas."' data-kontrak='".$p->nomorkontrak."' target='_blank' title='Unduh Surat Tugas' ".$tutupjob."><i class='fas fa-download fa-sm'></i> Unduh Surat Tugas</a><br><br>";
+								echo $getKontrak;
+								
+								echo "</td>
+										</tr>";
 							}
+
 						?>	
 					  </tbody>
 					</table>
