@@ -291,10 +291,14 @@ class Mdosen extends CI_Model
 			"id_scopus"			=> $this->input->post("scopus", true),
 			"id_sinta"			=> $this->input->post("sinta", true),
 			"modified"			=> $waktu
-		);
+			);
 
-		$this->db->where("id_dosen", $this->input->post("id_dosen", true));
-		$this->db->update("dosen", $data);
+			/* echo '<pre>';
+			print_r($data);
+			echo '</pre>'; */
+		
+		$this->db->where("id_dosen",$this->input->post("id_dosen",true));
+		$this->db->update("dosen",$data);	
 
 		//update sesi
 		$this->session->set_userdata('sesi_jafung', $this->input->post("jabatanakademik", true));
