@@ -153,21 +153,23 @@
 	});
 
 	$(document).ready(function() {
-		$("#fakultas").change(function() {
-			var url = "<?php echo site_url('dosen/load_prodi'); ?>/" + $(this).val();
-			$('#prodi').load(url);
-			return false;
-		});
-
-		$(document).on('click', '#prodi', function() {
-			var currProdi = $(this).val();
-			var currFakultas = $('#fakultas').val();
-			var url = "<?php echo site_url('dosen/load_prodi'); ?>/" + currFakultas;
+		var currFakultas = $('#fakultas').val();
+		var currProdi = $('#prodi').val();
+		getProdi(currFakultas);
+		function getProdi(fk){
+			var url = "<?php echo site_url('dosen/load_prodi'); ?>/" + fk;
 			$('#prodi').load(url, function() {
-				$('#prodi').val(currProdi).trigger('change');
+				setTimeout(function(){
+					console.log(currProdi);
+					$('#prodi').val(currProdi).trigger('change');
+				},50);
 			});
-
-			return false;
+		}
+		$("#fakultas").on('change',function() {
+			fk = $(this).val();
+			getProdi(fk);
 		});
+
+		
 	});
 </script>

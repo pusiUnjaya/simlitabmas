@@ -303,6 +303,10 @@ Class Mdosen extends CI_Model
 			"id_sinta"			=> $this->input->post("sinta",true),
 			"modified"			=> $waktu
 			);
+
+			/* echo '<pre>';
+			print_r($data);
+			echo '</pre>'; */
 		
 		$this->db->where("id_dosen",$this->input->post("id_dosen",true));
 		$this->db->update("dosen",$data);	
