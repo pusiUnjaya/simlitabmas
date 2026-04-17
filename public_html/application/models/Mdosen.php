@@ -318,6 +318,8 @@ Class Mdosen extends CI_Model
 		//update data user
 		$data = array(
 				"namalengkap"	=> $this->input->post("namalengkap",true),
+				"fakultas"		=> $this->input->post("fakultas",true),
+				"prodi"			=> $this->input->post("prodi",true),
 				"modified"		=> $waktu
 				);
 		
