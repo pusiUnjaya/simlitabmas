@@ -306,15 +306,18 @@ class Mdosen extends CI_Model
 
 		//update data user
 		$data = array(
-			"namalengkap"	=> $this->input->post("namalengkap", true),
-			"modified"		=> $waktu
-		);
-
-		if ($this->session->userdata('sesi_status') == 1)
-			$this->db->where("id_user", $this->input->post("id_user", true));
-		else {
-			$this->db->where("id_user", $this->session->userdata('sesi_id'));
-			$this->session->set_userdata('sesi_nama', $this->input->post("namalengkap", true));
+				"namalengkap"	=> $this->input->post("namalengkap",true),
+				"fakultas"		=> $this->input->post("fakultas",true),
+				"prodi"			=> $this->input->post("prodi",true),
+				"modified"		=> $waktu
+				);
+		
+		if($this->session->userdata('sesi_status')==1)
+			$this->db->where("id_user",$this->input->post("id_user",true));
+		else
+		{
+			$this->db->where("id_user",$this->session->userdata('sesi_id'));
+			$this->session->set_userdata('sesi_nama', $this->input->post("namalengkap",true));
 		}
 		$this->db->update("users", $data);
 
