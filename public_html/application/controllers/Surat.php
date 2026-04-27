@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Surat extends LPPM_Controller {
+class Surat extends LPPM_Controller
+{
 
 	function __construct()
 	{
@@ -14,65 +15,65 @@ class Surat extends LPPM_Controller {
 		$this->load->model('mdosen', '', TRUE);
 		$this->load->model('mprodi', '', TRUE);
 	}
-	
+
 	public function nomor()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$data = [];
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
-		
-		if($this->input->post('periode')=='')
+
+		if ($this->input->post('periode') == '')
 			$pilih = date('Y');
 		else
 			$pilih = $this->input->post('periode');
-		
+
 		$data['usulan'] = $this->msurat->selectusulan($pilih);
 		$data['usulanpkm'] = $this->msurat->selectusulanpkm($pilih);
 		// echo $this->db->last_query();exit;
 		$data['page'] = 'surat/nomor';
-		$this->load->view('dashboard/dashboard',$data);
+		$this->load->view('dashboard/dashboard', $data);
 	}
 
 	function nomorpenelitian()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$data = [];
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
-		
-		if($this->input->post('periode')=='')
+
+		if ($this->input->post('periode') == '')
 			$pilih = date('Y');
 		else
 			$pilih = $this->input->post('periode');
-		
+
 		$data['usulan'] = $this->msurat->selectusulan($pilih);
 		// echo $this->db->last_query();exit;
 		$data['page'] = 'surat/nomorpenelitian';
-		$this->load->view('dashboard/dashboard',$data);
+		$this->load->view('dashboard/dashboard', $data);
 	}
 
 	function nomorpengabdian()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$data = [];
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
-		
-		if($this->input->post('periode')=='')
+
+		if ($this->input->post('periode') == '')
 			$pilih = date('Y');
 		else
 			$pilih = $this->input->post('periode');
-		
+
 		$data['usulanpkm'] = $this->msurat->selectusulanpkm($pilih);
 		// echo $this->db->last_query();exit;
 		$data['page'] = 'surat/nomorpengabdian';
-		$this->load->view('dashboard/dashboard',$data);
+		$this->load->view('dashboard/dashboard', $data);
 	}
-	
+
 	public function penelitian()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
@@ -80,37 +81,37 @@ class Surat extends LPPM_Controller {
 		$data = [];
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
-		
-		if($this->input->post('periode')=='')
+
+		if ($this->input->post('periode') == '')
 			$pilih = date('Y');
 		else
 			$pilih = $this->input->post('periode');
-		
+
 		$data['usulan'] = $this->msurat->selectusulan($pilih);
 		$data['usulanpkm'] = $this->msurat->selectusulanpkm($pilih);
 		// echo $this->db->last_query();exit;
 		$data['page'] = 'surat/penelitian';
-		$this->load->view('dashboard/dashboard',$data);
+		$this->load->view('dashboard/dashboard', $data);
 	}
-	
+
 	public function pengabdian()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$data = [];
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
-		
-		if($this->input->post('periode')=='')
+
+		if ($this->input->post('periode') == '')
 			$pilih = date('Y');
 		else
 			$pilih = $this->input->post('periode');
-		
+
 		$data['usulan'] = $this->msurat->selectusulan($pilih);
 		$data['usulanpkm'] = $this->msurat->selectusulanpkm($pilih);
 		// echo $this->db->last_query();exit;
 		$data['page'] = 'surat/pengabdian';
-		$this->load->view('dashboard/dashboard',$data);
+		$this->load->view('dashboard/dashboard', $data);
 	}
 
 	function eksporkontrak($tahun = null, $prodi = null)
@@ -136,7 +137,7 @@ class Surat extends LPPM_Controller {
 
 		$this->load->view('surat/eksporkontrakpkm', $data);
 	}
-	
+
 	function tugaspkm($id_usulan)
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
@@ -149,9 +150,9 @@ class Surat extends LPPM_Controller {
 		// $this->load->view('surat/surat_tugas_pkm',$data);
 		$this->load->library('pdf');
 		// $this->pdf->set_paper('F4', 'portrait');
-		$html = $this->load->view('surat/surat_tugas_pkm', $data,true);
+		$html = $this->load->view('surat/surat_tugas_pkm', $data, true);
 		//echo $html;
-		$this->pdf->createPDF($html, 'surat_tugas_pkm_'.date('dmYHis'), false);
+		$this->pdf->createPDF($html, 'surat_tugas_pkm_' . date('dmYHis'), false);
 	}
 
 	function tugaspenelitian($id_usulan)
@@ -165,11 +166,11 @@ class Surat extends LPPM_Controller {
 		// echo $this->db->last_query();exit;
 		$this->load->library('pdf');
 		// $this->pdf->set_paper('F4', 'portrait');
-		$html = $this->load->view('surat/surat_tugas_penelitian', $data,true);
+		$html = $this->load->view('surat/surat_tugas_penelitian', $data, true);
 		//echo $html;
-		$this->pdf->createPDF($html, 'surat_tugas_penelitian_'.date('dmYHis'), false);
+		$this->pdf->createPDF($html, 'surat_tugas_penelitian_' . date('dmYHis'), false);
 	}
-	
+
 	function kontrakpkm($id_usulan)
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
@@ -181,10 +182,10 @@ class Surat extends LPPM_Controller {
 		// echo $this->db->last_query();exit;
 		// $this->load->view('surat/surat_tugas_pkm',$data);
 		$this->load->library('pdf');
-		$html = $this->load->view('surat/surat_kontrak_pkm', $data,true);
+		$html = $this->load->view('surat/surat_kontrak_pkm', $data, true);
 		//echo $html;
 
-		$this->pdf->createPDF($html, 'surat_kontrak_pkm_'.date('dmYHis'), false);
+		$this->pdf->createPDF($html, 'surat_kontrak_pkm_' . date('dmYHis'), false);
 	}
 
 	function kontrakpenelitian($id_usulan)
@@ -198,21 +199,20 @@ class Surat extends LPPM_Controller {
 		// echo $this->db->last_query();exit;
 		// $this->load->view('surat/surat_kontrak_penelitian', $data); return;
 		$this->load->library('pdf');
-		$html = $this->load->view('surat/surat_kontrak_penelitian', $data,true);
+		$html = $this->load->view('surat/surat_kontrak_penelitian', $data, true);
 		//echo $html;
-		
-		$this->pdf->createPDF($html, 'surat_kontrak_penelitian_'.date('dmYHis'), false, 'a4');
+
+		$this->pdf->createPDF($html, 'surat_kontrak_penelitian_' . date('dmYHis'), false, 'a4');
 	}
-	
+
 	function simpan()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$this->msurat->simpan();
 		$this->session->set_flashdata('result', 'Nomor Surat Telah Sukses Ditambahkan!');
 		//echo $this->db->last_query();exit;	
 		redirect("surat/nomorpenelitian");
-		
 	}
 
 	function setujuipenelitian($id_usulan)
@@ -223,179 +223,195 @@ class Surat extends LPPM_Controller {
 		$this->session->set_flashdata('result', 'Anda telah menyetujui Kontrak Penelitian!');
 		//echo $this->db->last_query();exit;	
 		redirect("surat/penelitian");
-		
 	}
-	
+
 
 	function simpankontrakpkm()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
-		$id = $this->input->post('usulan',true);
-		$config['file_name'] = 'surat_kontrak_pkm'.'_'.date('dmyhis');
+
+		$id = $this->input->post('usulan', true);
+		$config['file_name'] = 'surat_kontrak_pkm' . '_' . date('dmyhis');
 		$config['upload_path'] = './assets/uploadbox/';
 		$config['allowed_types'] = 'pdf';
-		$this->load->library('upload',$config);
-		
+		$this->load->library('upload', $config);
+
 		$this->upload->do_upload("kontrak");
 		$data = $this->upload->data();
-		if($_FILES['kontrak']['size'] == 0 || $_FILES['kontrak']['name'] == "")
+		if ($_FILES['kontrak']['size'] == 0 || $_FILES['kontrak']['name'] == "")
 			$file = '';
 		else
 			$file = $data["file_name"];
 
-		$this->msurat->simpankontrakpkm($id,$file);
+		$this->msurat->simpankontrakpkm($id, $file);
 		$this->session->set_flashdata('result', 'Surat Kontrak Pengabdian Telah Sukses Ditambahkan!');
 		//echo $this->db->last_query();exit;	
 		redirect("surat/pengabdian");
-		
 	}
 
 	function simpankontrakpenelitian()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
-		$id = $this->input->post('usulan',true);
-		$config['file_name'] = 'surat_kontrak_penelitian'.'_'.date('dmyhis');
+
+		$id = $this->input->post('usulan', true);
+		$config['file_name'] = 'surat_kontrak_penelitian' . '_' . date('dmyhis');
 		$config['upload_path'] = './assets/uploadbox/';
 		$config['allowed_types'] = 'pdf';
-		$this->load->library('upload',$config);
-		
+		$this->load->library('upload', $config);
+
 		$this->upload->do_upload("kontrak");
 		$data = $this->upload->data();
-		if($_FILES['kontrak']['size'] == 0 || $_FILES['kontrak']['name'] == "")
+		if ($_FILES['kontrak']['size'] == 0 || $_FILES['kontrak']['name'] == "")
 			$file = '';
 		else
 			$file = $data["file_name"];
 
-		$this->msurat->simpankontrakpenelitian($id,$file);
+		$this->msurat->simpankontrakpenelitian($id, $file);
 		$this->session->set_flashdata('result', 'Surat Kontrak Penelitian Telah Sukses Ditambahkan!');
 		//echo $this->db->last_query();exit;	
 		redirect("surat/penelitian");
-		
 	}
-	
+
 	function simpanpkm()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$this->msurat->simpanpkm();
 		$this->session->set_flashdata('result', 'Nomor Surat Telah Sukses Ditambahkan!');
 		//echo $this->db->last_query();exit;	
 		redirect("surat/nomorpengabdian");
-		
 	}
 
 	function setujuipkm($id_usulan)
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$this->msurat->setujuipkm($id_usulan);
 		$this->session->set_flashdata('result', 'Nomor Surat Telah Sukses Ditambahkan!');
 		//echo $this->db->last_query();exit;	
 		redirect("surat/pengabdian");
-		
 	}
 
 	function dasar()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$data = [];
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
-		
+
 		$data['dasar'] = $this->msurat->selectdasar();
 		// echo $this->db->last_query();exit;
 		$data['page'] = 'surat/dasarsurat';
-		$this->load->view('dashboard/dashboard',$data);
+		$this->load->view('dashboard/dashboard', $data);
 	}
 
 	function terbit()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
+		$data = [];
+		$data['active'] = 'active ';
+		$data['show'] = 'show ';
+
+		$data['terbit'] = $this->msurat->selectterbit();
+		// echo $this->db->last_query();exit;
+		$data['page'] = 'surat/terbit';
+		$this->load->view('dashboard/dashboard', $data);
+	}
+
+	function simpanterbit()
+	{
+		empty($this->session->userdata('sesi_user')) and redirect('login');
+		/*	
 		$data = [];
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
 		
-		$data['terbit'] = $this->msurat->selectterbit();
+		$data['terbit'] = $this->msurat->simpanterbit();
 		// echo $this->db->last_query();exit;
 		$data['page'] = 'surat/terbit';
-		$this->load->view('dashboard/dashboard',$data);
+		$this->load->view('dashboard/dashboard',$data);*/
+		$this->load->model('Msurat');
+		$simpan = $this->msurat->simpanterbit();
+		//$this->session->set_flashdata('result', 'Terbit Surat Telah Sukses Disimpan!');
+		//echo $this->db->last_query();exit;
+		if ($simpan) {
+			echo json_encode(array("status" => TRUE));
+		} else {
+			echo json_encode(array("status" => FALSE, "message" => "Penyimpanan Gagal"));
+		}
 	}
 
 	function tambahdasar()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$data = [];
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
-		
+
 		$data['page'] = 'surat/tambahdasar';
-		$this->load->view('dashboard/dashboard',$data);
+		$this->load->view('dashboard/dashboard', $data);
 	}
 
 	function editdasar()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$data = [];
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
-		
+
 		$data['dasar'] = $this->msurat->detaildasar($this->uri->segment(3));
 		$data['page'] = 'surat/editdasar';
-		$this->load->view('dashboard/dashboard',$data);
+		$this->load->view('dashboard/dashboard', $data);
 	}
 
 	function simpandasar()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$this->msurat->simpandasar();
 		$this->session->set_flashdata('result', 'Dasar Hukum Telah Sukses Ditambahkan!');
 		//echo $this->db->last_query();exit;	
 		redirect("surat/dasar");
-		
 	}
 
 	function updatedasar()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
+
 		$this->msurat->updatedasar();
 		$this->session->set_flashdata('result', 'Dasar Hukum Telah Sukses Diupdate!');
 		//echo $this->db->last_query();exit;	
 		redirect("surat/dasar");
-		
 	}
 
 	function pakaidasar()
 	{
 		empty($this->session->userdata('sesi_user')) and redirect('login');
-		
-		$this->msurat->pakaidasar($this->uri->segment(3));	
-		redirect("surat/dasar");		
+
+		$this->msurat->pakaidasar($this->uri->segment(3));
+		redirect("surat/dasar");
 	}
 
 	function tidakdasar()
 	{
-		if($this->session->userdata('sesi_user')=='')
+		if ($this->session->userdata('sesi_user') == '')
 			redirect('login');
-		
-		$this->msurat->tidakdasar($this->uri->segment(3));	
-		redirect("surat/dasar");		
+
+		$this->msurat->tidakdasar($this->uri->segment(3));
+		redirect("surat/dasar");
 	}
 
 	function hapusdasar()
 	{
-		if($this->session->userdata('sesi_user')=='')
+		if ($this->session->userdata('sesi_user') == '')
 			redirect('login');
-		
-		$this->msurat->hapusdasar($this->uri->segment(3));	
-		redirect("surat/dasar");		
+
+		$this->msurat->hapusdasar($this->uri->segment(3));
+		redirect("surat/dasar");
 	}
 
 	public function izin($id = null, $action = null)
@@ -529,7 +545,7 @@ class Surat extends LPPM_Controller {
 			$id = $this->db->insert_id();
 			$dosens = $this->input->post('m_id');
 			$data = array_map(
-				function($x) {
+				function ($x) {
 					return array_combine(['id_surat', 'id_dosen', 'ketua'], $x);
 				},
 				array_map(
@@ -555,7 +571,7 @@ class Surat extends LPPM_Controller {
 		$as_admin ? $this->check_admin() : $this->check_dosen();
 		$as_admin or $this->izin_check_dosen($id);
 
-		$this->db->delete('surat_izin', ['id'=> $id]);
+		$this->db->delete('surat_izin', ['id' => $id]);
 
 		$this->session->set_flashdata('result', 'Permohonan berhasil dihapus');
 		redirect('surat/izin');
@@ -575,16 +591,18 @@ class Surat extends LPPM_Controller {
 			->get_where('surat_izin', ['id' => $id])
 			->row();
 
-		$dosen = array_map(function($x) {
-			return $this->mdosen->namadosenprodi($x->id_dosen);
-		}, $this->db
-			->select('id_dosen')
-			->order_by('ketua', 'DESC')
-			->get_where('surat_izin_dosen', ['id_surat' => $id])
-			->result()
+		$dosen = array_map(
+			function ($x) {
+				return $this->mdosen->namadosenprodi($x->id_dosen);
+			},
+			$this->db
+				->select('id_dosen')
+				->order_by('ketua', 'DESC')
+				->get_where('surat_izin_dosen', ['id_surat' => $id])
+				->result()
 		);
 		$data['prodi'] = $this->mprodi->get_by_id($dosen[0]['prodi'])->prodi;
-		$data['dosen'] = array_map(function($x) {
+		$data['dosen'] = array_map(function ($x) {
 			return $x['namalengkap'];
 		}, $dosen);
 
@@ -643,24 +661,26 @@ class Surat extends LPPM_Controller {
 			->get_where('surat_izin', ['id' => $id])
 			->row_array();
 
-		$dosen = array_map(function($x) {
-			return $this->mdosen->namadosenprodi($x->id_dosen);
-		}, $this->db
-			->select('id_dosen')
-			->order_by('ketua', 'DESC')
-			->get_where('surat_izin_dosen', ['id_surat' => $id])
-			->result()
+		$dosen = array_map(
+			function ($x) {
+				return $this->mdosen->namadosenprodi($x->id_dosen);
+			},
+			$this->db
+				->select('id_dosen')
+				->order_by('ketua', 'DESC')
+				->get_where('surat_izin_dosen', ['id_surat' => $id])
+				->result()
 		);
 		$data['prodi'] = $this->mprodi->get_by_id($dosen[0]['prodi'])->prodi;
-		$data['dosen'] = join('/', array_map(function($x) {
+		$data['dosen'] = join('/', array_map(function ($x) {
 			return $x['namalengkap'];
 		}, $dosen));
-		$data['nidn'] = join('/', array_map(function($x) {
+		$data['nidn'] = join('/', array_map(function ($x) {
 			return $x['nidn'];
 		}, $dosen));
 
 		$this->load->library('pdf');
 		$html = $this->load->view('surat/surat_izin', $data, true);
-		$this->pdf->createPDF($html, 'surat-izin-'.date('Ymdhis'), false);
+		$this->pdf->createPDF($html, 'surat-izin-' . date('Ymdhis'), false);
 	}
 }
