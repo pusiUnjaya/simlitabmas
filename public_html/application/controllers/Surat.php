@@ -201,8 +201,9 @@ class Surat extends LPPM_Controller
 		$this->load->library('pdf');
 		$html = $this->load->view('surat/surat_kontrak_penelitian', $data, true);
 		//echo $html;
-
-		$this->pdf->createPDF($html, 'surat_kontrak_penelitian_' . date('dmYHis'), false, 'a4');
+		//$filename = 'surat_kontrak_pkm_' . $id_usulan . '_' . date('dmYHis');
+		$filename = 'surat_kontrak_pkm_' . $id_usulan;
+		$this->pdf->createPDF($html, $filename, false, 'a4', 'portrait', 1);
 	}
 
 	function simpan()
