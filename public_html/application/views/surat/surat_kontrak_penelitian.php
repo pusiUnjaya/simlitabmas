@@ -1,59 +1,65 @@
 <html>
-	<head>
-		<title>Surat Kontrak Penelitian</title>
-		<style>
-			page[size="F4"][layout="portrait"] {
-			  width: 33cm;
-			  height: 21cm;  
-			  margin: 50px 110px !important;
-			}
-			/* margin on left page */
-	        @page :left {
-	            margin: 50px;
-	        }
-	 
-	        /* margin on right page */
-	        @page :right {
-	            margin: 50px;
-	        }
-			body {
-			  font-family: "Times New Roman";
-			  font-size: 16px;
-			  text-align: justify;
-  			  text-justify: inter-word;
-			}
+
+<head>
+	<title>Surat Kontrak Penelitian</title>
+	<style>
+		page[size="F4"][layout="portrait"] {
+			width: 33cm;
+			height: 21cm;
+			margin: 50px 110px !important;
+		}
+
+		/* margin on left page */
+		@page :left {
+			margin: 50px;
+		}
+
+		/* margin on right page */
+		@page :right {
+			margin: 50px;
+		}
+
+		body {
+			font-family: "Times New Roman";
+			font-size: 16px;
+			text-align: justify;
+			text-justify: inter-word;
+		}
+
 		.no-break {
 			break-inside: avoid;
 			page-break-inside: avoid;
 		}
+
 		.no-break-after {
 			break-after: avoid;
 			page-break-after: avoid;
 		}
-		</style>
-	</head>
-	<body>
-		<img style="margin-top:-20" width="100%" src="<?php echo FCPATH.'assets/img/kop.png' ?>">
-		<h3 align="center">KONTRAK PENELITIAN<br>
-ANTARA<br>
-LEMBAGA PENELITIAN DAN PENGABDIAN KEPADA MASYARAKAT <br>
-UNIVERSITAS JENDERAL ACHMAD YANI YOGYAKARTA <br>
-DENGAN<br>
-DOSEN PENERIMA HIBAH INTERNAL <br>
-SKEMA PENELITIAN<br><br>
+	</style>
+</head>
 
-NOMOR: <?php echo $tugas['nomorkontrak'];?>
-</h3>
-<div id="isian" style="margin-left: 30px;margin-right: 30px; text-align: justify-all;">
+<body>
+	<img style="margin-top:-20" width="100%" src="<?php echo FCPATH . 'assets/img/kop.png' ?>">
+	<h3 align="center">KONTRAK PENELITIAN<br>
+		ANTARA<br>
+		LEMBAGA PENELITIAN DAN PENGABDIAN KEPADA MASYARAKAT <br>
+		UNIVERSITAS JENDERAL ACHMAD YANI YOGYAKARTA <br>
+		DENGAN<br>
+		DOSEN PENERIMA HIBAH INTERNAL <br>
+		SKEMA PENELITIAN<br><br>
+
+		NOMOR: <?php echo $tugas['nomorkontrak']; ?>
+	</h3>
+	<div id="isian" style="margin-left: 30px;margin-right: 30px; text-align: justify-all;">
 		<p>&nbsp;</p>
 		<?php
-			$th = date('Y', strtotime($tugas['tglmulai']));
-			$getdate = $this->msubmit->tglterbit($th);
-			// $tanggal = tgl_indo($th.'-04-02',1);					
-			// $tanggal = tgl_indo($getdate['surat_tugas'],1);
-			$skep = $getdate['skepkontrak'];
-			$textgetdate=tgl_indo($getdate['akhirkontrak'],1);
-			$tanggal = tanggal_ke_kalimat($getdate['surat_kontrak']);					
+		$th = date('Y', strtotime($tugas['tglmulai']));
+		$getdate = $this->msubmit->tglterbit($th);
+		// $tanggal = tgl_indo($th.'-04-02',1);					
+		// $tanggal = tgl_indo($getdate['surat_tugas'],1);
+		$skep = $getdate['skepkontrak'];
+		$textgetdate = tgl_indo($getdate['akhirkontrak'], 1);
+		$tanggal = tanggal_ke_kalimat($getdate['surat_kontrak']);
 		?>
 		<p>Pada hari ini, <?php echo $tanggal; ?>, kami yang bertanda tangan di bawah ini:</p>
 		<table style="margin-top:10">
@@ -62,95 +68,84 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 				<td width="120" valign="top"><b>Dr. Bdn. Tri Sunarsih, SST., M.Kes.</b></td>
 				<td valign="top">:</td>
 				<td valign="top" style="text-align: justify !important;">
-					dalam hal ini bertindak untuk dan atas nama <b>Lembaga Penelitian dan Pengabdian Kepada Masyarakat Universitas Jenderal Achmad Yani Yogyakarta</b> berdasarkan Surat  Keputusan (SK) Ketua Pengurus YKEP Nomor: Skep/007/UNJAYA/I/2023 tanggal 24 Januari 2023 yang selanjutnya dalam Surat Perjanjian ini disebut sebagai <b>PIHAK PERTAMA</b>.
+					dalam hal ini bertindak untuk dan atas nama <b>Lembaga Penelitian dan Pengabdian Kepada Masyarakat Universitas Jenderal Achmad Yani Yogyakarta</b> berdasarkan Surat Keputusan (SK) Ketua Pengurus YKEP Nomor: Skep/007/UNJAYA/I/2023 tanggal 24 Januari 2023 yang selanjutnya dalam Surat Perjanjian ini disebut sebagai <b>PIHAK PERTAMA</b>.
 				</td>
 			</tr>
 			<?php
-				$user = $this->mpengguna->detail($tugas['pengusul']);
-				$ketua = $this->mdosen->dosennya($tugas['pengusul']);
-				$prodi = $this->mdosen->namaprodi($user['prodi']);
-				$fak = $this->mdosen->namafakultas($user['fakultas']);
-				$ambil = explode(',',$tugas['anggotadosen']);
-				$hit = count($ambil);
-				$anggotadosen = '';
-				$anggotamhs = '';
-				
-				if($tugas['anggotadosen']<>'') 
-				{
-					for($i=0;$i<$hit;$i++)
-					{
-						$dosen = $this->mdosen->namadosen($ambil[$i]);
-						$anggotadosen .= $dosen['namalengkap'];
-							if($i<($hit-1))
-								$anggotadosen .= ', ';
-					}
+			$user = $this->mpengguna->detail($tugas['pengusul']);
+			$ketua = $this->mdosen->dosennya($tugas['pengusul']);
+			$prodi = $this->mdosen->namaprodi($user['prodi']);
+			$fak = $this->mdosen->namafakultas($user['fakultas']);
+			$ambil = explode(',', $tugas['anggotadosen']);
+			$hit = count($ambil);
+			$anggotadosen = '';
+			$anggotamhs = '';
+
+			if ($tugas['anggotadosen'] <> '') {
+				for ($i = 0; $i < $hit; $i++) {
+					$dosen = $this->mdosen->namadosen($ambil[$i]);
+					$anggotadosen .= $dosen['namalengkap'];
+					if ($i < ($hit - 1))
+						$anggotadosen .= ', ';
 				}
-				else
-				{
-					$angg = $this->msubmit->perananggota($tugas['id_usulan'],'Penelitian');
-					$hits = count($angg);
-					$n = 0;
-					
-					foreach($angg as $a)
-					{
-						$anggotadosen .= $a->namalengkap.'/'.$a->nidn;
-							if($n<($hits-1))
-								$anggotadosen .= ', ';
-						$n++;
-					}
+			} else {
+				$angg = $this->msubmit->perananggota($tugas['id_usulan'], 'Penelitian');
+				$hits = count($angg);
+				$n = 0;
+
+				foreach ($angg as $a) {
+					$anggotadosen .= $a->namalengkap . '/' . $a->nidn;
+					if ($n < ($hits - 1))
+						$anggotadosen .= ', ';
+					$n++;
 				}
-				$split = explode(',',$tugas['anggotamhs']);
-				$n = count($split);
-				if($tugas['anggotamhs']<>'')
-				{
-					for($i=0;$i<$n;$i++)
-					{
-						$mhs = $this->msubmit->namamhs($split[$i]);
-						$anggotamhs .= $mhs['namamhs'].'/'.$mhs['npm'];
-						if($i<($n-1))
-							$anggotamhs .= ', ';
-					}
+			}
+			$split = explode(',', $tugas['anggotamhs']);
+			$n = count($split);
+			if ($tugas['anggotamhs'] <> '') {
+				for ($i = 0; $i < $n; $i++) {
+					$mhs = $this->msubmit->namamhs($split[$i]);
+					$anggotamhs .= $mhs['namamhs'] . '/' . $mhs['npm'];
+					if ($i < ($n - 1))
+						$anggotamhs .= ', ';
 				}
-				else
-				{
-					$angg = $this->msubmit->peranmhs($tugas['id_usulan'],'Penelitian');
-					$hits = count($angg);
-					$m = 0;
-					foreach($angg as $a)
-					{
-						$anggotamhs .= $a->namamhs.'/'.$a->npm;
-						if($m<($hits-1))
-							$anggotamhs .= ', ';
-					}
-					$m++;
+			} else {
+				$angg = $this->msubmit->peranmhs($tugas['id_usulan'], 'Penelitian');
+				$hits = count($angg);
+				$m = 0;
+				foreach ($angg as $a) {
+					$anggotamhs .= $a->namamhs . '/' . $a->npm;
+					if ($m < ($hits - 1))
+						$anggotamhs .= ', ';
 				}
+				$m++;
+			}
 			?>
 			<tr>
 				<td valign="top">2.</td>
-				<td width="120" valign="top"><b><?php echo $ketua['namalengkap'];?></b></td>
+				<td width="120" valign="top"><b><?php echo $ketua['namalengkap']; ?></b></td>
 				<td valign="top">:</td>
 				<td valign="top" style="text-align: justify !important;">
-					Dosen Prodi <?php echo $prodi['prodi'].', '.$fak['fakultas']; ?>, Universitas Jenderal Achmad Yani Yogyakarta selaku penerima tugas (Ketua Pengusul) program penelitian dosen penerima hibah internal Universitas Jenderal Achmad Yani Yogyakarta skema <?php echo $tugas['skema'] ?> Tahun Anggaran <?php echo $th; ?> dengan judul "<?php echo ucwords(strtolower($tugas['judul'])); ?>" dengan anggota dosen <?php echo $anggotadosen; ?>, anggota mahasiswa <?php echo $anggotamhs;?> yang selanjutnya disebut <b>PIHAK KEDUA</b>
+					Dosen Prodi <?php echo $prodi['prodi'] . ', ' . $fak['fakultas']; ?>, Universitas Jenderal Achmad Yani Yogyakarta selaku penerima tugas (Ketua Pengusul) program penelitian dosen penerima hibah internal Universitas Jenderal Achmad Yani Yogyakarta skema <?php echo $tugas['skema'] ?> Tahun Anggaran <?php echo $th; ?> dengan judul "<?php echo ucwords(strtolower($tugas['judul'])); ?>" dengan anggota dosen <?php echo $anggotadosen; ?>, anggota mahasiswa <?php echo $anggotamhs; ?> yang selanjutnya disebut <b>PIHAK KEDUA</b>
 				</td>
 			</tr>
 		</table>
-		<p><b>PIHAK PERTAMA</b> dan <b>PIHAK KEDUA</b> secara bersama-sama bersepakat mengikatkan diri dalam suatu Perjanjian Kontrak dalam Pelaksanaan Penelitian dengan  ketentuan  dan   syarat-syarat yang diatur sebagai berikut:</p><br>
+		<p><b>PIHAK PERTAMA</b> dan <b>PIHAK KEDUA</b> secara bersama-sama bersepakat mengikatkan diri dalam suatu Perjanjian Kontrak dalam Pelaksanaan Penelitian dengan ketentuan dan syarat-syarat yang diatur sebagai berikut:</p><br>
 		<h3 align="center" class="no-break-after">Pasal 1<br>DASAR HUKUM</h3>
 		<ol type="1">
 			<li>Surat Perjanjian Kontrak Penelitian ini berdasarkan kepada:
 			</li>
 			<ol type="a">
 				<?php
-					foreach($dasartugas as $d)
-					{
-						echo '<li>'.$d->teks.'</li>';
-					}
+				foreach ($dasartugas as $d) {
+					echo '<li>' . $d->teks . '</li>';
+				}
 				?>
 			</ol>
 		</ol>
 		<h3 align="center" class="no-break-after">Pasal 2<br>RUANG LINGKUP</h3>
-		<p>Ruang lingkup Kontrak Penelitian ini meliputi Pelaksanaan Penelitian  di perguruan tinggi <b>Universitas Jenderal Achmad Yani Yogyakarta</b> yang dibebankan pada Program Kerja dan Rancangan Anggaran (PKRA) tahun <?php echo $th; ?>.</p>
-		
+		<p>Ruang lingkup Kontrak Penelitian ini meliputi Pelaksanaan Penelitian di perguruan tinggi <b>Universitas Jenderal Achmad Yani Yogyakarta</b> yang dibebankan pada Program Kerja dan Rancangan Anggaran (PKRA) tahun <?php echo $th; ?>.</p>
+
 		<h3 align="center" class="no-break-after">Pasal 3<br>JANGKA WAKTU</h3>
 		<p>Kontrak Penelitian ini dilaksanakan dalam jangka 6 (enam) bulan dalam tahun berjalan setelah penandatangan kontrak;</p>
 
@@ -168,11 +163,11 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 		</ol>
 		<h3 align="center" class="no-break-after">Pasal 5<br>CARA PEMBAYARAN</h3>
 		<ol type="1">
-			<li><b>PIHAK PERTAMA</b> memberikan pendanaan penelitian sebagaimana dimaksud dalam Pasal 2 ayat (1) dengan besaran sesuai Pengumuman Penelitian Internal Unjaya Tahun <?php echo $th; ?> Nomor: <?php echo $skep; ?> dibebankan pada Program Kerja dan Rancangan Anggaran (PKRA) LPPM UNJAYA tahun  <?php echo $th; ?>.</li>
+			<li><b>PIHAK PERTAMA</b> memberikan pendanaan penelitian sebagaimana dimaksud dalam Pasal 2 ayat (1) dengan besaran sesuai Pengumuman Penelitian Internal Unjaya Tahun <?php echo $th; ?> Nomor: <?php echo $skep; ?> dibebankan pada Program Kerja dan Rancangan Anggaran (PKRA) LPPM UNJAYA tahun <?php echo $th; ?>.</li>
 			<li>Pendanaan Pelaksanaan Penelitian sebagaimana dimaksud pada ayat (1) dibayarkan oleh <b>PIHAK PERTAMA</b> kepada <b>PIHAK KEDUA</b> secara bertahap melalui rekening <b>PIHAK KEDUA</b>.</li>
 			<li><b>PIHAK PERTAMA</b> mempunyai hak menerima dokumen hasil unggahan di laman <b>simlitabmas.unjaya.ac.id</b> sebagaimana tersebut pada ayat (2), <b>paling lambat 3 hari terhitung sejak batas akhir pengunggahan di laman <b>simlitabmas.unjaya.ac.id.</b></li>
 			<li><b>PIHAK KEDUA</b> mempunyai hak mendapatkan dana Penelitian dari <b>PIHAK PERTAMA</b></li>
-			<li class="no-break-after">Pendanaan Penelitian sebagaimana dimaksud pada ayat (2), dapat dibayarkan setelah <b>PIHAK KEDUA</b> mengunggah ke laman <b>simlitabmas.unjaya.ac.id</b> selambat-lambatnya bulan <b>Desember <?php echo $th;?></b> dokumen sebagai berikut:</li>
+			<li class="no-break-after">Pendanaan Penelitian sebagaimana dimaksud pada ayat (2), dapat dibayarkan setelah <b>PIHAK KEDUA</b> mengunggah ke laman <b>simlitabmas.unjaya.ac.id</b> selambat-lambatnya bulan <b>Desember <?php echo $th; ?></b> dokumen sebagai berikut:</li>
 			<ol type="a">
 				<li>Laporan kemajuan pelaksanaan Penelitian</li>
 				<li>Surat pernyataan tanggungjawab belanja (SPTB) atas dana Penelitian yang telah ditetapkan</li>
@@ -226,25 +221,28 @@ NOMOR: <?php echo $tugas['nomorkontrak'];?>
 
 		<div class="no-break">
 			<table style="margin-top:60">
-			<tr>
-				<td width="350px"><b>PIHAK PERTAMA</b><br>Ka. LPPM Unjaya</td>
-				<td width="350px"><b>PIHAK KEDUA</b><br>Ketua Pengusul</td>
-			</tr>
-			<tr>
-				<?php if($tugas['suratkontrak']<>'') {
-				echo '<td width="350px"><img style="margin-top:0" width="60%" src="'.FCPATH.'assets/img/disetujui.png'.'"</td>
-				      <td width="350px"><img style="margin-top:0" width="60%" src="'.FCPATH.'assets/img/disetujui.png'.'"</td>';
-				}
-				?>
-			</tr>
-			<tr>
-				<td width="350px"><p style="margin-top:10px">Dr. Bdn. Tri Sunarsih, SST., M.Kes.</p></td>
-				<td width="350px">
-					<p style="margin-top:10px"><?php echo $ketua['namalengkap']; ?></p>
-				</td>
-			</tr>
+				<tr>
+					<td width="350px"><b>PIHAK PERTAMA</b><br>Ka. LPPM Unjaya</td>
+					<td width="350px"><b>PIHAK KEDUA</b><br>Ketua Pengusul</td>
+				</tr>
+				<tr>
+					<?php if ($tugas['suratkontrak'] <> '') {
+						echo '<td width="350px"><img style="margin-top:0" width="30%" src="' . FCPATH . 'assets/img/disetujui.png' . '"</td>
+				      <td width="350px"><img style="margin-top:0" width="30%" src="' . FCPATH . 'assets/img/disetujui.png' . '"</td>';
+					}
+					?>
+				</tr>
+				<tr>
+					<td width="350px">
+						<p style="margin-top:10px">Dr. Bdn. Tri Sunarsih, SST., M.Kes.</p>
+					</td>
+					<td width="350px">
+						<p style="margin-top:10px"><?php echo $ketua['namalengkap']; ?></p>
+					</td>
+				</tr>
 			</table>
 		</div>
 	</div>
-	</body>
+</body>
+
 </html>
