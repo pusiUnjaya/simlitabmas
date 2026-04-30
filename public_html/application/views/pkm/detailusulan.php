@@ -126,7 +126,7 @@
 									for ($i = 0; $i < $hitpisah; $i++) {
 										$revnya = $this->mdosen->namadosen($pisah[$i]);
 										if ($is_dashboardpengusul) {
-											echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+											echo '<li>Reviewer ' . $nrev . '</li>';
 										} else {
 											if ($revnya['id_dosen'] == $this->session->userdata('sesi_dosen')) {
 												echo '<li><b>' . $revnya['namalengkap'] . '</b></li>';
@@ -135,7 +135,7 @@
 												if ($this->session->userdata('sesi_status') == 1) {
 													echo '<li>' . $revnya['namalengkap'] . '</li>';
 												} else {
-													echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+													echo '<li>Reviewer ' . $nrev . '</li>';
 												}
 											}
 										}
@@ -303,7 +303,7 @@
 							foreach ($hasilreview as $h) {
 								if ($is_dashboardpengusul) {
 									$namarev = [];
-									$namarev['namalengkap'] = 'Reviewer Anonim ' . $nrev;
+									$namarev['namalengkap'] = 'Reviewer ' . $nrev;
 									$nrev++;
 								} else {
 									$namarev = $this->mdosen->dosennya($h->reviewer);
@@ -798,7 +798,7 @@
 					for ($i = 0; $i < $hitpisah; $i++) {
 						$revnya = $this->mdosen->namadosen($pisah[$i]);
 						if ($is_dashboardpengusul) {
-							echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+							echo '<li>Reviewer ' . $nrev . '</li>';
 						} else {
 							if ($revnya['id_dosen'] == $this->session->userdata('sesi_dosen')) {
 								echo '<li><b>' . $revnya['namalengkap'] . '</b></li>';
@@ -806,7 +806,7 @@
 								if ($this->session->userdata('sesi_status') == 1) {
 									echo '<li>' . $revnya['namalengkap'] . '</li>';
 								} else {
-									echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+									echo '<li>Reviewer ' . $nrev . '</li>';
 								}
 							}
 						}

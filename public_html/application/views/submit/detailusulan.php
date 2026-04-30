@@ -125,7 +125,7 @@
 									for ($i = 0; $i < $hitpisah; $i++) {
 										$revnya = $this->mdosen->namadosen($pisah[$i]);
 										if ($is_dashboardpengusul) {
-											echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+											echo '<li>Reviewer ' . $nrev . '</li>';
 										} else {
 											if ($revnya['id_dosen'] == $this->session->userdata('sesi_dosen')) {
 												$is_rev = true;
@@ -134,7 +134,7 @@
 												if ($this->session->userdata('sesi_status') == 1) {
 													echo '<li>' . $revnya['namalengkap'] . '</li>';
 												} else {
-													echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+													echo '<li>Reviewer ' . $nrev . '</li>';
 												}
 											}
 										}
@@ -295,7 +295,7 @@
 							$namarev = [];
 							foreach ($hasilreview as $h) {
 								if ($is_dashboardpengusul) {
-									$namarev['namalengkap'] = 'Reviewer Anonimous ' . $nrev;
+									$namarev['namalengkap'] = 'Reviewer ' . $nrev;
 									$nrev++;
 								} else {
 									$namarev = $this->mdosen->dosennya($h->reviewer);
@@ -1142,7 +1142,7 @@
 					for ($i = 0; $i < $hitpisah; $i++) {
 						$revnya = $this->mdosen->namadosen($pisah[$i]);
 						if ($is_dashboardpengusul) {
-							echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+							echo '<li>Reviewer ' . $nrev . '</li>';
 						} else {
 							if ($revnya['id_dosen'] == $this->session->userdata('sesi_dosen')) {
 								echo '<li><b>' . $revnya['namalengkap'] . '</b></li>';
@@ -1150,7 +1150,7 @@
 								if ($this->session->userdata('sesi_status') == 1) {
 									echo '<li>' . $revnya['namalengkap'] . '</li>';
 								} else {
-									echo '<li>Reviewer Anonim ' . $nrev . '</li>';
+									echo '<li>Reviewer ' . $nrev . '</li>';
 								}
 							}
 						}
@@ -1797,10 +1797,10 @@
 			var total = ((poin1 * 20) + (poin2 * 15) + (poin3 * 20) + (poin4 * 15) + (poin5 * 10) + (poin6 * 20)) / 4;
 		else if (year >= 2024 && month >= 5)
 			var total = ((poin1 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;
-		else if (year == 2025){
+		else if (year == 2025) {
 			var total = ((poin1 * 20) + (poin2 * 15) + (poin3 * 20) + (poin4 * 15) + (poin5 * 10) + (poin6 * 20)) / 7;
 		} else {
-			var total = ((poin1 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;			
+			var total = ((poin1 * 10) + (poin2 * 10) + (poin3 * 10) + (poin4 * 10) + (poin5 * 10) + (poin6 * 10) + (poin7 * 10) + (poin8 * 10) + (poin9 * 10) + (poin10 * 10)) / 4;
 		}
 
 		$(".modal-body .revskor1").text(skorarray[0]);

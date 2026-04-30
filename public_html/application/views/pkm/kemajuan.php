@@ -95,7 +95,7 @@
 										if ($s->id_dosen == $this->session->userdata('sesi_dosen')) {
 											echo '<b style="color:blue">Anda</b>';
 										} else {
-											echo '<b style="color:green">Reviewer Anonimous ' . $nrev . '</b>';
+											echo '<b style="color:green">Reviewer ' . $nrev . '</b>';
 										}
 										if ($i < ($n - 1))
 											echo ' dan ';
@@ -232,7 +232,7 @@
 							if ($n > 0) {
 								foreach ($sudah as $s) {
 									$nrev++;
-									echo '<b style="color:green">Reviewer Anonimous ' . $nrev . '</b>';
+									echo '<b style="color:green">Reviewer ' . $nrev . '</b>';
 									if ($i < ($n - 1))
 										echo ' dan ';
 									$i++;

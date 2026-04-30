@@ -98,7 +98,7 @@
 									echo '<ol>';
 									for ($i = 0; $i < $hitpisah; $i++) {
 										$revnya = $this->mdosen->namadosen($pisah[$i]);
-										echo '<li>Reviewer Anonimous ' . ($i + 1) . '</li>';
+										echo '<li>Reviewer ' . ($i + 1) . '</li>';
 									}
 									echo '</ol>';
 								} else
