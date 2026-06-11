@@ -127,7 +127,7 @@
 				<td>
 					<img style="margin-top:-10;margin-left:-60;z-index:99" width="130" src="<?php echo base_url().'assets/img/stempel.png'; ?>">
 					<img style="position:absolute;margin-left:-50;z-index:-1" width="110" src="<?php echo base_url().'assets/img/ttd.jpg'; ?>">
-					<p style="margin-top:-40;">Dr. Tri Sunarsih, SST., M.Kes. </p>
+					<p style="margin-top:-40;">Kori Puspita Ningsih, S.K.M., M.K.M., FISQua. </p>
 				</td>
 			</tr>
 		</table>

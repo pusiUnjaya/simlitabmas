@@ -54,7 +54,7 @@ $jenis = $jenis == 'lit' ? 'Penelitian' : 'Pengabdian kepada Masyarakat';
 </head>
 
 <body>
-    <img style="margin-top:-20px" width="100%" src="<?php FCPATH . 'assets/img/kop.png' ?>">
+    <img style="margin-top:-20px" width="100%" src="<?php echo FCPATH . 'assets/img/kop.png' ?>">
     <div class="main">
         <table width="100%">
             <tr>
@@ -113,9 +113,9 @@ $jenis = $jenis == 'lit' ? 'Penelitian' : 'Pengabdian kepada Masyarakat';
         <p>Atas ijin dan kerjasamanya kami ucapkan terima kasih.</p>
         <div class="no-break" style="text-align: center; margin-left: 50%; margin-top: 2cm;">
             <p>Kepala LPPM</p>
-            <img style="margin-top:-10;margin-left:-60;z-index:99" width="130" src="<?php FCPATH . 'assets/img/stempel.png' ?>">
-            <img style="position:absolute;margin-left:40;z-index:-1" width="110" src="<?php FCPATH . 'assets/img/ttd.png' ?>">
-            <p style="margin-top:-40;">Dr. Bdn. Tri Sunarsih, SST., M.Kes. </p>
+            <img style="margin-top:-10;margin-left:-60;z-index:99" width="130" src="<?php echo FCPATH . 'assets/img/stempel.png' ?>">
+            <img style="position:absolute;margin-left:40;z-index:-1" width="110" src="<?php echo FCPATH . 'assets/img/ttd.png' ?>">
+            <p style="margin-top:-40;">Kori Puspita Ningsih, S.K.M., M.K.M., FISQua. </p>
         </div>
     </div>
 </body>

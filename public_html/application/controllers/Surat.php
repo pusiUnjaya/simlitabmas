@@ -682,6 +682,7 @@ class Surat extends LPPM_Controller
 
 		$this->load->library('pdf');
 		$html = $this->load->view('surat/surat_izin', $data, true);
+		//echo $html;
 		$this->pdf->createPDF($html, 'surat-izin-' . date('Ymdhis'), false);
 	}
 }

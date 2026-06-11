@@ -191,7 +191,7 @@
 				<td>
 					<img style="margin-top:-30;margin-left:-60;z-index:99" width="130" src="<?php echo FCPATH.'assets/img/stempel.png'; ?>">
 					<img style="position:absolute;margin-top:-15;margin-left:-40;z-index:-1" width="110" src="<?php echo FCPATH.'assets/img/ttd.png'; ?>">
-					<p style="margin-top:-30;">Dr. Bdn. Tri Sunarsih, SST., M.Kes. </p>
+					<p style="margin-top:-30;">Kori Puspita Ningsih, S.K.M., M.K.M., FISQua.</p>
 				</td>
 			</tr>
 		</table>
