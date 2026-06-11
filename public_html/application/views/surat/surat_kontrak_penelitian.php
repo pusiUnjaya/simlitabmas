@@ -65,7 +65,7 @@
 		<table style="margin-top:10">
 			<tr>
 				<td valign="top">1.</td>
-				<td width="120" valign="top"><b>Dr. Bdn. Tri Sunarsih, SST., M.Kes.</b></td>
+				<td width="120" valign="top"><b>Kori Puspita Ningsih, S.K.M., M.K.M., FISQua.</b></td>
 				<td valign="top">:</td>
 				<td valign="top" style="text-align: justify !important;">
 					dalam hal ini bertindak untuk dan atas nama <b>Lembaga Penelitian dan Pengabdian Kepada Masyarakat Universitas Jenderal Achmad Yani Yogyakarta</b> berdasarkan Surat Keputusan (SK) Ketua Pengurus YKEP Nomor: Skep/007/UNJAYA/I/2023 tanggal 24 Januari 2023 yang selanjutnya dalam Surat Perjanjian ini disebut sebagai <b>PIHAK PERTAMA</b>.
@@ -234,7 +234,7 @@
 				</tr>
 				<tr>
 					<td width="350px">
-						<p style="margin-top:10px">Dr. Bdn. Tri Sunarsih, SST., M.Kes.</p>
+						<p style="margin-top:10px">Kori Puspita Ningsih, S.K.M., M.K.M., FISQua.</p>
 					</td>
 					<td width="350px">
 						<p style="margin-top:10px"><?php echo $ketua['namalengkap']; ?></p>
