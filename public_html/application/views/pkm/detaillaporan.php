@@ -277,7 +277,7 @@
 						?>
 							<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-usulan="<?php //echo $this->uri->segment(3);
 																																			?>" data-filelaporan="<?php //echo $upload;
-																																																		?>" data-target="#kirim-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Kirim Laporan</a>
+																																									?>" data-target="#kirim-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Kirim Laporan</a>
 							<?php
 							// }
 							// elseif($hitlapakhir>0 && $usulan['status']<>'Laporan Disetujui Reviewer 2')
@@ -285,14 +285,14 @@
 							?>
 							<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-usulan="<?php //echo $this->uri->segment(3);
 																																			?>" data-filerevisi="<?php //echo $uploadrev;
-																																																	?>" data-target="#revisi-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Revisi Laporan</a>
+																																									?>" data-target="#revisi-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Revisi Laporan</a>
 							<?php
 							// }
 							// else {
 							?>
 							<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-usulan="<?php //echo $this->uri->segment(3);
 																																			?>" data-filelapakhir="<?php //echo $uploadakhir;
-																																																		?>" data-target="#akhir-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Kirim Laporan Lengkap (Pengesahan dan Semua Lampiran)</a>
+																																									?>" data-target="#akhir-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Kirim Laporan Lengkap (Pengesahan dan Semua Lampiran)</a>
 						<?php //}} 
 						?>
 						</div>
@@ -307,12 +307,13 @@
 							$hasilreview = $this->mpengabdian->lihathasilreviewlaporan($usulan['id_usulan']);
 							$nomor = 1;
 							echo '<div class="row" style="margin-top:40px">';
+							$i_rev = 0;
 							foreach ($hasilreview as $h) {
 								$namarev = $this->mdosen->dosennya($h->reviewer);
 					?>
 
 								<div class="col-md-6">
-									<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-catatan="<?php echo $h->hasilreview_laporan; ?>" data-skor="<?php echo $h->skor; ?>" data-file="<?php echo $h->filereview_laporan; ?>" data-reviewer="<?php echo $namarev['namalengkap']; ?>" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Review dari Reviewer 1</a>
+									<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-catatan="<?php echo $h->hasilreview_laporan; ?>" data-skor="<?php echo $h->skor; ?>" data-file="<?php echo $h->filereview_laporan; ?>" data-reviewer="Reviewer <?php echo ($i_rev + 1); ?>" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Review dari Reviewer <?php echo ($i_rev + 1); ?> </a>
 								</div>
 
 							<?php
