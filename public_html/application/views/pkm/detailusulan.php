@@ -99,6 +99,28 @@
 									?></p>
 							</div>
 						</div>
+						<?php
+						$is_superadmin = $this->session->userdata('sesi_status') == 1;
+						$is_reviewer = false;
+						if (!$is_superadmin) {
+							$id_dosen = $this->mdosen->ambildosen($this->session->userdata('sesi_id'));
+							$cekcek = $this->mdosen->isreviewer($id_dosen['id_dosen']);
+							$reviewernya = $this->mpengabdian->cekrevnya($this->uri->segment(3), $this->session->userdata('sesi_id'));
+							$is_reviewer = $cekcek > 0 && $reviewernya > 0 && $this->session->userdata('sesi_id') <> $usulan['pengusul'];
+						}
+						if ($is_superadmin || $is_reviewer) {
+						?>
+						<div class="row">
+							<div class="col-md-4">
+								<label>Koreksi Reviewer</label>
+							</div>
+							<div class="col-md-8">
+								<p><?php echo rupiah(isset($usulan['koreksianggaranreviewer']) && $usulan['koreksianggaranreviewer'] !== null ? (float) $usulan['koreksianggaranreviewer'] : 0); ?></p>
+							</div>
+						</div>
+						<?php
+						}
+						?>
 						<div class="row">
 							<div class="col-md-4">
 								<label>RAB</label>
@@ -220,8 +242,8 @@
 									} elseif ($hitrev == 0 && $this->session->userdata('sesi_dosen') == $usulan['reviewer']) {
 							?>
 										<div class="row" style="margin-top:40px">
-											<div class="col-md-6">
-												<a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-target="#reviewer-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Review Usulan</a>
+											<div class="col-md-12">
+												<a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-target="#reviewer-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Review Usulan</a>&nbsp;<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-usulan="<?php echo $this->uri->segment(3); ?>" data-koreksianggaran="<?php echo isset($usulan['koreksianggaranreviewer']) ? (int) $usulan['koreksianggaranreviewer'] : ''; ?>" data-toggle="modal" data-target="#koreksi-anggaran-modal"><i class="fas fa-money-bill-wave fa-sm text-white-50"></i> Koreksi Anggaran</a>
 											</div>
 										</div>
 								<?php
@@ -926,6 +948,32 @@
 	</div>
 </div>
 
+<!-- Modal Koreksi Anggaran -->
+<div class="modal fade" id="koreksi-anggaran-modal" tabindex="-1" role="dialog" aria-labelledby="koreksiAnggaranLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="koreksiAnggaranLabel">Koreksi Anggaran</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" action="<?php echo base_url() . 'pengabdian/simpankoreksianggaran/' . $this->uri->segment(3); ?>">
+					<div class="form-group">
+						<label for="koreksianggaranreviewer">Koreksi Anggaran</label>
+						<input type="number" id="koreksianggaranreviewer" name="koreksianggaranreviewer" class="form-control" min="0" step="1" value="<?php echo isset($usulan['koreksianggaranreviewer']) ? (int) $usulan['koreksianggaranreviewer'] : ''; ?>" required>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+						<button type="submit" class="btn btn-success">Simpan</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- Modal Reviewer -->
 <div class="modal fade" id="reviewer-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
@@ -1378,6 +1426,12 @@
 	});
 
 	$(document).ready(function() {
+		$('#koreksi-anggaran-modal').on('show.bs.modal', function(event) {
+			var div = $(event.relatedTarget);
+			var modal = $(this);
+			modal.find('#koreksianggaranreviewer').val(div.data('koreksianggaran') || '');
+		});
+
 		$('#reviewer-modal').on('show.bs.modal', function(event) {
 			var div = $(event.relatedTarget) // Tombol dimana modal di tampilkan
 			var modal = $(this)

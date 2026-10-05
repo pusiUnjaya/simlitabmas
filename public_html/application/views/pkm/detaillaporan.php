@@ -31,6 +31,11 @@
 			$this->session->flashdata('result') . '
 						</div>';
 	}
+	if ($this->session->flashdata('result_error') <> '') {
+		echo '<div class="alert alert-danger" role="alert">' .
+			htmlspecialchars($this->session->flashdata('result_error'), ENT_QUOTES, 'UTF-8') . '
+			</div>';
+	}
 	?>
 
 	<!-- Content Row -->
@@ -244,30 +249,24 @@
 							</div>
 						</div>
 						<?php
-								}
-								if ($this->session->userdata('sesi_status') <> 1) {
-									$id_dosen = $this->mdosen->ambildosen($this->session->userdata('sesi_id'));
-									$cekcek = $this->mdosen->isreviewer($id_dosen['id_dosen']);
-
-									$reviewernya = $this->mdosen->reviewernya($this->session->userdata('sesi_id'));
-									if ($cekcek > 0 && $reviewernya == 0 && $this->session->userdata('sesi_id') <> $laporan['pengusul']) {
-										$hitrevlap = $this->mpengabdian->hitrevlap($this->uri->segment(3), $this->session->userdata('sesi_id'));
-										if ($hitrevlap > 0) {
-											$isianreview = $this->mpengabdian->lihatreviewlaporan($this->uri->segment(3), $this->session->userdata('sesi_id'));
-											echo '<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview_laporan'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview_laporan'] . '" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer</a>';
-										} else {
-						?>
+						}
+						$cekcek = $this->mdosen->isreviewer($id_dosen['id_dosen']);
+						if ($cekcek > 0 && $reviewernya == 0 && $this->session->userdata('sesi_id') <> $laporan['pengusul']) {
+							$hitrevlap = $this->mpengabdian->hitrevlap($this->uri->segment(3), $this->session->userdata('sesi_id'));
+							if ($hitrevlap > 0) {
+								$isianreview = $this->mpengabdian->lihatreviewlaporan($this->uri->segment(3), $this->session->userdata('sesi_id'));
+								echo '<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm pencet" data-usulan="' . $this->uri->segment(3) . '" data-toggle="modal" data-catatan="' . $isianreview['hasilreview_laporan'] . '" data-skor="' . $isianreview['skor'] . '" data-file="' . $isianreview['filereview_laporan'] . '" data-target="#perbaikan-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Hasil Reviewer</a>';
+							} else {
+								?>
 								<div class="row" style="margin-top:40px">
 									<div class="col-md-6">
 										<a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-usulan="<?php echo $this->uri->segment(3); ?>" data-toggle="modal" data-target="#reviewer-modal"><i class="fas fa-sticky-note fa-sm text-white-50"></i> Review Laporan</a>
 									</div>
 								</div>
-					<?php
-										}
-									}
-								}
-
-					?>
+							<?php
+							}
+						}
+						?>
 					<!-- Tutup Dulu -->
 					<!--
 					<div class="row" style="margin-top:40px">
@@ -486,6 +485,28 @@
 								<td><?php if ($hitrel > 0)  echo $rel['bentuk_integrasi']; ?></td>
 							</tr>
 						</table>
+						<?php if (!empty($dampak)) { ?>
+							<div class="table-responsive mt-3">
+								<table class="table table-bordered table-sm">
+									<thead>
+										<tr>
+											<th>Jenis Dampak</th>
+											<th>Deskripsi Dampak</th>
+											<th>Bukti</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ($dampak as $item) { ?>
+											<tr>
+												<td><?php echo htmlspecialchars($item['jenis_dampak'], ENT_QUOTES, 'UTF-8'); ?></td>
+												<td><?php echo nl2br(htmlspecialchars($item['deskripsi'], ENT_QUOTES, 'UTF-8')); ?></td>
+												<td><a href="<?php echo base_url('assets/uploadbox/' . rawurlencode($item['file_bukti'])); ?>" target="_blank">Lihat File</a></td>
+											</tr>
+										<?php } ?>
+									</tbody>
+								</table>
+							</div>
+						<?php } ?>
 						&nbsp;&nbsp;
 						<?php if ($this->session->userdata('sesi_status') <> 1) {
 							if ($hitrel > 0) { ?>
@@ -495,6 +516,9 @@
 							<?php
 							}
 						}
+						if ($this->session->userdata('sesi_status') == 1 || $this->session->userdata('sesi_id') == $laporan['pengusul']) { ?>
+							<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#dampak-pkm-modal"><i class="fas fa-bullseye fa-sm text-white"></i> Dampak</a>&nbsp;
+						<?php }
 						if ($this->session->userdata('sesi_status') <> 1 && !in_array($this->session->userdata('sesi_dosen'), $getRev)) {
 							?>
 							<div class="col-md-8">
@@ -622,6 +646,45 @@
 				</div>
 			</div>
 
+		</div>
+	</div>
+</div>
+
+<!-- Modal Dampak PKM -->
+<div class="modal fade" id="dampak-pkm-modal" tabindex="-1" role="dialog" aria-labelledby="dampakPkmModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="dampakPkmModalLabel">Dampak PKM</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form method="post" action="<?php echo base_url() . 'pengabdian/simpandampak'; ?>" enctype="multipart/form-data">
+				<div class="modal-body">
+					<input type="hidden" name="id_usulan" value="<?php echo (int) $this->uri->segment(3); ?>">
+					<div class="form-group">
+						<label for="jenis-dampak-pkm">Jenis Dampak</label>
+						<select id="jenis-dampak-pkm" name="jenis_dampak" class="form-control" required>
+							<option value="">-- Pilih Jenis Dampak --</option>
+							<option value="Masyarakat">Masyarakat</option>
+							<option value="Dudika">Dudika</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="deskripsi-dampak-pkm">Deskripsi Dampak</label>
+						<textarea id="deskripsi-dampak-pkm" name="deskripsi" class="form-control" rows="5" required></textarea>
+					</div>
+					<div class="form-group">
+						<label for="file-bukti-dampak-pkm">Bukti Dampak (PDF, maksimal 20MB)</label>
+						<input id="file-bukti-dampak-pkm" type="file" name="file_bukti" class="form-control" accept="application/pdf" required>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+					<button type="submit" class="btn btn-success">Simpan</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
