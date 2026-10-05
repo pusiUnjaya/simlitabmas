@@ -941,15 +941,15 @@ class MSubmit extends CI_Model
 
 	function hasilreview($tahun)
 	{
-		
-	/*	$data = array();
+
+		/*	$data = array();
 		$this->db->select("*");
 		$this->db->from("hasilreview");
 		$this->db->join("usulan", "hasilreview.usulan=usulan.id_usulan");
 		$this->db->join("dosen", "dosen.user=usulan.pengusul");
 		$this->db->order_by("hasilreview.modified", "desc");
 		$hasil = $this->db->get();*/
-	
+
 		$data = array();
 		$this->db->select("*");
 		$this->db->from("v_usulan");
@@ -2069,6 +2069,24 @@ class MSubmit extends CI_Model
 		//akhir masukan logs sistem
 	}
 
+	function simpankoreksianggaran($id, $koreksianggaran)
+	{
+		$waktu = date('Y-m-d H:i:s');
+		$data = array(
+			"koreksianggaranreviewer" => (int) $koreksianggaran,
+			"modified" => $waktu
+		);
+
+		$this->db->where("id_usulan", $id);
+		$this->db->update("usulan", $data);
+
+		$data = array(
+			"tgl" => date('Y-m-d'),
+			"keterangan" => "Koreksi Anggaran reviewer telah ditambahkan oleh " . $this->session->userdata("sesi_nama") . " pada " . tgl_indo($waktu, 1)
+		);
+		$this->db->insert("logs", $data);
+	}
+
 	function simpanreview($id, $filereview)
 	{
 		$waktu = date('Y-m-d H:i:s');
@@ -2985,6 +3003,32 @@ class MSubmit extends CI_Model
 		}
 		$hasil->free_result();
 		return $data;
+	}
+
+	function dampak($id_usulan)
+	{
+		$this->db->from('dampak_penelitian');
+		$this->db->where('id_usulan', $id_usulan);
+		$this->db->order_by('created_at', 'desc');
+		$hasil = $this->db->get();
+
+		return $hasil->result_array();
+	}
+
+	function simpan_dampak($id_usulan, $jenis, $deskripsi, $file, $created_by)
+	{
+		$waktu = date('Y-m-d H:i:s');
+		$data = array(
+			'id_usulan' => $id_usulan,
+			'jenis_dampak' => $jenis,
+			'deskripsi' => $deskripsi,
+			'file_bukti' => $file,
+			'created_by' => $created_by,
+			'created_at' => $waktu,
+			'updated_at' => $waktu
+		);
+
+		$this->db->insert('dampak_penelitian', $data);
 	}
 
 	function lihatkemajuan($id)

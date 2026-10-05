@@ -158,7 +158,7 @@ class Submit extends CI_Controller
 	function eksporhasilreview()
 	{
 		$this->check_login();
-		$tahun=date('Y');
+		$tahun = date('Y');
 		$data = [];
 		$data['date'] = date('dmYHis');
 		$data['hasilreview'] = $this->msubmit->hasilreview($tahun);
@@ -241,7 +241,7 @@ class Submit extends CI_Controller
 	{
 		$this->check_login();
 
-		$tahun=date('Y');
+		$tahun = date('Y');
 		$data = [];
 		$data['active'] = 'active ';
 		$data['show'] = 'show ';
@@ -585,9 +585,49 @@ class Submit extends CI_Controller
 		$data['setuju'] = $this->msubmit->siapsetuju($id_usulan);
 		// echo $this->db->last_query();exit;
 		$data['laporan'] = $this->msubmit->detailusulan($id_usulan);
+		$data['dampak'] = $this->msubmit->dampak($id_usulan);
 
 		$data['page'] = 'submit/detaillaporan';
 		$this->load->view('dashboard/dashboard', $data);
+	}
+
+	function simpandampak()
+	{
+		$this->check_login();
+
+		$id_usulan = $this->input->post('id_usulan', true);
+		$usulan = $this->msubmit->detailusulan($id_usulan);
+		$is_admin = $this->sesi_status == 1;
+		$is_owner = !empty($usulan) && (int) $usulan['pengusul'] === (int) $this->sesi_id;
+
+		if (empty($usulan) || (!$is_admin && !$is_owner)) {
+			show_error('Anda tidak berhak menambahkan dampak pada usulan ini.', 403);
+		}
+
+		$jenis = $this->input->post('jenis_dampak', true);
+		$deskripsi = trim($this->input->post('deskripsi', true));
+		$jenis_valid = in_array($jenis, array('Masyarakat', 'Dudika'), true);
+
+		if (!$jenis_valid || $deskripsi === '' || empty($_FILES['file_bukti']['name'])) {
+			$this->session->set_flashdata('result_error', 'Jenis dampak, deskripsi, dan file bukti wajib diisi.');
+			redirect('submit/detaillaporan/' . $id_usulan);
+		}
+
+		$config['file_name'] = 'dampak_' . $id_usulan . '_' . date('dmyhis');
+		$config['upload_path'] = './assets/uploadbox/';
+		$config['allowed_types'] = 'pdf';
+		$config['max_size'] = 20480;
+		$this->load->library('upload', $config);
+
+		if (!$this->upload->do_upload('file_bukti')) {
+			$this->session->set_flashdata('result_error', 'File bukti tidak dapat diunggah: ' . strip_tags($this->upload->display_errors('', '')));
+			redirect('submit/detaillaporan/' . $id_usulan);
+		}
+
+		$file = $this->upload->data('file_name');
+		$this->msubmit->simpan_dampak($id_usulan, $jenis, $deskripsi, $file, $this->sesi_id);
+		$this->session->set_flashdata('result', 'Data dampak penelitian berhasil disimpan.');
+		redirect('submit/detaillaporan/' . $id_usulan);
 	}
 
 	function load_prodi($fak)
@@ -913,6 +953,21 @@ class Submit extends CI_Controller
 
 		$this->session->set_flashdata('result', 'Data Plot Reviewer Telah Sukses Disimpan!');
 		redirect("submit/plotreviewer");
+	}
+
+	function simpankoreksianggaran($id_usulan)
+	{
+		$this->check_login();
+
+		$koreksi = trim($this->input->post('koreksianggaranreviewer', true));
+		if ($koreksi === '' || !preg_match('/^\d+$/', $koreksi)) {
+			$this->session->set_flashdata('result', 'Koreksi Anggaran harus berupa angka bulat non-negatif!');
+			redirect("submit/detail/$id_usulan");
+		}
+
+		$this->msubmit->simpankoreksianggaran($id_usulan, (int) $koreksi);
+		$this->session->set_flashdata('result', 'Koreksi Anggaran Telah Sukses Disimpan!');
+		redirect("submit/detail/$id_usulan");
 	}
 
 	function simpanreview($id_usulan)

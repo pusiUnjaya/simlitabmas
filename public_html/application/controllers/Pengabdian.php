@@ -496,10 +496,50 @@ class Pengabdian extends CI_Controller
 		$data['usulan'] = $this->mpengabdian->detailapakhir($this->uri->segment(3));
 		// echo $this->db->last_query();exit;
 		$data['laporan'] = $this->mpengabdian->detailusulan($this->uri->segment(3));
+		$data['dampak'] = $this->mpengabdian->dampak($this->uri->segment(3));
 		// echo $this->db->last_query();exit;
 
 		$data['page'] = 'pkm/detaillaporan';
 		$this->load->view('dashboard/dashboard', $data);
+	}
+
+	function simpandampak()
+	{
+		empty($this->session->userdata('sesi_user')) and redirect('login');
+
+		$id_usulan = $this->input->post('id_usulan', true);
+		$usulan = $this->mpengabdian->detailusulan($id_usulan);
+		$is_admin = $this->session->userdata('sesi_status') == 1;
+		$is_owner = !empty($usulan) && (int) $usulan['pengusul'] === (int) $this->session->userdata('sesi_id');
+
+		if (empty($usulan) || (!$is_admin && !$is_owner)) {
+			show_error('Anda tidak berhak menambahkan dampak pada usulan ini.', 403);
+		}
+
+		$jenis = $this->input->post('jenis_dampak', true);
+		$deskripsi = trim($this->input->post('deskripsi', true));
+		$jenis_valid = in_array($jenis, array('Masyarakat', 'Dudika'), true);
+
+		if (!$jenis_valid || $deskripsi === '' || empty($_FILES['file_bukti']['name'])) {
+			$this->session->set_flashdata('result_error', 'Jenis dampak, deskripsi, dan file bukti wajib diisi.');
+			redirect('pengabdian/detaillaporan/' . $id_usulan);
+		}
+
+		$config['file_name'] = 'dampak_pkm_' . $id_usulan . '_' . date('dmyhis');
+		$config['upload_path'] = './assets/uploadbox/';
+		$config['allowed_types'] = 'pdf';
+		$config['max_size'] = 20480;
+		$this->load->library('upload', $config);
+
+		if (!$this->upload->do_upload('file_bukti')) {
+			$this->session->set_flashdata('result_error', 'File bukti tidak dapat diunggah: ' . strip_tags($this->upload->display_errors('', '')));
+			redirect('pengabdian/detaillaporan/' . $id_usulan);
+		}
+
+		$file = $this->upload->data('file_name');
+		$this->mpengabdian->simpan_dampak($id_usulan, $jenis, $deskripsi, $file, $this->session->userdata('sesi_id'));
+		$this->session->set_flashdata('result', 'Data dampak PKM berhasil disimpan.');
+		redirect('pengabdian/detaillaporan/' . $id_usulan);
 	}
 
 	function load_prodi($fak)
@@ -798,6 +838,31 @@ class Pengabdian extends CI_Controller
 
 		$this->session->set_flashdata('result', 'Hasil Review Penelitian Telah Sukses Disimpan!');
 		redirect("pengabdian/detail/" .$id_usulan);
+	}
+
+	function simpankoreksianggaran($id_usulan)
+	{
+		empty($this->session->userdata('sesi_user')) and redirect('login');
+
+		$usulan = $this->mpengabdian->detailusulan($id_usulan);
+		$dosen = $this->mdosen->ambildosen($this->session->userdata('sesi_id'));
+		$is_reviewer = !empty($usulan) && !empty($dosen)
+			&& $this->mdosen->isreviewer($dosen['id_dosen']) > 0
+			&& $this->mpengabdian->cekrevnya($id_usulan, $this->session->userdata('sesi_id')) > 0
+			&& (int) $this->session->userdata('sesi_id') !== (int) $usulan['pengusul'];
+		if (!$is_reviewer) {
+			show_error('Anda tidak berhak menyimpan koreksi anggaran untuk usulan ini.', 403);
+		}
+
+		$koreksi = trim($this->input->post('koreksianggaranreviewer', true));
+		if ($koreksi === '' || !preg_match('/^\d+$/', $koreksi)) {
+			$this->session->set_flashdata('result', 'Koreksi Anggaran harus berupa angka bulat non-negatif!');
+			redirect("pengabdian/detail/$id_usulan");
+		}
+
+		$this->mpengabdian->simpankoreksianggaran($id_usulan, (int) $koreksi);
+		$this->session->set_flashdata('result', 'Koreksi Anggaran Telah Sukses Disimpan!');
+		redirect("pengabdian/detail/$id_usulan");
 	}
 
 	function simpanreviewlaporan()
