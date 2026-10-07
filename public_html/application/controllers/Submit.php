@@ -606,10 +606,17 @@ class Submit extends CI_Controller
 
 		$jenis = $this->input->post('jenis_dampak', true);
 		$deskripsi = trim($this->input->post('deskripsi', true));
+		$url_bukti = trim((string) $this->input->post('url_bukti', true));
+		$url_parts = $url_bukti === '' ? false : parse_url($url_bukti);
+		$url_valid = $url_bukti === '' || (strlen($url_bukti) <= 2048 && filter_var($url_bukti, FILTER_VALIDATE_URL) !== false
+			&& is_array($url_parts)
+			&& isset($url_parts['scheme'])
+			&& in_array(strtolower($url_parts['scheme']), array('http', 'https'), true)
+		);
 		$jenis_valid = in_array($jenis, array('Masyarakat', 'Dudika'), true);
 
-		if (!$jenis_valid || $deskripsi === '' || empty($_FILES['file_bukti']['name'])) {
-			$this->session->set_flashdata('result_error', 'Jenis dampak, deskripsi, dan file bukti wajib diisi.');
+		if (!$jenis_valid || $deskripsi === '' || !$url_valid || empty($_FILES['file_bukti']['name'])) {
+			$this->session->set_flashdata('result_error', 'Jenis dampak, deskripsi, file bukti, dan URL HTTP/HTTPS yang valid (jika diisi) wajib dipenuhi.');
 			redirect('submit/detaillaporan/' . $id_usulan);
 		}
 
@@ -625,7 +632,7 @@ class Submit extends CI_Controller
 		}
 
 		$file = $this->upload->data('file_name');
-		$this->msubmit->simpan_dampak($id_usulan, $jenis, $deskripsi, $file, $this->sesi_id);
+		$this->msubmit->simpan_dampak($id_usulan, $jenis, $deskripsi, $file, $this->sesi_id, $url_bukti === '' ? null : $url_bukti);
 		$this->session->set_flashdata('result', 'Data dampak penelitian berhasil disimpan.');
 		redirect('submit/detaillaporan/' . $id_usulan);
 	}
