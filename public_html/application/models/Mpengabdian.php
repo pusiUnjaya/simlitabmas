@@ -2779,13 +2779,14 @@ class Mpengabdian extends CI_Model
 		return $hasil->result_array();
 	}
 
-	function simpan_dampak($id_usulan, $jenis, $deskripsi, $file, $created_by)
+	function simpan_dampak($id_usulan, $jenis, $deskripsi, $file, $created_by, $url_bukti = null)
 	{
 		$waktu = date('Y-m-d H:i:s');
 		$data = array(
 			'id_usulan' => $id_usulan,
 			'jenis_dampak' => $jenis,
 			'deskripsi' => $deskripsi,
+			'url_bukti' => $url_bukti,
 			'file_bukti' => $file,
 			'created_by' => $created_by,
 			'created_at' => $waktu,

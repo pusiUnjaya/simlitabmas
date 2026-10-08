@@ -57,11 +57,38 @@
 								<?php
 								if ($laporan['reviewer'] <> '') {
 									$pisah = explode(',', $laporan['reviewer']);
+									$sesi_dosen = (int) $this->session->userdata('sesi_dosen');
+									$is_admin = $this->session->userdata('sesi_status') == 1;
+									$daftar_reviewer = array_map('intval', array_filter(array_map('trim', $pisah), 'strlen'));
+									$is_reviewer = $sesi_dosen > 0 && in_array($sesi_dosen, $daftar_reviewer, true);
+									$is_pengusul = (int) $this->session->userdata('sesi_id') === (int) $laporan['pengusul'];
+									$anggota_lama = array_map('intval', explode(',', isset($laporan['anggotadosen']) ? $laporan['anggotadosen'] : ''));
+									$is_anggota = $sesi_dosen > 0 && in_array($sesi_dosen, $anggota_lama, true);
+									if (!$is_anggota && $sesi_dosen > 0) {
+										$anggota_penelitian = $this->msubmit->perananggota($laporan['id_usulan'], 'Penelitian');
+										foreach ($anggota_penelitian as $anggota) {
+											if ((int) $anggota->id_dosen === $sesi_dosen) {
+												$is_anggota = true;
+												break;
+											}
+										}
+									}
+									$sembunyikan_nama_reviewer = !$is_admin && !$is_reviewer && ($is_pengusul || $is_anggota);
 									$hitpisah = count($pisah);
 									echo '<ol>';
+									$nomor_reviewer = 0;
 									for ($i = 0; $i < $hitpisah; $i++) {
-										$revnya = $this->mdosen->namadosen($pisah[$i]);
-										echo '<li>' . $revnya['namalengkap'] . '</li>';
+										$id_reviewer = trim($pisah[$i]);
+										if ($id_reviewer === '') {
+											continue;
+										}
+										$nomor_reviewer++;
+										if ($sembunyikan_nama_reviewer) {
+											echo '<li>Reviewer ' . $nomor_reviewer . '</li>';
+										} else {
+											$revnya = $this->mdosen->namadosen($id_reviewer);
+											echo '<li>' . $revnya['namalengkap'] . '</li>';
+										}
 									}
 									echo '</ol>';
 								} else
@@ -617,6 +644,12 @@
 								?>
 							</tbody>
 						</table>
+						<?php if ($hitrel == 0) { ?>
+							<div class="alert alert-warning" role="alert">Peringatan: Data relevansi belum diisi.</div>
+						<?php } ?>
+						<?php if (empty($dampak)) { ?>
+							<div class="alert alert-warning" role="alert">Peringatan: Data dampak belum diisi.</div>
+						<?php } ?>
 						<table class="table table-bordered" width="100%" cellspacing="0">
 							<tr>
 								<th></th>
@@ -648,6 +681,7 @@
 										<tr>
 											<th>Jenis Dampak</th>
 											<th>Deskripsi Dampak</th>
+											<th>URL Bukti</th>
 											<th>Bukti</th>
 										</tr>
 									</thead>
@@ -656,6 +690,7 @@
 											<tr>
 												<td><?php echo htmlspecialchars($item['jenis_dampak'], ENT_QUOTES, 'UTF-8'); ?></td>
 												<td><?php echo nl2br(htmlspecialchars($item['deskripsi'], ENT_QUOTES, 'UTF-8')); ?></td>
+												<td><?php if (!empty($item['url_bukti'])) { ?><a href="<?php echo htmlspecialchars($item['url_bukti'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer">Buka URL</a><?php } else { echo '-'; } ?></td>
 												<td><a href="<?php echo base_url('assets/uploadbox/' . rawurlencode($item['file_bukti'])); ?>" target="_blank">Lihat File</a></td>
 											</tr>
 										<?php } ?>
@@ -970,6 +1005,10 @@
 						<div class="form-group">
 							<label for="deskripsi-dampak">Deskripsi Dampak</label>
 							<textarea id="deskripsi-dampak" name="deskripsi" class="form-control" rows="5" required></textarea>
+						</div>
+						<div class="form-group">
+							<label for="url-bukti-dampak">URL Bukti Dampak (opsional)</label>
+							<input id="url-bukti-dampak" type="url" name="url_bukti" class="form-control" maxlength="2048" placeholder="https://" autocomplete="url">
 						</div>
 						<div class="form-group">
 							<label for="file-bukti-dampak">Bukti Dampak (PDF, maksimal 20MB)</label>
